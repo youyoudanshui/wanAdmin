@@ -15,3 +15,5 @@ JDK、MySQL、Redis
 4. 持久层框架：MyBatis
 5. 数据库连接池：Druid
 
+#### 截图
+![主界面](https://images.gitee.com/uploads/images/2021/0408/223833_b0db68ba_5563527.png "捕获.PNG")
