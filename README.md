@@ -9,8 +9,9 @@ JDK、MySQL、Redis
 
 #### 主要技术
 
-1.核心框架：Spring Boot
-2.安全框架：Spring Security
-3.模板引擎：Freemarker
-4.持久层框架：MyBatis
-5.数据库连接池：Druid
+1. 核心框架：Spring Boot
+2. 安全框架：Spring Security
+3. 模板引擎：Freemarker
+4. 持久层框架：MyBatis
+5. 数据库连接池：Druid
+
