@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <#assign title="新增通知">
+  <#include "/head.html">
+</head>
+
+<body>
+  
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="card-body bg-white">
+          
+          <form id="submitForm" action="system/notice/update" method="post" class="row">
+            <input type="hidden" name="id" value="${notice.id}">
+            
+            <div class="form-group col-md-12">
+              <label for="title">标题</label>
+              <input type="text" class="form-control" id="title" name="title" value="${notice.title}" />
+            </div>
+            <div class="form-group col-md-12">
+              <label for="content">内容</label>
+              <textarea id="content" name="content" data-provide="summernote" data-min-height="150">${notice.content}</textarea>
+            </div>
+          </form>
+ 
+        </div>
+    </div>
+    
+  </div>
+  
+<#include "/footer.html">
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('[data-provide="summernote"]').each(function() {
+        var options = {
+            dialogsInBody: true,
+            lang: 'zh-CN',
+            dialogsFade: true
+        };
+        
+        var config = {};
+        $.each( $(this).data(), function(key, value){
+            key = key.replace(/-([a-z])/g, function(x){return x[1].toUpperCase();});
+
+            if ( key == 'provide' ) {
+                return;
+            }
+
+            config[key] = value;
+        });
+        
+        options = $.extend(options, config);
+        
+        if ( options.toolbar ) {
+            switch( options.toolbar.toLowerCase() ) {
+              case 'slim':
+                options.toolbar = [
+                  // [groupName, [list of button]]
+                  ['style', ['bold', 'underline', 'clear']],
+                  ['color', ['color']],
+                  ['para', ['ul', 'ol']],
+                  ['insert', ['link', 'picture']]
+                ];
+                break;
+    
+              case 'full':
+                options.toolbar = [
+                  // [groupName, [list of button]]
+                  ['para_style', ['style']],
+                  ['style', ['bold', 'italic', 'underline', 'clear']],
+                  ['font', ['strikethrough', 'superscript', 'subscript']],
+                  ['fontsize', ['fontname', 'fontsize', 'height']],
+                  ['color', ['color']],
+                  ['para', ['ul', 'ol', 'paragraph', 'hr']],
+                  ['table', ['table']],
+                  ['insert', ['link', 'picture', 'video']],
+                  ['do', ['undo', 'redo']],
+                  ['misc', ['fullscreen', 'codeview', 'help']]
+                ];
+                break;
+            }
+        }
+        $(this).summernote(options);
+    });
+
+    validateForm({
+    	'title': {
+    		required: true
+    	}
+    });
+});
+</script>
+</body>
+</html>

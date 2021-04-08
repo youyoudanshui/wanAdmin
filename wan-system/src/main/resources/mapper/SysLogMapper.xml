@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wan.system.mapper.SysLogMapper">
+
+	<resultMap type="SysLog" id="SysLogResult">
+		<id     property="id"               column="log_id"        />
+		<result property="status"           column="status"      />
+		<result property="businessName"     column="business_name"      />
+		<result property="operationType"    column="operation_type"      />
+		<result property="content"          column="content"            />
+		<result property="method"	        column="method"         />
+		<result property="url"              column="url"      />
+		<result property="requestParam"     column="request_param"      />
+		<result property="responseParam"    column="response_param"      />
+		<result property="operator"         column="operator"      />
+		<result property="operatorName"         column="username"      />
+		<result property="ip"               column="ip"      />
+		<result property="errorMessage"     column="error_message"      />
+		<result property="gmtCreate"        column="gmt_create"        />
+		<result property="gmtModified"      column="gmt_modified"          />
+	</resultMap>
+	
+	<sql id="selectLogVO">
+		select 
+			o.log_id, o.status, o.business_name, o.operation_type, o.content, o.method, o.url, o.request_param, o.response_param, o.operator, 
+			o.ip, e.error_message, o.gmt_create, o.gmt_modified, u.username
+		from sys_log o
+		left join sys_error_log e on o.status = '1' and o.log_id = e.log_id
+		left join sys_user u on o.operator = u.user_id
+	</sql>
+	
+	<select id="listLogs" parameterType="SysLog" resultMap="SysLogResult">
+		<include refid="selectLogVO"/>
+		<where>
+			<if test="status != null and status != ''">and o.status = #{status}</if>
+			<if test="operator != null and operator != ''">and o.operator like concat('%', #{operator}, '%')</if>
+			<if test="operationType == 'LOGIN'">and (o.operation_type = 'LOGIN' or o.operation_type = 'LOGOUT')</if>
+			<if test="operationType == null or operationType == ''"><![CDATA[ and o.operation_type <> 'LOGIN' and o.operation_type <> 'LOGOUT' ]]></if>
+			<if test="content != null and content != ''">and o.content like concat('%', #{content}, '%')</if>
+			<if test="query.srartDate != null and query.srartDate != ''">
+				and o.gmt_create >= str_to_date(#{query.srartDate}, '%Y-%m-%d')
+			</if>
+			<if test="query.endDate != null and query.endDate != ''">
+				and str_to_date(#{query.endDate}, '%Y-%m-%d') >= o.gmt_create
+			</if>
+		</where>
+		order by o.gmt_create desc
+	</select>
+	
+	<insert id="insertLog" parameterType="SysLog" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_log(
+			<if test="status != null and status != ''">status,</if>
+			<if test="businessName != null and businessName != ''">business_name,</if>
+			<if test="operationType != null and operationType != ''">operation_type,</if>
+			<if test="content != null and content != ''">content,</if>
+			<if test="method != null and method != ''">method,</if>
+			<if test="url != null and url != ''">url,</if>
+			<if test="requestParam != null and requestParam != ''">request_param,</if>
+			<if test="responseParam != null and responseParam != ''">response_param,</if>
+			<if test="operator != null">operator,</if>
+			<if test="ip != null and ip != ''">ip,</if>
+			gmt_create
+		) values (
+			<if test="status != null and status != ''">#{status},</if>
+			<if test="businessName != null and businessName != ''">#{businessName},</if>
+			<if test="operationType != null and operationType != ''">#{operationType},</if>
+			<if test="content != null and content != ''">#{content},</if>
+			<if test="method != null and method != ''">#{method},</if>
+			<if test="url != null and url != ''">#{url},</if>
+			<if test="requestParam != null and requestParam != ''">#{requestParam},</if>
+			<if test="responseParam != null and responseParam != ''">#{responseParam},</if>
+			<if test="operator != null">#{operator},</if>
+			<if test="ip != null and ip != ''">#{ip},</if>
+			now()
+		)
+	</insert>
+	
+	<insert id="insertErrorLog">
+		insert into sys_error_log(
+			<if test="logId != null">log_id,</if>
+			<if test="errorMessage != null and errorMessage != ''">error_message,</if>
+			gmt_create
+		) values (
+			<if test="logId != null">#{logId},</if>
+			<if test="errorMessage != null and errorMessage != ''">#{errorMessage},</if>
+			now()
+		)
+	</insert>
+	
+	<select id="getLog" parameterType="Long" resultMap="SysLogResult">
+		<include refid="selectLogVO"/>
+		where o.log_id = #{id}
+	</select>
+
+</mapper>

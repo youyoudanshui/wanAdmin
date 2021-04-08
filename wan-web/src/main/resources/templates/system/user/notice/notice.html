@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <#assign title="系统通知">
+  <#include "/head.html">
+</head>
+  
+<body>
+<div class="container-fluid p-t-15">
+  
+  <div class="row">
+    
+    <div class="col-lg-12">
+      <div class="card">
+      
+        <div class="card-toolbar clearfix">
+          <form id="searchForm" class="form-inline" action="#!" method="post">
+            <div class="form-group mb-2 mr-2">
+              <input class="form-control" type="text" name="title" placeholder="标题..">
+            </div>
+            <div class="form-group mb-2 mr-2">
+              <select name="isRead" class="form-control">
+                <option value="">不限状态</option>
+                <option value="0">未读</option>
+                <option value="1">已读</option>
+              </select>
+            </div>
+            <a class="btn btn-default mb-2 mr-2" type="button" onclick="refreshTable()"><i class="mdi mdi-magnify"></i> 搜索</a>
+            <button class="btn btn-secondary mb-2" type="reset">重置</button>
+          </form>
+        </div>
+      
+        <div class="card-body">
+        
+          <div id="toolbar" class="toolbar-btn-action">
+            <button id="btn_delete" type="button" class="btn btn-default" onclick="doBatchDelete()">
+              <span class="mdi mdi-window-close" aria-hidden="true"></span>删除
+            </button>
+            <button id="btn_del" type="button" class="btn btn-default m-r-5" onclick="doBatchRead()">
+              <span class="mdi mdi-email-check" aria-hidden="true"></span>全部已读
+            </button>
+          </div>
+          
+          <table id="bootstrap-table"></table>
+          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+
+<#include "/footer.html">
+
+<script type="text/javascript">
+var prefix = "system/user/notice";
+var listUrl = prefix + '/list';
+
+bootstrapTable({
+	url: listUrl,
+    columns: [{
+        field: 'cb',
+        checkbox: true    // 是否显示复选框
+    }, {
+        field: 'title',
+        title: '标题',
+        formatter: function (value, row, index, field) {
+        	var rs = '<a type="button" class="detail-btn text-reset" href="' + prefix + '/detail/' + row.id + '" onclick="doRead(' + row.id + ', ' + row.isRead + ')">' + value;
+        	if (row.isRead == '0') {
+        		rs += ' <span class="badge badge-primary">未读</span>';
+        	}
+        	rs += '</a>';
+        	return rs;
+        }
+    }, {
+        field: 'gmtCreate',
+        title: '时间'
+    }]
+});
+
+function doRead(id, isRead) {
+	if (isRead == '1') {
+		return;
+	}
+	
+	ajaxPost({ 
+   		url: prefix + '/read/' + id
+   	});
+}
+
+function doBatchRead() {
+	ajaxPost({ 
+   		url: prefix + '/allRead',
+   		success: function(r) {
+   			if (r.code == 0) {
+   				notifySuccess('执行成功');
+   				refreshTable();
+   				parent.getUnreadNotices();
+   			} else {
+   				notifyWarning(r.message);
+   			}
+   		}
+   	});
+}
+
+function doBatchDelete() {
+	var selRows = $('#bootstrap-table').bootstrapTable('getSelections');
+    if(selRows.length == 0){
+    	notifyWarning('请至少选择一行');
+        return;
+    }
+
+	var ids = getSelectIds(selRows);
+	
+ 	layer.confirm('确定删除通知？', function(index) {
+		ajaxPost({ 
+    		url: prefix + '/remove',
+    		data: {ids: ids},
+    		success: function(r) {
+    			if (r.code == 0) {
+    				notifySuccess('执行成功');
+    				refreshTable();
+    				parent.getUnreadNotices();
+    			} else {
+    				notifyWarning(r.message);
+    			}
+    		}
+    	});
+	    layer.close(index);
+	});
+}
+</script>
+</body>
+</html>

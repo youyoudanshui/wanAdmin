@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <#assign title="通知管理">
+  <#include "/head.html">
+</head>
+  
+<body>
+<div class="container-fluid p-t-15">
+  
+  <div class="row">
+    
+    <div class="col-lg-12">
+      <div class="card">
+      
+        <div class="card-toolbar clearfix">
+          <form id="searchForm" class="form-inline" action="#!" method="post">
+            <div class="form-group mb-2 mr-2">
+              <input class="form-control" type="text" name="title" placeholder="标题..">
+            </div>
+            <div class="form-group mb-2 mr-2">
+              <select name="isSent" class="form-control">
+                <option value="">不限状态</option>
+                <option value="1">已发送</option>
+                <option value="0">未发送</option>
+              </select>
+            </div>
+            <a class="btn btn-default mb-2 mr-2" type="button" onclick="refreshTable()"><i class="mdi mdi-magnify"></i> 搜索</a>
+            <button class="btn btn-secondary mb-2" type="reset">重置</button>
+          </form>
+        </div>
+      
+        <div class="card-body">
+        
+          <div id="toolbar" class="toolbar-btn-action">
+            <button id="btn_add" type="button" class="btn btn-primary m-r-5" onclick="add('新增通知')">
+              <span class="mdi mdi-plus" aria-hidden="true"></span>新增
+            </button>
+          </div>
+          
+          <table id="bootstrap-table"></table>
+          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+
+<#include "/footer.html">
+
+<script type="text/javascript">
+var prefix = "system/notice";
+var listUrl = prefix + '/list';
+
+bootstrapTable({
+	url: listUrl,
+    columns: [{
+        field: 'id',
+        title: '编号'
+    }, {
+        field: 'title',
+        title: '标题'
+    }, {
+        field: 'isSent',
+        title: '状态',
+        formatter: function (value, row, index) {
+            return getDict('sys_notice_isSent', value);
+        }
+    }, {
+        field: 'gmtCreate',
+        title: '创建时间'
+    }, {
+        field: 'gmtSent',
+        title: '发送时间'
+    }, {
+        field: 'operate',
+        title: '操作',
+        formatter: function(value, item, index) {
+        	return btnGroup(item.isSent)  // 自定义方法
+        },
+        events: {
+            'click .edit-btn': function (event, value, row, index) {
+            	update(row.id, '编辑通知');
+            },
+            'click .send-btn': function (event, value, row, index) {
+            	doSend(row.id);
+            },
+            'click .delete-btn': function (event, value, row, index) {
+            	if (row.isSent == '1') {
+            		doDelete(row.id);
+            	} else {
+            		del(row.id);
+            	}
+            }
+        }
+    }]
+});
+
+//操作按钮
+function btnGroup(isSent) {
+	var btns = '<a type="button" class="edit-btn btn btn-xs btn-default m-r-5" title="修改" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>'
+			 + '<a type="button" class="delete-btn btn btn-xs btn-default m-r-5" title="删除" data-toggle="tooltip"><i class="mdi mdi-delete"></i></a>';
+	if (isSent == '0') {
+		btns += '<a type="button" class="send-btn btn btn-xs btn-default" title="发送" data-toggle="tooltip"><i class="mdi mdi-send"></i></a>';
+	}
+	return btns;
+}
+
+function doSend(id) {
+	layer.confirm('确定向用户发送该条通知？', function(index) {
+		ajaxPost({ 
+    		url: prefix + '/send/' + id,
+    		success: function(r) {
+    			if (r.code == 0) {
+    				notifySuccess('执行成功');
+    				refreshTable();
+    				parent.getUnreadNotices();
+    			} else {
+    				notifyWarning(r.message);
+    			}
+    		}
+    	});
+	    layer.close(index);
+	});
+}
+
+function doDelete(id) {
+	layer.confirm('将会同步删除已发送给用户的该条通知，确定删除该条记录？', function(index) {
+		ajaxPost({ 
+    		url: prefix + '/remove/' + id,
+    		success: function(r) {
+    			if (r.code == 0) {
+    				notifySuccess('执行成功');
+    				refreshTable();
+    				parent.getUnreadNotices();
+    			} else {
+    				notifyWarning(r.message);
+    			}
+    		}
+    	});
+	    layer.close(index);
+	});
+}
+</script>
+</body>
+</html>

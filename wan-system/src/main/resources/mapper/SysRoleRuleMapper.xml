@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wan.system.mapper.SysRoleRuleMapper">
+
+	<resultMap type="SysRoleRule" id="SysRoleRuleResult">
+		<id     property="id"               column="role_rule_id"        />
+		<result property="roleId"           column="role_id"      />
+		<result property="permissionValue"    column="permission_value"      />
+		<result property="gmtCreate"        column="gmt_create"        />
+		<result property="gmtModified"      column="gmt_modified"          />
+	</resultMap>
+	
+	<sql id="selectRoleRuleVO">
+		select 
+			rr.role_rule_id, rr.role_id, rr.permission_value, rr.gmt_create, rr.gmt_modified
+		from sys_role_rule rr
+	</sql>
+	
+	<select id="listRoleRules" parameterType="SysRoleRule" resultMap="SysRoleRuleResult">
+		<include refid="selectRoleRuleVO"/>
+		where rr.role_id = #{roleId}
+		order by rr.gmt_create desc
+	</select>
+	
+	<select id="listRoleRulesByUserId" parameterType="SysRoleRule" resultMap="SysRoleRuleResult">
+		<include refid="selectRoleRuleVO"/>
+		left join
+			sys_user_role ur
+		on rr.role_id = ur.role_id
+		where ur.user_id = #{userId}
+	</select>
+	
+	<insert id="insertRoleRule" parameterType="SysRoleRule">
+		insert into sys_role_rule(
+			<if test="roleId != null and roleId != ''">role_id,</if>
+			<if test="permissionValue != null and permissionValue != ''">permission_value,</if>
+			gmt_create
+		) values (
+			<if test="roleId != null and roleId != ''">#{roleId},</if>
+			<if test="permissionValue != null and permissionValue != ''">#{permissionValue},</if>
+			now()
+		)
+	</insert>
+	
+	<delete id="deleteRoleRules" parameterType="Long">
+		delete from sys_role_rule where role_id = #{roleId}
+	</delete>
+
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wan.system.mapper.SysDictMapper">
+
+	<resultMap type="SysDict" id="SysDictResult">
+		<id     property="id"               column="dict_id"        />
+		<result property="typeName"           column="type_name"      />
+		<result property="description"    column="description"      />
+		<result property="status"    column="status"      />
+		<result property="gmtCreate"        column="gmt_create"        />
+		<result property="gmtModified"      column="gmt_modified"          />
+	</resultMap>
+	
+	<sql id="selectDictVO">
+		select 
+			dict_id, type_name, description, status, gmt_create, gmt_modified
+		from sys_dict
+	</sql>
+	
+	<select id="listDicts" parameterType="SysDict" resultMap="SysDictResult">
+		<include refid="selectDictVO"/>
+		<where>
+			<if test="typeName != null and typeName != ''">and type_name like concat('%', #{typeName}, '%')</if>
+		</where>
+		order by gmt_create desc
+	</select>
+	
+	<select id="getDictById" parameterType="Long" resultMap="SysDictResult">
+		<include refid="selectDictVO"/>
+		where dict_id = #{id}
+	</select>
+	
+	<select id="getDictByTypeName" parameterType="String" resultMap="SysDictResult">
+		<include refid="selectDictVO"/>
+		where type_name = #{typeName}
+	</select>
+	
+	<insert id="insertDict" parameterType="SysDict">
+		insert into sys_dict(
+			<if test="typeName != null and typeName != ''">type_name,</if>
+			<if test="description != null and description != ''">description,</if>
+			<if test="status != null and status != ''">status,</if>
+			gmt_create
+		) values (
+			<if test="typeName != null and typeName != ''">#{typeName},</if>
+			<if test="description != null and description != ''">#{description},</if>
+			<if test="status != null and status != ''">#{status},</if>
+			now()
+		)
+	</insert>
+	
+	<update id="updateDict" parameterType="SysDict">
+		update sys_dict
+		<set>
+			<if test="description != null">description = #{description},</if>
+			<if test="status != null">status = #{status},</if>
+			gmt_modified = now()
+		</set>
+		where dict_id = #{id}
+	</update>
+	
+	<delete id="deleteDict" parameterType="Long">
+		delete from sys_dict where dict_id = #{id}
+	</delete>
+
+</mapper>

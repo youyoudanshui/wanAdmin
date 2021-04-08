@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wan.system.mapper.SysUserRoleMapper">
+
+	<resultMap type="SysUserRole" id="SysUserRoleResult">
+		<id     property="id"               column="user_role_id"        />
+		<result property="userId"           column="user_id"      />
+		<result property="roleId"    column="role_id"      />
+		<result property="gmtCreate"        column="gmt_create"        />
+		<result property="gmtModified"      column="gmt_modified"          />
+	</resultMap>
+	
+	<sql id="selectUserRoleVO">
+		select 
+			user_role_id, user_id, role_id, gmt_create, gmt_modified
+		from sys_user_role
+	</sql>
+	
+	<select id="listUserRoles" parameterType="SysUserRole" resultMap="SysUserRoleResult">
+		<include refid="selectUserRoleVO"/>
+		where user_id = #{userId}
+		order by gmt_create desc
+	</select>
+	
+	<insert id="insertUserRole" parameterType="SysUserRole">
+		insert into sys_user_role(
+			<if test="userId != null and userId != ''">user_id,</if>
+			<if test="roleId != null and roleId != ''">role_id,</if>
+			gmt_create
+		) values (
+			<if test="userId != null and userId != ''">#{userId},</if>
+			<if test="roleId != null and roleId != ''">#{roleId},</if>
+			now()
+		)
+	</insert>
+	
+	<delete id="deleteUserRoles" parameterType="Long">
+		delete from sys_user_role where user_id = #{userId}
+	</delete>
+
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wan.system.mapper.SysUserNoticeMapper">
+
+	<resultMap type="SysUserNotice" id="SysUserNoticeResult">
+		<id     property="id"               column="user_notice_id"        />
+		<result property="userId"           column="user_id"      />
+		<result property="noticeId"           column="notice_id"      />
+		<result property="title"    column="title"      />
+		<result property="isRead"    column="is_read"      />
+		<result property="gmtRead"        column="gmt_read"        />
+		<result property="isDeleted"    column="is_deleted"      />
+		<result property="gmtDeleted"        column="gmt_deleted"        />
+		<result property="gmtCreate"        column="gmt_create"        />
+		<result property="gmtModified"      column="gmt_modified"          />
+	</resultMap>
+	
+	<sql id="selecUserNoticeVO">
+		select 
+			un.user_notice_id, un.user_id, un.notice_id, un.is_read, un.gmt_read, un.is_deleted, un.gmt_deleted, un.gmt_create, un.gmt_modified,
+			n.title
+		from sys_user_notice un
+		left join sys_notice n on un.notice_id = n.notice_id
+	</sql>
+	
+	<select id="listUserNotices" parameterType="SysUserNotice" resultMap="SysUserNoticeResult">
+		<include refid="selecUserNoticeVO"/>
+		<where>
+			and un.user_id = #{userId} and un.is_deleted = '0'
+			<if test="title != null and title != ''">and n.title like concat('%', #{title}, '%')</if>
+			<if test="isRead != null and isRead != ''">and un.is_read = #{isRead}</if>
+		</where>
+		order by un.gmt_create desc
+	</select>
+	
+	<select id="listUnreadUserNotices" parameterType="Long" resultMap="SysUserNoticeResult">
+		<include refid="selecUserNoticeVO"/>
+		where un.user_id = #{userId} and un.is_read = '0' and un.is_deleted = '0'
+		order by un.gmt_create desc
+		limit 7
+	</select>
+	
+	<select id="countUnreadUserNotices" parameterType="Long" resultType="int">
+		select count(1) from sys_user_notice
+		where user_id = #{userId} and is_read = '0' and is_deleted = '0'
+	</select>
+	
+	<select id="getUserNoticeById" parameterType="Long" resultMap="SysUserNoticeResult">
+		<include refid="selecUserNoticeVO"/>
+		where un.user_notice_id = #{id}
+	</select>
+	
+	<insert id="insertUserNotices" parameterType="Long">
+		insert into sys_user_notice (
+			user_id, notice_id, gmt_create
+		)(
+			select user_id, #{noticeId}, now()
+			from sys_user
+		)
+	</insert>
+	
+	<update id="updateUserNotice" parameterType="SysUserNotice">
+		update sys_user_notice
+		<set>
+			<if test="isRead != null">is_read = #{isRead}, gmt_read = now(),</if>
+			<if test="isDeleted != null">is_deleted = #{isDeleted}, gmt_deleted = now(),</if>
+			gmt_modified = now()
+		</set>
+		where user_notice_id = #{id}
+	</update>
+	
+	<delete id="deleteUserNotices" parameterType="Long">
+		delete from sys_user_notice where notice_id = #{noticeId}
+	</delete>
+	
+	<update id="readAllUserNotice" parameterType="Long">
+		update sys_user_notice 
+		set is_read = '1', gmt_read = now(), gmt_modified = now() 
+		where user_id = #{userId} and is_read = '0'
+	</update>
+
+</mapper>

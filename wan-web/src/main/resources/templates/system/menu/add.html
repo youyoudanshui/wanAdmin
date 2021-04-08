@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <#assign title="新增菜单">
+  <#include "/head.html">
+</head>
+
+<body>
+  
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="card-body bg-white">
+          
+          <form id="submitForm" action="system/menu/save" method="post" class="form-horizontal">
+            <#if pmenu.id??>
+            
+	          <input type="hidden" name="pid" value="${pmenu.id}">
+	            
+	          <div class="form-group row">
+	            <label class="col-md-2 col-form-label">上级菜单</label>
+	            <div class="col-md-10">
+	              <input type="text" class="form-control" value="${pmenu.name}" readonly>
+	            </div>
+	          </div>
+	          
+	          <div class="form-group row">
+	            <label class="col-md-2 col-form-label" for="status">类型</label>
+	            <div class="col-md-10 h-28">
+	              <div class="custom-control custom-radio custom-control-inline">
+		            <input type="radio" id="typeMenu" name="type" class="custom-control-input" value="MENU" checked>
+		            <label class="custom-control-label" for="typeMenu">菜单</label>
+		          </div>
+	              <div class="custom-control custom-radio custom-control-inline">
+		            <input type="radio" id="typeButton" name="type" class="custom-control-input" value="BUTTON">
+		            <label class="custom-control-label" for="typeButton">按钮</label>
+		          </div>
+	            </div>
+	          </div>
+            
+            </#if>
+            
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="name">名称</label>
+              <div class="col-md-10">
+              	<input type="text" class="form-control" id="name" name="name" value="" />
+              </div>
+            </div>
+            
+            <#if !pmenu.id??>
+            
+              <input type="hidden" name="type" value="MENU">
+            
+	          <div class="form-group row">
+	            <label class="col-md-2 col-form-label" for="icon">图标</label>
+	            <div class="col-md-10">
+	              <input type="text" class="form-control" id="icon" name="icon" value=""  />
+	              <span id="show-mdi"></span>
+	            </div>
+	          </div>
+            
+            </#if>
+            
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="url">url</label>
+              <div class="col-md-10">
+              	<input type="text" class="form-control" id="url" name="url" value="" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="permissionValue">权限值</label>
+              <div class="col-md-10">
+              	<input type="text" class="form-control" id="permissionValue" name="permissionValue" value="" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="permissionValue">排序</label>
+              <div class="col-md-10">
+              	<input type="text" class="form-control" id="seq" name="seq" value="" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="status">状态</label>
+              <div class="col-md-10 h-28">
+                <div class="custom-control custom-radio custom-control-inline">
+	              <input type="radio" id="statusOne" name="status" class="custom-control-input" value="1" checked>
+	              <label class="custom-control-label" for="statusOne">启用</label>
+	            </div>
+                <div class="custom-control custom-radio custom-control-inline">
+	              <input type="radio" id="statusZero" name="status" class="custom-control-input" value="0">
+	              <label class="custom-control-label" for="statusZero">禁用</label>
+	            </div>
+              </div>
+            </div>
+          </form>
+ 
+        </div>
+    </div>
+    
+  </div>
+  
+<#include "/footer.html">
+
+<script type="text/javascript">
+var font_element = $('#icon').fontIconPicker({
+    theme: 'fip-bootstrap'
+});
+
+$.ajax({
+    url: 'js/fontIconPicker/fontjson/materialdesignicons.json',
+    type: 'GET',
+    dataType: 'json'
+}).done(function(response) {
+
+    var fontello_json_icons = [];
+
+    $.each(response.glyphs, function(i, v) {
+        fontello_json_icons.push( v.css );
+    });
+
+    font_element.setIcons(fontello_json_icons);
+}).fail(function() {
+    console.error('字体图标配置加载失败');
+});
+
+$(document).on('change', '#icon', function(){
+    $('#show-mdi').html($(this).val());
+});
+
+$(':radio[name="type"]').change(function() {
+	if ($(this).val() == 'MENU') {
+		$('#url').parents('.form-group').show();
+	} else {
+		$('#url').parents('.form-group').hide();
+		$('#url').val('');
+	}
+});
+
+validateForm({
+	'name': {
+		required: true
+	},
+	'icon': {
+		required: true
+	},
+	'permissionValue': {
+		required: true
+	},
+	'seq': {
+		required: true,
+		digits: true
+	}
+});
+</script>
+</body>
+</html>

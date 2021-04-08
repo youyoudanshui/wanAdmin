@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wan.system.mapper.SysUserMapper">
+
+	<resultMap type="SysUser" id="SysUserResult">
+		<id     property="id"               column="user_id"        />
+		<result property="loginname"           column="loginname"      />
+		<result property="username"     column="username"      />
+		<result property="password"    column="password"      />
+		<result property="avatar"          column="avatar"            />
+		<result property="telephone"	        column="telephone"         />
+		<result property="email"              column="email"      />
+		<result property="sex"     column="sex"      />
+		<result property="status"         column="status"      />
+		<result property="gmtCreate"        column="gmt_create"        />
+		<result property="gmtModified"      column="gmt_modified"          />
+	</resultMap>
+	
+	<sql id="selectUserVO">
+		select 
+			user_id, loginname, username, password, avatar, telephone, email, sex, status, gmt_create, gmt_modified
+		from sys_user
+	</sql>
+	
+	<select id="listUsers" parameterType="SysUser" resultMap="SysUserResult">
+		<include refid="selectUserVO"/>
+		<where>
+			<if test="username != null and username != ''">and username like concat('%', #{username}, '%')</if>
+			<if test="status != null and status != ''">and status = #{status}</if>
+		</where>
+		order by gmt_create desc
+	</select>
+	
+	<select id="getUserById" parameterType="Long" resultMap="SysUserResult">
+		<include refid="selectUserVO"/>
+		where user_id = #{id}
+	</select>
+	
+	<select id="getUserByLoginname" parameterType="String" resultMap="SysUserResult">
+		<include refid="selectUserVO"/>
+		where loginname = #{loginname}
+	</select>
+	
+	<insert id="insertUser" parameterType="SysUser" useGeneratedKeys="true" keyProperty="id" keyColumn="user_id">
+		insert into sys_user(
+			<if test="loginname != null and loginname != ''">loginname,</if>
+			<if test="username != null and username != ''">username,</if>
+			<if test="password != null and password != ''">password,</if>
+			<if test="avatar != null and avatar != ''">avatar,</if>
+			<if test="telephone != null and telephone != ''">telephone,</if>
+			<if test="email != null and email != ''">email,</if>
+			<if test="sex != null and sex != ''">sex,</if>
+			<if test="status != null and status != ''">status,</if>
+			gmt_create
+		) values (
+			<if test="loginname != null and loginname != ''">#{loginname},</if>
+			<if test="username != null and username != ''">#{username},</if>
+			<if test="password != null and password != ''">#{password},</if>
+			<if test="avatar != null and avatar != ''">#{avatar},</if>
+			<if test="telephone != null and telephone != ''">#{telephone},</if>
+			<if test="email != null and email != ''">#{email},</if>
+			<if test="sex != null and sex != ''">#{sex},</if>
+			<if test="status != null and status != ''">#{status},</if>
+			now()
+		)
+	</insert>
+	
+	<update id="updateUser" parameterType="SysUser">
+		update sys_user
+		<set>
+			<if test="username != null">username = #{username},</if>
+			<if test="password != null">password = #{password},</if>
+			<if test="avatar != null">avatar = #{avatar},</if>
+			<if test="telephone != null">telephone = #{telephone},</if>
+			<if test="email != null">email = #{email},</if>
+			<if test="sex != null">sex = #{sex},</if>
+			<if test="status != null">status = #{status},</if>
+			gmt_modified = now()
+		</set>
+		where user_id = #{id}
+	</update>
+	
+	<delete id="deleteUser" parameterType="Long">
+		delete from sys_user where user_id = #{id}
+	</delete>
+
+</mapper>

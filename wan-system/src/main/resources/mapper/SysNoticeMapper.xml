@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wan.system.mapper.SysNoticeMapper">
+
+	<resultMap type="SysNotice" id="SysNoticeResult">
+		<id     property="id"               column="notice_id"        />
+		<result property="title"           column="title"      />
+		<result property="content"    column="content"      />
+		<result property="isSent"    column="is_sent"      />
+		<result property="gmtSent"        column="gmt_sent"        />
+		<result property="gmtCreate"        column="gmt_create"        />
+		<result property="gmtModified"      column="gmt_modified"          />
+	</resultMap>
+	
+	<sql id="selectNoticeVO">
+		select 
+			n.notice_id, n.title, c.content, n.is_sent, n.gmt_sent, n.gmt_create, n.gmt_modified
+		from sys_notice n
+		left join sys_notice_content c on n.notice_id = c.notice_id
+	</sql>
+	
+	<select id="listNotices" parameterType="SysNotice" resultMap="SysNoticeResult">
+		<include refid="selectNoticeVO"/>
+		<where>
+			<if test="title != null and title != ''">and n.title like concat('%', #{title}, '%')</if>
+			<if test="isSent != null and isSent != ''">and n.is_sent = #{isSent}</if>
+		</where>
+		order by n.gmt_create desc
+	</select>
+	
+	<select id="getNoticeById" parameterType="Long" resultMap="SysNoticeResult">
+		<include refid="selectNoticeVO"/>
+		where n.notice_id = #{id}
+	</select>
+	
+	<insert id="insertNotice" parameterType="SysNotice" useGeneratedKeys="true" keyProperty="id" keyColumn="notice_id">
+		insert into sys_notice(
+			<if test="title != null and title != ''">title,</if>
+			gmt_create
+		) values (
+			<if test="title != null and title != ''">#{title},</if>
+			now()
+		)
+	</insert>
+	
+	<update id="updateNotice" parameterType="SysNotice">
+		update sys_notice
+		<set>
+			<if test="title != null">title = #{title},</if>
+			<if test="isSent != null">is_sent = #{isSent}, gmt_sent = now(),</if>
+			gmt_modified = now()
+		</set>
+		where notice_id = #{id}
+	</update>
+	
+	<delete id="deleteNotice" parameterType="Long">
+		delete from sys_notice where notice_id = #{id}
+	</delete>
+	
+	<select id="getNoticeContent" parameterType="Long" resultMap="SysNoticeResult">
+		select notice_id, content from sys_notice_content
+		where notice_id = #{noticeId}
+	</select>
+	
+	<insert id="insertNoticeContent" parameterType="SysNotice">
+		insert into sys_notice_content(
+			<if test="id != null and id != ''">notice_id,</if>
+			<if test="content != null and content != ''">content,</if>
+			gmt_create
+		) values (
+			<if test="id != null and id != ''">#{id},</if>
+			<if test="content != null and content != ''">#{content},</if>
+			now()
+		)
+	</insert>
+	
+	<update id="updateNoticeContent" parameterType="SysNotice">
+		update sys_notice_content
+		<set>
+			<if test="content != null">content = #{content},</if>
+			gmt_modified = now()
+		</set>
+		where notice_id = #{id}
+	</update>
+	
+	<delete id="deleteNoticeContent" parameterType="Long">
+		delete from sys_notice_content where notice_id = #{noticeId}
+	</delete>
+
+</mapper>

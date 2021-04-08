@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <#assign title="用户管理">
+  <#include "/head.html">
+</head>
+  
+<body>
+<div class="container-fluid p-t-15">
+  
+  <div class="row">
+    
+    <div class="col-lg-12">
+      <div class="card">
+      
+        <div class="card-toolbar clearfix">
+          <form id="searchForm" class="form-inline" action="#!" method="post">
+            <div class="form-group mb-2 mr-2">
+              <input class="form-control" type="text" name="username" placeholder="用户名..">
+            </div>
+            <div class="form-group mb-2 mr-2">
+              <select name="status" class="form-control">
+                <option value="">不限状态</option>
+                <option value="1">正常状态</option>
+                <option value="0">停用状态</option>
+              </select>
+            </div>
+            <a class="btn btn-default mb-2 mr-2" type="button" onclick="refreshTable()"><i class="mdi mdi-magnify"></i> 搜索</a>
+            <button class="btn btn-secondary mb-2" type="reset">重置</button>
+          </form>
+        </div>
+      
+        <div class="card-body">
+        
+          <div id="toolbar" class="toolbar-btn-action">
+            <button id="btn_add" type="button" class="btn btn-primary m-r-5" onclick="add('新增用户')">
+              <span class="mdi mdi-plus" aria-hidden="true"></span>新增
+            </button>
+          </div>
+          
+          <table id="bootstrap-table"></table>
+          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+
+<#include "/footer.html">
+
+<script type="text/javascript">
+var prefix = "system/user";
+var listUrl = prefix + '/list';
+
+bootstrapTable({
+	url: listUrl,
+    columns: [{
+        field: 'id',
+        title: '编号'
+    }, {
+        field: 'username',
+        title: '用户名'
+    }, {
+        field: 'status',
+        title: '状态',
+        formatter: function (value, row, index) {
+            if (value == 0) {
+                is_checked = '';
+            } else if (value == 1){
+                is_checked = 'checked="checked"';
+            }
+            var result = '<div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" id="customSwitch'+ row.id +'" '+ is_checked +'><label class="custom-control-label" for="customSwitch'+ row.id +'" onClick="updateStatus('+ row.id +', '+ value +')"></label></div>';
+        
+            return result;
+        },
+    }, {
+        field: 'avatar',
+        title: '头像',
+        formatter: function (value, row, index) {
+        	var result = '-';
+            if (value) {
+            	result = '<img class="img-avatar img-avatar-48 m-r-10" src="' + value + '" title="头像" alt="头像" />';
+            }
+        
+            return result;
+        },
+    }, {
+        field: 'telephone',
+        title: '手机'
+    }, {
+        field: 'email',
+        title: '邮箱'
+    }, {
+        field: 'sex',
+        title: '性别',
+        formatter: function (value, row, index) {
+            return getDict('sys_user_sex', value);
+        }
+    }, {
+        field: 'gmtCreate',
+        title: '加入时间'
+    }, {
+        field: 'operate',
+        title: '操作',
+        formatter: btnGroup,  // 自定义方法
+        events: {
+            'click .edit-btn': function (event, value, row, index) {
+            	update(row.id, '编辑用户');
+            },
+            'click .delete-btn': function (event, value, row, index) {
+            	del(row.id);
+            }
+        }
+    }]
+});
+
+//操作按钮
+function btnGroup() {
+	return [
+        '<a type="button" class="edit-btn btn btn-xs btn-default m-r-5" title="修改" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>',
+        '<a type="button" class="delete-btn btn btn-xs btn-default" title="删除" data-toggle="tooltip"><i class="mdi mdi-delete"></i></a>'
+    ].join('');
+}
+</script>
+</body>
+</html>

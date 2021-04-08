@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <#assign title="新增角色">
+  <#include "/head.html">
+</head>
+
+<body>
+  
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="card-body bg-white">
+          
+          <form id="submitForm" action="system/role/save" method="post" class="form-horizontal">
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="rolename">角色名</label>
+              <div class="col-md-10">
+              	<input type="text" class="form-control" id="rolename" name="rolename" value="ROLE_" />
+              	<small class="help-block">格式：ROLE_XXX</small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="description">具体描述</label>
+              <div class="col-md-10">
+              	<input type="text" class="form-control" id="description" name="description" value="" />
+              </div>
+            </div>
+          </form>
+ 
+        </div>
+    </div>
+    
+  </div>
+  
+<#include "/footer.html">
+
+<script type="text/javascript">
+validateForm({
+	'rolename': {
+		required: true,
+		remote: 'system/role/checkRolename'
+	},
+	'description': {
+		required: true
+	}
+}, {
+	'rolename': {
+		remote: '该角色名已经存在'
+	}
+});
+</script>
+</body>
+</html>

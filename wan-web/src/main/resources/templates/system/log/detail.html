@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <#assign title="日志详情">
+  <#include "/head.html">
+</head>
+
+<body>
+  
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-body bg-white">
+          
+	    <dl class="row">
+	    
+	      <dt class="col-sm-2">业务名称</dt>
+	      <dd class="col-sm-10">${log.businessName}</dd>
+	
+	      <dt class="col-sm-2">操作类型</dt>
+	      <dd class="col-sm-10" id="operationType"></dd>
+	
+	      <dt class="col-sm-2">内容</dt>
+	      <dd class="col-sm-10">${log.content}</dd>
+	
+	      <dt class="col-sm-2">请求方法</dt>
+	      <dd class="col-sm-10">${log.method}</dd>
+	
+	      <dt class="col-sm-2">请求URI</dt>
+	      <dd class="col-sm-10">${log.url}</dd>
+	
+	      <dt class="col-sm-2">请求参数</dt>
+	      <dd class="col-sm-10">${log.requestParam}</dd>
+		
+		  <#if log.responseParam??>
+	      <dt class="col-sm-2">返回参数</dt>
+	      <dd class="col-sm-10">${log.responseParam}</dd>
+	      </#if>
+	
+	      <dt class="col-sm-2">操作人员</dt>
+	      <dd class="col-sm-10">${log.operatorName}</dd>
+	
+	      <dt class="col-sm-2">操作时间</dt>
+	      <dd class="col-sm-10">${log.gmtCreate}</dd>
+	
+	      <dt class="col-sm-2">请求IP</dt>
+	      <dd class="col-sm-10">${log.ip}</dd>
+	
+		  <#if log.status == '1'>
+	      <dt class="col-sm-2">异常信息</dt>
+	      <dd class="col-sm-12" style="overflow-x: auto;">${log.errorMessage}</dd>
+	      </#if>
+	
+	    </dl>
+ 
+      </div>
+    </div>
+    
+  </div>
+  
+<#include "/footer.html">
+
+<script type="text/javascript">
+$('#operationType').html(getDict('sys_operation_type', '${log.operationType}'));
+</script>
+</body>
+</html>

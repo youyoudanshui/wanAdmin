@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wan.system.mapper.SysRoleMapper">
+
+	<resultMap type="SysRole" id="SysRoleResult">
+		<id     property="id"               column="role_id"        />
+		<result property="rolename"           column="rolename"      />
+		<result property="description"    column="description"      />
+		<result property="gmtCreate"        column="gmt_create"        />
+		<result property="gmtModified"      column="gmt_modified"          />
+	</resultMap>
+	
+	<sql id="selectRoleVO">
+		select 
+			role_id, rolename, description, gmt_create, gmt_modified
+		from sys_role
+	</sql>
+	
+	<select id="listRoles" parameterType="SysRole" resultMap="SysRoleResult">
+		<include refid="selectRoleVO"/>
+		<where>
+			<if test="rolename != null and rolename != ''">and rolename like concat('%', #{rolename}, '%')</if>
+		</where>
+		order by gmt_create desc
+	</select>
+	
+	<select id="getRoleById" parameterType="Long" resultMap="SysRoleResult">
+		<include refid="selectRoleVO"/>
+		where role_id = #{id}
+	</select>
+	
+	<select id="getRoleByRolename" parameterType="String" resultMap="SysRoleResult">
+		<include refid="selectRoleVO"/>
+		where rolename = #{rolename}
+	</select>
+	
+	<insert id="insertRole" parameterType="SysRole">
+		insert into sys_role(
+			<if test="rolename != null and rolename != ''">rolename,</if>
+			<if test="description != null and description != ''">description,</if>
+			gmt_create
+		) values (
+			<if test="rolename != null and rolename != ''">#{rolename},</if>
+			<if test="description != null and description != ''">#{description},</if>
+			now()
+		)
+	</insert>
+	
+	<update id="updateRole" parameterType="SysRole">
+		update sys_role
+		<set>
+			<if test="description != null">description = #{description},</if>
+			gmt_modified = now()
+		</set>
+		where role_id = #{id}
+	</update>
+	
+	<delete id="deleteRole" parameterType="Long">
+		delete from sys_role where role_id = #{id}
+	</delete>
+
+</mapper>

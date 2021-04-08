@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <#assign title="修改用户">
+  <#include "/head.html">
+</head>
+
+<body>
+  
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="card-body bg-white">
+          
+          <form id="submitForm" action="system/user/update" method="post" class="form-horizontal">
+            <input type="hidden" name="id" value="${user.id}">
+            <input type="hidden" name="password" value="${user.password}">
+            
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="loginname">登录名</label>
+              <div class="col-md-10">
+              	<input type="text" class="form-control" id="loginname" name="loginname" value="${user.loginname}" readonly />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="username">用户名</label>
+              <div class="col-md-10">
+              	<input type="text" class="form-control" id="username" name="username" value="${user.username}" />
+              </div>
+            </div>
+            <div class="form-group file-group row">
+              <label class="col-md-2 col-form-label" for="avatar">头像</label>
+              <div class="col-md-10">
+              	<div class="input-group">
+	              <input type="text" class="form-control file-value" id="avatar" name="avatar" value="${user.avatar}" placeholder="头像图片地址" />
+	              <input type="file" class="d-none" file-type="image" />
+	              <div class="input-group-append">
+	                <button class="btn btn-default file-browser" type="button">上传图片</button>
+	              </div>
+	            </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="telephone">手机</label>
+              <div class="col-md-10">
+              	<input type="text" class="form-control" id="telephone" name="telephone" value="${user.telephone}" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="email">邮箱</label>
+              <div class="col-md-10">
+              	<input type="text" class="form-control" id="email" name="email" value="${user.email}" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="sex">性别</label>
+              <div class="col-md-10">
+              	<div class="form-controls">
+                  <div class="custom-control custom-radio custom-control-inline">
+		            <input type="radio" id="sexOne" name="sex" class="custom-control-input" value="1" <#if user.sex == '1'>checked</#if>>
+		            <label class="custom-control-label" for="sexOne">男</label>
+		          </div>
+	              <div class="custom-control custom-radio custom-control-inline">
+		            <input type="radio" id="sexTwo" name="sex" class="custom-control-input" value="2" <#if user.sex == '2'>checked</#if>>
+		            <label class="custom-control-label" for="sexTwo">女</label>
+		          </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="status">状态</label>
+              <div class="col-md-10 h-28">
+                <div class="custom-control custom-radio custom-control-inline">
+	              <input type="radio" id="statusOne" name="status" class="custom-control-input" value="1" <#if user.status == '1'>checked</#if>>
+	              <label class="custom-control-label" for="statusOne">正常</label>
+	            </div>
+                <div class="custom-control custom-radio custom-control-inline">
+	              <input type="radio" id="statusZero" name="status" class="custom-control-input" value="0" <#if user.status == '0'>checked</#if>>
+	              <label class="custom-control-label" for="statusZero">停用</label>
+	            </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-form-label" for="roles">角色</label>
+              <div class="col-md-10 h-28">
+                
+                <#list roleList as role>
+                
+	              <div class="custom-control custom-checkbox custom-control-inline">
+	                <input type="checkbox" class="custom-control-input" id="role${role.id}" name="roles" value="${role.id}" <#if user.roles?seq_contains(role.id?string)>checked</#if>>
+	                <label class="custom-control-label" for="role${role.id}">${role.description}</label>
+	              </div>
+                
+                </#list>
+                
+              </div>
+            </div>
+          </form>
+ 
+        </div>
+    </div>
+    
+  </div>
+  
+<#include "/footer.html">
+
+<script type="text/javascript">
+validateForm({
+	'username': {
+		required: true
+	},
+	'email': {
+		email: true
+	},
+	'status': {
+		required: true
+	},
+	'roles': {
+		required: true
+	}
+});
+</script>
+</body>
+</html>
