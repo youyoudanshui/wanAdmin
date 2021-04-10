@@ -3,6 +3,8 @@ package com.wan.system.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,12 @@ public class SysRoleServiceImpl implements SysRoleService {
 	@Override
 	public List<SysRole> listRoles(SysRole role) {
 		return roleMapper.listRoles(role);
+	}
+	
+	@Override
+	@Cacheable("roleList")
+	public List<SysRole> listAllRoles() {
+		return roleMapper.listAllRoles();
 	}
 
 	@Override
@@ -53,16 +61,19 @@ public class SysRoleServiceImpl implements SysRoleService {
 	}
 
 	@Override
+	@CacheEvict(value="roleList", allEntries=true)
 	public void insertRole(SysRole role) {
 		roleMapper.insertRole(role);
 	}
 
 	@Override
+	@CacheEvict(value="roleList", allEntries=true)
 	public void updateRole(SysRole role) {
 		roleMapper.updateRole(role);
 	}
 
 	@Override
+	@CacheEvict(value="roleList", allEntries=true)
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteRole(Long id) {
 		roleMapper.deleteRole(id);

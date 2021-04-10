@@ -79,7 +79,7 @@ public class SysUserController extends BaseController {
 	@GetMapping("/add")
 	@PreAuthorize("hasAuthority('open:user:add')")
 	public String add(ModelMap map) {
-		List<SysRole> roleList = roleService.listRoles(new SysRole());
+		List<SysRole> roleList = roleService.listAllRoles();
 		map.put("roleList", roleList);
 		
 		return prefix + "/add";
@@ -91,7 +91,7 @@ public class SysUserController extends BaseController {
 		SysUser user = userService.getUserAndRolesById(id);
 		map.put("user", user);
 		
-		List<SysRole> roleList = roleService.listRoles(new SysRole());
+		List<SysRole> roleList = roleService.listAllRoles();
 		map.put("roleList", roleList);
 		
 		return prefix + "/edit";

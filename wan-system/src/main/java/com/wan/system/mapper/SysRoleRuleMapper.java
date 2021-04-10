@@ -13,13 +13,6 @@ public interface SysRoleRuleMapper {
 	List<SysRoleRule> listRoleRules(Long roleId);
 	
 	/**
-	 * 获取用户权限列表
-	 * @param userId
-	 * @return
-	 */
-	List<SysRoleRule> listRoleRulesByUserId(Long userId);
-	
-	/**
 	 * 新增角色权限
 	 * @param roleRule
 	 */

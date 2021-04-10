@@ -75,7 +75,7 @@
             
             <#list menuList as menu><!-- 一级菜单 -->
               
-              <#if rules?seq_contains(menu.permissionValue)>
+              <#if user.authorities?seq_contains(menu.permissionValue)>
             
 	              <#if menu.submenus?size gt 0>
 	              
@@ -84,7 +84,7 @@
 		              <ul class="nav nav-subnav">
 		              	<#list menu.submenus as submenu2><!-- 二级菜单 -->
 		              	
-		              	  <#if rules?seq_contains(submenu2.permissionValue)>
+		              	  <#if user.authorities?seq_contains(submenu2.permissionValue)>
 		              	  
 			              	  <#if submenu2.submenus?size gt 0>
 			              	  	
@@ -94,7 +94,7 @@
 			              	  	  	
 			              	  	  	<#list submenu2.submenus as submenu3><!-- 三级菜单 -->
 			              	  	  	
-			              	  	  	  <#if rules?seq_contains(submenu3.permissionValue)>
+			              	  	  	  <#if user.authorities?seq_contains(submenu3.permissionValue)>
 			              	  	  	
 			              	  	  	  	<li> <a class="multitabs" href="${submenu3.url!'#'}">${submenu3.name}</a> </li>
 			              	  	  	

@@ -23,7 +23,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 	
 	@Override
-	@Cacheable("menuList")
+	@Cacheable("indexMenuList")
 	public List<SysMenu> listIndexMenus() {
 		// 一级菜单
 		List<SysMenu> list = menuMapper.listPrimaryMenus();
@@ -41,6 +41,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 	
 	@Override
+	@Cacheable("menuAndButtonList")
 	public List<SysMenu> listMenusAndButtons() {
 		// 一级菜单
 		List<SysMenu> list = menuMapper.listPrimaryMenus();
@@ -82,19 +83,19 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 
 	@Override
-	@CacheEvict(value="menuList", condition="#menu.type=='MENU'", allEntries=true)
+	@CacheEvict(value={"indexMenuList", "menuAndButtonList"}, allEntries=true)
 	public void insertMenu(SysMenu menu) {
 		menuMapper.insertMenu(menu);
 	}
 
 	@Override
-	@CacheEvict(value="menuList", allEntries=true)
+	@CacheEvict(value={"indexMenuList", "menuAndButtonList"}, allEntries=true)
 	public void updateMenu(SysMenu menu) {
 		menuMapper.updateMenu(menu);
 	}
 
 	@Override
-	@CacheEvict(value="menuList", allEntries=true)
+	@CacheEvict(value={"indexMenuList", "menuAndButtonList"}, allEntries=true)
 	public void deleteMenu(Long id) {
 		menuMapper.deleteMenu(id);
 	}

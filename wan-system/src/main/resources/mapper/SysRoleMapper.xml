@@ -26,6 +26,11 @@
 		order by gmt_create desc
 	</select>
 	
+	<select id="listAllRoles" resultMap="SysRoleResult">
+		<include refid="selectRoleVO"/>
+		order by gmt_create asc
+	</select>
+	
 	<select id="getRoleById" parameterType="Long" resultMap="SysRoleResult">
 		<include refid="selectRoleVO"/>
 		where role_id = #{id}

@@ -13,6 +13,12 @@ public interface SysRoleMapper {
 	List<SysRole> listRoles(SysRole role);
 	
 	/**
+	 * 获取所有角色列表
+	 * @return
+	 */
+	List<SysRole> listAllRoles();
+	
+	/**
 	 * 根据id获取角色
 	 * @param id
 	 * @return

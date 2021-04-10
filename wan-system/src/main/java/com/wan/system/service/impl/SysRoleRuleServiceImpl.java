@@ -1,7 +1,5 @@
 package com.wan.system.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,11 +30,6 @@ public class SysRoleRuleServiceImpl implements SysRoleRuleService {
 				roleRuleMapper.insertRoleRule(roleRule);
 			}
 		}
-	}
-
-	@Override
-	public List<SysRoleRule> listRoleRulesByUserId(Long userId) {
-		return roleRuleMapper.listRoleRulesByUserId(userId);
 	}
 	
 }

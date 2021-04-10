@@ -119,7 +119,7 @@ public class SysMenuController {
 	@GetMapping("/removeCache")
 	@ResponseBody
 	@PreAuthorize("hasAuthority('open:menu:manage')")
-	@CacheEvict(value="menuList", allEntries=true)
+	@CacheEvict(value={"indexMenuList", "menuAndButtonList"}, allEntries=true)
 	public Result removeCache() {
 		return ResultUtil.success();
 	}

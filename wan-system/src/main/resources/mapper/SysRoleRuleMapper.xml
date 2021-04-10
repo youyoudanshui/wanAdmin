@@ -24,14 +24,6 @@
 		order by rr.gmt_create desc
 	</select>
 	
-	<select id="listRoleRulesByUserId" parameterType="SysRoleRule" resultMap="SysRoleRuleResult">
-		<include refid="selectRoleRuleVO"/>
-		left join
-			sys_user_role ur
-		on rr.role_id = ur.role_id
-		where ur.user_id = #{userId}
-	</select>
-	
 	<insert id="insertRoleRule" parameterType="SysRoleRule">
 		insert into sys_role_rule(
 			<if test="roleId != null and roleId != ''">role_id,</if>
