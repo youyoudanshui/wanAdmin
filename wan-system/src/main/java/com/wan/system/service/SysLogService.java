@@ -14,4 +14,6 @@ public interface SysLogService {
 	
 	SysLog getLog(Long id);
 	
+	void deleteExpiredLogs();
+	
 }

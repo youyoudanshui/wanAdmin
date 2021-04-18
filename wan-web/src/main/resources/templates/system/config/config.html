@@ -107,14 +107,7 @@ function doSubmit() {
 
 	ajaxPost({ 
 		url: prefix + '/update',
-		data: $form.serialize(),
-		success: function(r) {
-			if (r.code == 0) {
-				notifySuccess('执行成功');
-			} else {
-				notifyWarning(r.message);
-			}
-		}
+		data: $form.serialize()
 	});
 }
 </script>

@@ -74,7 +74,11 @@ function myAjax(options) {
         	if(options.success) {
         		options.success(result);
         	} else {
-        		notifySuccess('执行成功');
+        		if (result.code == 0) {
+    				notifySuccess('执行成功');
+    			} else {
+    				notifyWarning(r.message);
+    			}
         	}
         },
         error: function() {

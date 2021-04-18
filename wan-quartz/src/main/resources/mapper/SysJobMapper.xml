@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wan.quartz.mapper.SysJobMapper">
+
+	<resultMap type="SysJob" id="SysJobResult">
+		<id     property="id"               column="job_id"        />
+		<result property="jobName"           column="job_name"      />
+		<result property="jobClass"           column="job_class"      />
+		<result property="status"    column="status"      />
+		<result property="cronExpression"    column="cron_expression"      />
+		<result property="gmtCreate"        column="gmt_create"        />
+		<result property="gmtModified"      column="gmt_modified"          />
+	</resultMap>
+	
+	<sql id="selectJobVO">
+		select 
+			job_id, job_name, job_class, status, cron_expression, gmt_create, gmt_modified
+		from sys_job
+	</sql>
+	
+	<select id="listJobs" parameterType="SysJob" resultMap="SysJobResult">
+		<include refid="selectJobVO"/>
+		<where>
+			<if test="jobName != null and jobName != ''">and job_name like concat('%', #{jobName}, '%')</if>
+			<if test="status != null and status != ''">and status = #{status}</if>
+		</where>
+		order by gmt_create desc
+	</select>
+	
+	<select id="getJobById" parameterType="Long" resultMap="SysJobResult">
+		<include refid="selectJobVO"/>
+		where job_id = #{id}
+	</select>
+	
+	<select id="getJobByJobName" parameterType="String" resultMap="SysJobResult">
+		<include refid="selectJobVO"/>
+		where job_name = #{jobName}
+	</select>
+	
+	<insert id="insertJob" parameterType="SysJob">
+		insert into sys_job(
+			<if test="jobName != null and jobName != ''">job_name,</if>
+			<if test="jobClass != null and jobClass != ''">job_class,</if>
+			<if test="status != null and status != ''">status,</if>
+			<if test="cronExpression != null and cronExpression != ''">cron_expression,</if>
+			gmt_create
+		) values (
+			<if test="jobName != null and jobName != ''">#{jobName},</if>
+			<if test="jobClass != null and jobClass != ''">#{jobClass},</if>
+			<if test="status != null and status != ''">#{status},</if>
+			<if test="cronExpression != null and cronExpression != ''">#{cronExpression},</if>
+			now()
+		)
+	</insert>
+	
+	<update id="updateJob" parameterType="SysJob">
+		update sys_job
+		<set>
+			<if test="status != null">status = #{status},</if>
+			<if test="cronExpression != null">cron_expression = #{cronExpression},</if>
+			gmt_modified = now()
+		</set>
+		where job_id = #{id}
+	</update>
+	
+	<delete id="deleteJob" parameterType="Long">
+		delete from sys_job where job_id = #{id}
+	</delete>
+
+</mapper>

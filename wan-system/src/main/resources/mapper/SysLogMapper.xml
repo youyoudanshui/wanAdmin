@@ -93,5 +93,9 @@
 		<include refid="selectLogVO"/>
 		where o.log_id = #{id}
 	</select>
+	
+	<delete id="deleteExpiredLogs">
+		delete from sys_log where status = '0' and timestampdiff(MONTH, gmt_create, now()) > 3
+	</delete>
 
 </mapper>

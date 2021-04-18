@@ -34,5 +34,10 @@ public class SysLogServiceImpl implements SysLogService {
 	public SysLog getLog(Long id) {
 		return logMapper.getLog(id);
 	}
+
+	@Override
+	public void deleteExpiredLogs() {
+		logMapper.deleteExpiredLogs();
+	}
 	
 }
