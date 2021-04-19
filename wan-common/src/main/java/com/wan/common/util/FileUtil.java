@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 public class FileUtil {
 	
 	public static String UPLOAD_FOLDER = "E://upload//";
-	public static String PROJECT_FOLDER = "wan-admin";
+	public static String PROJECT_FOLDER = ReqUtil.getRequest().getContextPath();
 	
 	public static String getUploadPath() throws FileNotFoundException {
         
