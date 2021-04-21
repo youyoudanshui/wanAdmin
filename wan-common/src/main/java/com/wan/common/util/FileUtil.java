@@ -2,7 +2,6 @@ package com.wan.common.util;
 
 import java.awt.Image;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -11,24 +10,6 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 
 public class FileUtil {
-	
-	public static String UPLOAD_FOLDER = "E://upload//";
-	public static String PROJECT_FOLDER = ReqUtil.getRequest().getContextPath();
-	
-	public static String getUploadPath() throws FileNotFoundException {
-        
-		String uploadPath = UPLOAD_FOLDER + PROJECT_FOLDER;
-		
-        File folder = new File(uploadPath);
-        if(!folder.getParentFile().exists()){
-        	folder.getParentFile().mkdir();
-        }
-        if(!folder.exists()){
-        	folder.mkdir();
-        }
-        
-        return uploadPath;
-	}
 
 	public static String getRandomFileName() {
 		
@@ -54,6 +35,20 @@ public class FileUtil {
 		    return false; //不是图片
 		}
 		return true;
+		
+	}
+	
+	public static void createDirectory(String filePath) {
+		
+		String paths[] = filePath.split("\\\\");
+		String dir = paths[0];
+		for (int i = 1; i < paths.length; i ++) {
+			dir = dir + "/" + paths[i];
+			File dirFile = new File(dir);
+			if (!dirFile.exists()) {
+				dirFile.mkdir();
+			}
+		}
 		
 	}
 	

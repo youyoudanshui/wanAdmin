@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.wan.common.domain.Result;
 import com.wan.common.util.FileUtil;
 import com.wan.common.util.ResultUtil;
+import com.wan.security.util.SecurityUtil;
 import com.wan.system.service.SysConfigService;
 
 @Controller
@@ -21,6 +23,9 @@ public class FileController extends BaseController {
 	
 	@Autowired
 	private SysConfigService configService;
+	
+	@Value("${wan.upload-path}")
+	private String UPLOAD_FOLDER;
 
 	@PostMapping("/upload")
 	@ResponseBody
@@ -30,23 +35,15 @@ public class FileController extends BaseController {
 		}
 		
 		String fileName = FileUtil.getRandomFileName() + "-" + file.getOriginalFilename();
-		String userFloder = "1/files/";
-		String filePath = FileUtil.getUploadPath() + "/" + userFloder;
+		String userFloder = SecurityUtil.getAuthUser().getId().toString();
+		String filePath = UPLOAD_FOLDER + "\\\\" + userFloder + "\\\\files\\\\";
 		File dest = new File(filePath + fileName);
 		
 		try {
-		
-			// 创建用户文件夹
-			if(!dest.getParentFile().getParentFile().exists()){
-				dest.getParentFile().getParentFile().mkdir();
-			}
-			// 创建files文件夹
-			if(!dest.getParentFile().exists()){
-				dest.getParentFile().mkdir();
-	        }
-		
+			
+			FileUtil.createDirectory(filePath);
 			file.transferTo(dest);
-			String rs = userFloder + fileName;
+			String rs = userFloder + "/files/" + fileName;
 			return ResultUtil.success(rs);
 			
 		} catch (Exception e) {
@@ -71,21 +68,13 @@ public class FileController extends BaseController {
 		}
 		
 		String fileName = FileUtil.getRandomFileName() + "-" + oFileName;
-		String userFloder = "1/images/";
-		String filePath = FileUtil.getUploadPath() + "/" + userFloder;
+		String userFloder = SecurityUtil.getAuthUser().getId().toString();
+		String filePath = UPLOAD_FOLDER + "\\\\" + userFloder + "\\\\images\\\\";
 		File dest = new File(filePath + fileName);
 		
 		try {
 			
-			// 创建用户文件夹
-			if(!dest.getParentFile().getParentFile().exists()){
-				dest.getParentFile().getParentFile().mkdir();
-			}
-			// 创建images文件夹
-			if(!dest.getParentFile().exists()){
-				dest.getParentFile().mkdir();
-	        }
-		
+			FileUtil.createDirectory(filePath);
 			file.transferTo(dest);
 			
 			if (!FileUtil.isImage(dest)) {
@@ -93,7 +82,7 @@ public class FileController extends BaseController {
 				return ResultUtil.error("上传失败，文件不是图片");
 			}
 			
-			String rs = userFloder + fileName;
+			String rs = userFloder + "/images/" + fileName;
 			return ResultUtil.success(rs);
 			
 		} catch (Exception e) {

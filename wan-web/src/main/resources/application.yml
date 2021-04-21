@@ -15,6 +15,10 @@ server:
     # Tomcat启动初始化的线程数，默认值25
     min-spare-threads: 30
     
+#自定义参数
+wan:
+  upload-path: E:\\upload\\wan-admin
+
 # Spring配置
 spring:
   mvc:
