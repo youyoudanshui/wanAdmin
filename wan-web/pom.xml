@@ -40,11 +40,13 @@
   
   <!-- pom加入打包插件 -->
   <build>
-	  <plugins>
-		  <plugin>
-			  <groupId>org.springframework.boot</groupId>
-			  <artifactId>spring-boot-maven-plugin</artifactId>
-		  </plugin>
-	  </plugins>
+    <!-- 应与application.properties(或application.yml)中context-path保持一致 -->
+	<finalName>wan-admin</finalName>
+	<plugins>
+	  <plugin>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-maven-plugin</artifactId>
+	  </plugin>
+	</plugins>
   </build>
 </project>

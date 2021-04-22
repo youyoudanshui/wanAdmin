@@ -7,6 +7,7 @@
 <meta name="keywords" content="${config.web_site_keywords}">
 <meta name="description" content="${config.web_site_description}">
 <title>${config.web_site_title}</title>
+<#assign path="${request.getContextPath()}">
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-touch-fullscreen" content="yes">
@@ -58,7 +59,7 @@
       
       <!-- logo -->
       <div id="logo" class="sidebar-header">
-        <a href="index">
+        <a href="${path}/">
           <#if config.web_site_logo_type == 'TEXT'>
         	${config.web_site_logo_text}
           </#if>

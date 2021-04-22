@@ -23,7 +23,7 @@ public class SysIndexController extends BaseController {
 	@Autowired
 	private SysMenuService menuService;
 	
-	@GetMapping("/index")
+	@GetMapping("/")
 	public String index(ModelMap map) {
 		getConfig(map);
 		

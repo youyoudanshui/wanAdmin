@@ -31,6 +31,13 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<!-- 移除嵌入式tomcat插件 -->
+<!-- 		    <exclusions>
+		        <exclusion>
+		            <groupId>org.springframework.boot</groupId>
+		            <artifactId>spring-boot-starter-tomcat</artifactId>
+		        </exclusion>
+		    </exclusions> -->
 		</dependency>
 
 		<!--支持常规的测试依赖，包括JUnit、Hamcrest、Mockito以及spring-test模块。 -->
@@ -108,6 +115,13 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-quartz</artifactId>
 		</dependency>
+		
+<!-- 		<dependency>
+		    <groupId>org.apache.tomcat</groupId>
+		    <artifactId>tomcat-servlet-api</artifactId>
+		    <version>8.5.57</version>
+		    <scope>provided</scope>
+		</dependency> -->
 
 	</dependencies>
 	

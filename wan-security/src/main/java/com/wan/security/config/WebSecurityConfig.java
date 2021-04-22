@@ -90,7 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			// 登录处理接口
 			.loginProcessingUrl("/doLogin")
 			// 设置登陆成功页
-			.defaultSuccessUrl("/index")
+			.defaultSuccessUrl("/")
 			// 自定义登录成功处理
 			.successHandler(myAuthenctiationSuccessHandler)
 			// 自定义登录失败处理
