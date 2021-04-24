@@ -5,28 +5,39 @@ import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import com.wan.common.enumerate.OperationType;
-import com.wan.system.domain.SysLog;
+import com.wan.common.util.StringUtil;
+import com.wan.quartz.domain.SysJobLog;
+import com.wan.quartz.service.SysJobLogService;
 import com.wan.system.service.SysLogService;
 
 public class LogJob extends QuartzJobBean {
 	
 	@Autowired
 	private SysLogService logService;
+	
+	@Autowired
+	private SysJobLogService jobLogService;
 
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		
-		logService.deleteExpiredLogs();
+		SysJobLog jobLog = new SysJobLog();
+		jobLog.setJobName(arg0.getJobDetail().getKey().getName());
 		
-		// 保存日志
-		SysLog sysLog = new SysLog();
-		sysLog.setBusinessName("运行定时任务");
-		sysLog.setOperationType(OperationType.DELETE.toString());
-		sysLog.setContent("删除过期日志");
-		sysLog.setMethod(this.getClass().getName() + ".executeInternal");
+		try {
+			
+			// 任务内容
+			logService.deleteExpiredLogs();
+			
+		} catch (Exception e) {
+			
+			String errorMessage = StringUtil.stackTraceToString(e);
+			jobLog.setStatus("1");
+			jobLog.setErrorMessage(errorMessage);
+			
+		}
 		
-		logService.insertLog(sysLog);
+		jobLogService.insertJobLog(jobLog);
 		
 	}
 

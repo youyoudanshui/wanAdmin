@@ -40,10 +40,10 @@
 			<if test="operationType == null or operationType == ''"><![CDATA[ and o.operation_type <> 'LOGIN' and o.operation_type <> 'LOGOUT' ]]></if>
 			<if test="content != null and content != ''">and o.content like concat('%', #{content}, '%')</if>
 			<if test="query.srartDate != null and query.srartDate != ''">
-				and o.gmt_create >= str_to_date(#{query.srartDate}, '%Y-%m-%d')
+				and date_format(o.gmt_create, '%Y-%m-%d') >= str_to_date(#{query.srartDate}, '%Y-%m-%d')
 			</if>
 			<if test="query.endDate != null and query.endDate != ''">
-				and str_to_date(#{query.endDate}, '%Y-%m-%d') >= o.gmt_create
+				and str_to_date(#{query.endDate}, '%Y-%m-%d') >= date_format(o.gmt_create, '%Y-%m-%d')
 			</if>
 		</where>
 		order by o.gmt_create desc
@@ -95,7 +95,9 @@
 	</select>
 	
 	<delete id="deleteExpiredLogs">
-		delete from sys_log where status = '0' and timestampdiff(MONTH, gmt_create, now()) > 3
+		delete l, el
+		from sys_log l left join sys_error_log el on l.log_id = el.log_id
+		where timestampdiff(MONTH, l.gmt_create, now()) > 3
 	</delete>
 
 </mapper>

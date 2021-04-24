@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wan.common.domain.BaseDTO;
 
 /**
@@ -73,6 +74,22 @@ public class SysUser extends BaseDTO implements Serializable, UserDetails {
 	
 	@NotNull(message = "角色是必填字段！")
 	String[] roles;
+	
+	/**
+	 * 登录密码输入错误次数
+	 */
+	int errorTimes;
+	
+	/**
+	 * 账号是否被锁
+	 */
+	String isLocked;
+	
+	/**
+	 * 锁过期时间
+	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	String gmtLocked;
 	
 	Collection<GrantedAuthority> authorities;
 	
@@ -142,6 +159,30 @@ public class SysUser extends BaseDTO implements Serializable, UserDetails {
 		this.roles = roles;
 	}
 	
+	public int getErrorTimes() {
+		return errorTimes;
+	}
+
+	public void setErrorTimes(int errorTimes) {
+		this.errorTimes = errorTimes;
+	}
+
+	public String getIsLocked() {
+		return isLocked;
+	}
+
+	public void setIsLocked(String isLocked) {
+		this.isLocked = isLocked;
+	}
+
+	public String getGmtLocked() {
+		return gmtLocked;
+	}
+
+	public void setGmtLocked(String gmtLocked) {
+		this.gmtLocked = gmtLocked;
+	}
+
 	public void setAuthorities(Collection<GrantedAuthority> authorities) {
 		this.authorities = authorities;
 	}

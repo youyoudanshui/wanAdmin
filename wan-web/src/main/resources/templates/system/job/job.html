@@ -36,6 +36,9 @@
             <button id="btn_add" type="button" class="btn btn-primary m-r-5" onclick="add('新增定时任务')">
               <span class="mdi mdi-plus" aria-hidden="true"></span>新增
             </button>
+            <button id="btn_log" type="button" class="btn btn-info m-r-5" onclick="log()">
+              <span class="mdi mdi-view-list" aria-hidden="true"></span>执行日志
+            </button>
           </div>
           
           <table id="bootstrap-table"></table>
@@ -115,6 +118,14 @@ function runOnce(id) {
 	ajaxPost({ 
 		url: prefix + '/runOnce/' + id
 	});
+}
+
+function log() {
+	parent.$(parent.document).data('multitabs').create({
+        iframe : true,
+        title : '定时任务日志',
+        url : prefix + '/log'
+    }, true);
 }
 </script>
 </body>

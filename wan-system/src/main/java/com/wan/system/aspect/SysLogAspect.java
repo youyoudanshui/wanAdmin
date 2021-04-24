@@ -21,6 +21,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wan.common.aop.Log;
 import com.wan.common.util.ReqUtil;
+import com.wan.common.util.StringUtil;
 import com.wan.system.domain.SysLog;
 import com.wan.system.domain.SysUser;
 import com.wan.system.service.SysLogService;
@@ -122,7 +123,7 @@ public class SysLogAspect {
 			
 			logService.insertLog(sysLog);
 			if (e != null) {
-				String errorMessage = stackTraceToString(e.getClass().getName(), e.getMessage(), e.getStackTrace());
+				String errorMessage = StringUtil.stackTraceToString(e);
 				logService.insertErrorLog(sysLog.getId(), errorMessage);
 			}
 			
@@ -130,15 +131,6 @@ public class SysLogAspect {
 			ex.printStackTrace();
 		}
 		
-	}
-	
-	private String stackTraceToString(String exceptionName, String exceptionMessage, StackTraceElement[] elements) {
-		StringBuffer strbuff = new StringBuffer();
-		for (StackTraceElement stet : elements) {
-			strbuff.append(stet + "\n");
-		}
-		String message = exceptionName + ":" + exceptionMessage + "\n\t" + strbuff.toString();
-		return message;
 	}
 
 }

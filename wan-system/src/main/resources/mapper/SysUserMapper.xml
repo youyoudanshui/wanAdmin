@@ -14,13 +14,16 @@
 		<result property="email"              column="email"      />
 		<result property="sex"     column="sex"      />
 		<result property="status"         column="status"      />
+		<result property="errorTimes"         column="error_times"      />
+		<result property="isLocked"         column="is_locked"      />
+		<result property="gmtLocked"        column="gmt_locked"      />
 		<result property="gmtCreate"        column="gmt_create"        />
 		<result property="gmtModified"      column="gmt_modified"          />
 	</resultMap>
 	
 	<sql id="selectUserVO">
 		select 
-			user_id, loginname, username, password, avatar, telephone, email, sex, status, gmt_create, gmt_modified
+			user_id, loginname, username, password, avatar, telephone, email, sex, status, error_times, is_locked, gmt_locked, gmt_create, gmt_modified
 		from sys_user
 	</sql>
 	
@@ -77,6 +80,9 @@
 			<if test="email != null">email = #{email},</if>
 			<if test="sex != null">sex = #{sex},</if>
 			<if test="status != null">status = #{status},</if>
+			<if test="errorTimes != null">error_times = #{errorTimes},</if>
+			<if test="isLocked != null">is_locked = #{isLocked},</if>
+			<if test="isLocked != null and isLocked == 1">gmt_locked = date_add(now(), interval 10 minute),</if>
 			gmt_modified = now()
 		</set>
 		where user_id = #{id}

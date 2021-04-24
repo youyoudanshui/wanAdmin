@@ -1,13 +1,17 @@
 package com.wan.security.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -60,6 +64,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		// 判断用户是否被禁用
 		if ("0".equals(user.getStatus())) {
 			throw new DisabledException("账户被禁用，请联系管理员");
+		}
+		
+		// 判断用户是否被锁
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date now = new Date();
+		try {
+			if ("1".equals(user.getIsLocked()) && now.getTime() < sdf.parse(user.getGmtLocked()).getTime()) {
+				throw new LockedException("账户被锁，请稍后再试");
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+			throw new DisabledException("账户异常，请联系管理员");
 		}
         
         // IP

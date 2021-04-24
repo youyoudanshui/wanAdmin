@@ -34,7 +34,7 @@ public interface SysLogMapper {
 	SysLog getLog(Long id);
 	
 	/**
-	 * 正常执行日志保留三个月，删除三个月前日志
+	 * 日志保留三个月，删除三个月前日志
 	 */
 	void deleteExpiredLogs();
 	

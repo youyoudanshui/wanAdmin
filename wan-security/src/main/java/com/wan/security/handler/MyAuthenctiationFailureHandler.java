@@ -18,7 +18,9 @@ import com.wan.common.enumerate.OperationType;
 import com.wan.common.util.ReqUtil;
 import com.wan.common.util.ResultUtil;
 import com.wan.system.domain.SysLog;
+import com.wan.system.domain.SysUser;
 import com.wan.system.service.SysLogService;
+import com.wan.system.service.SysUserService;
 
 @Component("myAuthenctiationFailureHandler")
 public class MyAuthenctiationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
@@ -29,12 +31,29 @@ public class MyAuthenctiationFailureHandler extends SimpleUrlAuthenticationFailu
 	@Autowired
 	private SysLogService logService;
 	
+	@Autowired
+	private SysUserService userService;
+	
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) 
 			throws IOException, ServletException {
 		
 		if (exception instanceof BadCredentialsException) {
-			exception = new BadCredentialsException("用户名不存在或密码错误", exception);
+			String loginname = request.getParameter("username");
+			SysUser user = userService.getUserByLoginname(loginname);
+			
+			int errorTimes = user.getErrorTimes();
+			SysUser updateUser = new SysUser();
+			updateUser.setId(user.getId());
+			updateUser.setErrorTimes(errorTimes == 3 ? 1 : errorTimes + 1);
+			if (errorTimes == 2) {
+				updateUser.setIsLocked("1");
+				exception = new BadCredentialsException("密码输入连续错误三次，账户锁定十分钟，请十分钟后再试", exception);
+			} else {
+				updateUser.setIsLocked("0");
+				exception = new BadCredentialsException("用户名不存在或密码错误", exception);
+			}
+			userService.updateUser(updateUser);
 		}
 		
 		// 保存登录日志
