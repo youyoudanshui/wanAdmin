@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wan.common.aop.Log;
+import com.wan.common.annotation.Log;
 import com.wan.common.domain.Result;
 import com.wan.common.enumerate.OperationType;
 import com.wan.common.util.ResultUtil;

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <#assign title="定时任务日志">
+  <#include "/head.html">
+</head>
+  
+<body>
+<div class="container-fluid p-t-15">
+  
+  <div class="row">
+    
+    <div class="col-lg-12">
+      <div class="card">
+      
+        <div class="card-toolbar clearfix">
+          <form id="searchForm" class="form-inline" action="#!" method="post">
+            <div class="form-group mb-2 mr-2">
+              <input class="form-control" type="text" name="jobName" placeholder="任务名称..">
+            </div>
+            <div class="form-group mb-2 mr-2">
+              <select name="status" class="form-control">
+                <option value="">不限状态</option>
+                <option value="1">正常</option>
+                <option value="0">异常</option>
+              </select>
+            </div>
+            <div class="form-group mb-2 mr-2">
+              <div class="input-group">
+                <input type="text" class="form-control" data-provide="datepicker" name="query[srartDate]" placeholder="开始时间" value="${.now?string('yyyy-MM-dd')}">
+                <div class="input-group-prepend input-group-append">
+                  <span class="input-group-text">至</span>
+                </div>
+                <input type="text" class="form-control" data-provide="datepicker" name="query[endDate]" placeholder="结束时间">
+              </div>
+            </div>
+            <a class="btn btn-default mb-2 mr-2" type="button" onclick="refreshTable()"><i class="mdi mdi-magnify"></i> 搜索</a>
+            <button class="btn btn-secondary mb-2" type="reset">重置</button>
+          </form>
+        </div>
+      
+        <div class="card-body">
+          
+          <table id="bootstrap-table"></table>
+          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+
+<#include "/footer.html">
+
+<script type="text/javascript">
+var prefix = "system/job/log";
+var listUrl = prefix + '/list';
+
+bootstrapTable({
+	url: listUrl,
+    columns: [{
+        field: 'id',
+        title: '编号'
+    }, {
+        field: 'jobName',
+        title: '任务名称'
+    }, {
+        field: 'status',
+        title: '执行状态',
+        formatter: function (value, row, index) {
+        	var fontClass = value == '0' ? 'text-success' : 'text-danger';
+            return '<font class="' + fontClass +'">' + getDict('sys_log_status', value) + '</font>'
+        }
+    }, {
+        field: 'gmtCreate',
+        title: '执行时间'
+    }, {
+        field: 'operate',
+        title: '操作',
+        formatter: function(value, item, index) {
+        	return btnGroup(item.status)  // 自定义方法
+        },
+        events: {
+            'click .detail-btn': function (event, value, row, index) {
+            	detail(row.id, '异常详情');
+            }
+        }
+    }]
+});
+
+//操作按钮
+function btnGroup(status) {
+    let html =
+        '<a type="button" class="btn btn-xs btn-default detail-btn" title="异常详情" data-toggle="tooltip"><i class="mdi mdi-eye"></i></a>';
+    if (status == '1') {
+    	return html;
+    }
+    return '';
+}
+</script>
+</body>
+</html>

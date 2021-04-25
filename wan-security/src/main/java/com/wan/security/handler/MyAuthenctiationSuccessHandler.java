@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.code.kaptcha.Constants;
-import com.wan.common.aop.Log;
+import com.wan.common.annotation.Log;
 import com.wan.common.enumerate.OperationType;
 import com.wan.common.util.ResultUtil;
 import com.wan.system.domain.SysUser;

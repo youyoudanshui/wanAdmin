@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
-import com.wan.common.aop.Log;
+import com.wan.common.annotation.Log;
 import com.wan.common.domain.Page;
 import com.wan.common.domain.Result;
 import com.wan.common.enumerate.OperationType;

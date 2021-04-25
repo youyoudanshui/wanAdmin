@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wan.quartz.mapper.SysJobLogMapper">
+
+	<resultMap type="SysJobLog" id="SysJobLogResult">
+		<id     property="id"               column="log_id"        />
+		<result property="jobName"           column="job_name"      />
+		<result property="status"           column="status"      />
+		<result property="errorMessage"     column="error_message"      />
+		<result property="gmtCreate"        column="gmt_create"        />
+		<result property="gmtModified"      column="gmt_modified"          />
+	</resultMap>
+	
+	<sql id="selectJobLogVO">
+		select log_id, job_name, status, error_message, gmt_create, gmt_modified from sys_job_log
+	</sql>
+	
+	<select id="listJobLogs" parameterType="SysJobLog" resultMap="SysJobLogResult">
+		<include refid="selectJobLogVO"/>
+		<where>
+			<if test="jobName != null and jobName != ''">and job_name = #{jobName}</if>
+			<if test="status != null and status != ''">and status = #{status}</if>
+			<if test="query.srartDate != null and query.srartDate != ''">
+				and date_format(gmt_create, '%Y-%m-%d') >= str_to_date(#{query.srartDate}, '%Y-%m-%d')
+			</if>
+			<if test="query.endDate != null and query.endDate != ''">
+				and str_to_date(#{query.endDate}, '%Y-%m-%d') >= date_format(gmt_create, '%Y-%m-%d')
+			</if>
+		</where>
+		order by gmt_create desc
+	</select>
+	
+	<insert id="insertJobLog" parameterType="SysJobLog">
+		insert into sys_job_log(
+			<if test="jobName != null and jobName != ''">job_name,</if>
+			<if test="status != null and status != ''">status,</if>
+			<if test="errorMessage != null and errorMessage != ''">error_message,</if>
+			gmt_create
+		) values (
+			<if test="jobName != null and jobName != ''">#{jobName},</if>
+			<if test="status != null and status != ''">#{status},</if>
+			<if test="errorMessage != null and errorMessage != ''">#{errorMessage},</if>
+			now()
+		)
+	</insert>
+	
+	<select id="getJobLog" parameterType="Long" resultMap="SysJobLogResult">
+		<include refid="selectJobLogVO"/>
+		where log_id = #{id}
+	</select>
+	
+	<delete id="deleteExpiredJobLogs">
+		delete from sys_job_log where timestampdiff(MONTH, gmt_create, now()) > 3
+	</delete>
+
+</mapper>

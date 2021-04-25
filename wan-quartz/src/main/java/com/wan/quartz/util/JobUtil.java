@@ -24,7 +24,7 @@ public class JobUtil {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-	public static void createScheduleJob(Scheduler scheduler, SysJob quartzBean) throws ClassNotFoundException, SchedulerException{
+	public static void createScheduleJob(Scheduler scheduler, SysJob quartzBean) throws ClassNotFoundException, SchedulerException {
         //获取到定时任务的执行类  必须是类的绝对路径名称
         //定时任务类需要是job类的具体实现 QuartzJobBean是job的抽象类。
         Class<? extends Job> jobClass = (Class<? extends Job>) Class.forName(quartzBean.getJobClass());
@@ -47,7 +47,7 @@ public class JobUtil {
      * @param jobName    定时任务名称
      * @throws SchedulerException
      */
-    public static void pauseScheduleJob(Scheduler scheduler, String jobName) throws SchedulerException{
+    public static void pauseScheduleJob(Scheduler scheduler, String jobName) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(jobName);
         scheduler.pauseJob(jobKey);
     }
@@ -69,7 +69,7 @@ public class JobUtil {
      * @param jobName       定时任务名称
      * @throws SchedulerException
      */
-    public static void runOnce(Scheduler scheduler, String jobName) throws SchedulerException{
+    public static void runOnce(Scheduler scheduler, String jobName) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(jobName);
         scheduler.triggerJob(jobKey);
     }

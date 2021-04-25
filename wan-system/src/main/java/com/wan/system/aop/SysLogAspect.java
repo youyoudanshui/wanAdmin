@@ -1,4 +1,4 @@
-package com.wan.system.aspect;
+package com.wan.system.aop;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerMapping;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wan.common.aop.Log;
+import com.wan.common.annotation.Log;
 import com.wan.common.util.ReqUtil;
 import com.wan.common.util.StringUtil;
 import com.wan.system.domain.SysLog;
@@ -41,7 +41,7 @@ public class SysLogAspect {
 	/**
 	 * 设置操作日志切入点 记录操作日志 在注解的位置切入代码
 	 */
-	@Pointcut("@annotation(com.wan.common.aop.Log)")
+	@Pointcut("@annotation(com.wan.common.annotation.Log)")
 	public void logPointCut() {
 	}
 	
