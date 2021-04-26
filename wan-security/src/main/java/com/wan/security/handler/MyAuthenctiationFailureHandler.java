@@ -40,10 +40,9 @@ public class MyAuthenctiationFailureHandler extends SimpleUrlAuthenticationFailu
 			throws IOException, ServletException {
 		
 		String loginname = request.getParameter("username");
+		SysUser user = userService.getUserByLoginname(loginname);
 		
 		if (exception instanceof BadCredentialsException) {
-			SysUser user = userService.getUserByLoginname(loginname);
-			
 			int errorTimes = user.getErrorTimes();
 			SysUser updateUser = new SysUser();
 			updateUser.setId(user.getId());
@@ -61,6 +60,9 @@ public class MyAuthenctiationFailureHandler extends SimpleUrlAuthenticationFailu
 		// 保存登录日志
 		SysLoginLog loginLog = new SysLoginLog();
 		loginLog.setLoginname(loginname);
+		if (user != null) {
+			loginLog.setUserId(user.getId());
+		}
 		loginLog.setLoginStatus("1");
 		loginLog.setMessage(exception.getLocalizedMessage());
 		loginLog.setIp(request.getRemoteAddr());

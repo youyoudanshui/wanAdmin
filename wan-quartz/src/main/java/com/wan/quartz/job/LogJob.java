@@ -8,11 +8,15 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import com.wan.common.annotation.JobLog;
 import com.wan.quartz.service.SysJobLogService;
 import com.wan.system.service.SysLogService;
+import com.wan.system.service.SysLoginLogService;
 
 public class LogJob extends QuartzJobBean {
 	
 	@Autowired
 	private SysLogService logService;
+	
+	@Autowired
+	private SysLoginLogService loginLogService;
 	
 	@Autowired
 	private SysJobLogService jobLogService;
@@ -22,6 +26,7 @@ public class LogJob extends QuartzJobBean {
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		
 		logService.deleteExpiredLogs();
+		loginLogService.deleteExpiredLoginLogs();
 		jobLogService.deleteExpiredJobLogs();
 		
 	}
