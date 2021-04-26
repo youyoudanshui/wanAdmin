@@ -14,7 +14,7 @@ public interface SysJobLogMapper {
 	
 	/**
 	 * 新增日志
-	 * @param log
+	 * @param jobLog
 	 */
 	void insertJobLog(SysJobLog jobLog);
 	

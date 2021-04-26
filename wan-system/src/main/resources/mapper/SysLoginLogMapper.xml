@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wan.system.mapper.SysLoginLogMapper">
+
+	<resultMap type="SysLoginLog" id="SysLoginLogResult">
+		<id     property="id"               column="log_id"        />
+		<result property="loginname"           column="loginname"      />
+		<result property="userId"           column="user_id"      />
+		<result property="loginStatus"           column="login_status"      />
+		<result property="message"           column="message"      />
+		<result property="ip"           column="ip"      />
+		<result property="userAgent"           column="user_agent"      />
+		<result property="browser"           column="browser"      />
+		<result property="operatingSystem"           column="operating_system"      />
+		<result property="gmtCreate"        column="gmt_create"        />
+		<result property="gmtModified"      column="gmt_modified"          />
+	</resultMap>
+	
+	<sql id="selectLoginLogVO">
+		select 
+			log_id, loginname, user_id, login_status, message, ip, user_agent, browser, operating_system, gmt_create, gmt_modified
+		from sys_login_log
+	</sql>
+	
+	<select id="listLoginLogs" parameterType="SysLoginLog" resultMap="SysLoginLogResult">
+		<include refid="selectLoginLogVO"/>
+		<where>
+			<if test="loginStatus != null and loginStatus != ''">and login_status = #{loginStatus}</if>
+			<if test="loginname != null and loginname != ''">and loginname like concat('%', #{loginname}, '%')</if>
+			<if test="query.srartDate != null and query.srartDate != ''">
+				and date_format(gmt_create, '%Y-%m-%d') >= str_to_date(#{query.srartDate}, '%Y-%m-%d')
+			</if>
+			<if test="query.endDate != null and query.endDate != ''">
+				and str_to_date(#{query.endDate}, '%Y-%m-%d') >= date_format(gmt_create, '%Y-%m-%d')
+			</if>
+		</where>
+		order by gmt_create desc
+	</select>
+	
+	<insert id="insertLoginLog" parameterType="SysLoginLog">
+		insert into sys_login_log(
+			<if test="loginname != null and loginname != ''">loginname,</if>
+			<if test="userId != null and userId != ''">user_id,</if>
+			<if test="loginStatus != null and loginStatus != ''">login_status,</if>
+			<if test="message != null and message != ''">message,</if>
+			<if test="ip != null and ip != ''">ip,</if>
+			<if test="userAgent != null and userAgent != ''">user_agent,</if>
+			<if test="browser != null and browser != ''">browser,</if>
+			<if test="operatingSystem != null and operatingSystem != ''">operating_system,</if>
+			gmt_create
+		) values (
+			<if test="loginname != null and loginname != ''">#{loginname},</if>
+			<if test="userId != null and userId != ''">#{userId},</if>
+			<if test="loginStatus != null and loginStatus != ''">#{loginStatus},</if>
+			<if test="message != null and message != ''">#{message},</if>
+			<if test="ip != null and ip != ''">#{ip},</if>
+			<if test="userAgent != null and userAgent != ''">#{userAgent},</if>
+			<if test="browser != null and browser != ''">#{browser},</if>
+			<if test="operatingSystem != null and operatingSystem != ''">#{operatingSystem},</if>
+			now()
+		)
+	</insert>
+	
+	<delete id="deleteExpiredLoginLogs">
+		delete from sys_login_log where timestampdiff(MONTH, gmt_create, now()) > 3
+	</delete>
+
+</mapper>

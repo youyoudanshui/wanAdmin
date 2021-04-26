@@ -58,5 +58,11 @@ public class SysJob extends BaseDTO {
 	public void setCronExpression(String cronExpression) {
 		this.cronExpression = cronExpression;
 	}
+
+	@Override
+	public String toString() {
+		return "SysJob [jobName=" + jobName + ", jobClass=" + jobClass + ", status=" + status + ", cronExpression="
+				+ cronExpression + "]";
+	}
 	
 }

@@ -1,7 +1,6 @@
 package com.wan.security.handler;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,13 +13,15 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wan.common.enumerate.OperationType;
-import com.wan.common.util.ReqUtil;
 import com.wan.common.util.ResultUtil;
-import com.wan.system.domain.SysLog;
+import com.wan.system.domain.SysLoginLog;
 import com.wan.system.domain.SysUser;
-import com.wan.system.service.SysLogService;
+import com.wan.system.service.SysLoginLogService;
 import com.wan.system.service.SysUserService;
+
+import eu.bitwalker.useragentutils.Browser;
+import eu.bitwalker.useragentutils.OperatingSystem;
+import eu.bitwalker.useragentutils.UserAgent;
 
 @Component("myAuthenctiationFailureHandler")
 public class MyAuthenctiationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
@@ -29,17 +30,18 @@ public class MyAuthenctiationFailureHandler extends SimpleUrlAuthenticationFailu
 	private ObjectMapper objectMapper;
 	
 	@Autowired
-	private SysLogService logService;
+	private SysUserService userService;
 	
 	@Autowired
-	private SysUserService userService;
+	private SysLoginLogService loginLogService;
 	
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) 
 			throws IOException, ServletException {
 		
+		String loginname = request.getParameter("username");
+		
 		if (exception instanceof BadCredentialsException) {
-			String loginname = request.getParameter("username");
 			SysUser user = userService.getUserByLoginname(loginname);
 			
 			int errorTimes = user.getErrorTimes();
@@ -57,26 +59,22 @@ public class MyAuthenctiationFailureHandler extends SimpleUrlAuthenticationFailu
 		}
 		
 		// 保存登录日志
-		SysLog sysLog = new SysLog();
-		sysLog.setBusinessName("登录");
-		sysLog.setOperationType(OperationType.LOGIN.toString());
-		sysLog.setContent("登录失败，" + exception.getLocalizedMessage());
-		sysLog.setMethod(this.getClass().getName() + "." + "onAuthenticationFailure");
+		SysLoginLog loginLog = new SysLoginLog();
+		loginLog.setLoginname(loginname);
+		loginLog.setLoginStatus("1");
+		loginLog.setMessage(exception.getLocalizedMessage());
+		loginLog.setIp(request.getRemoteAddr());
 		
-		// 请求的参数
-		Map<String, String[]> parameterMap = request.getParameterMap();
-		if (parameterMap.size() > 0) {
-			sysLog.setRequestParam(objectMapper.writeValueAsString(ReqUtil.converRequestMap()));
-		}
+		String agent = request.getHeader("User-Agent");
+		UserAgent userAgent = UserAgent.parseUserAgentString(agent);  
+		Browser browser = userAgent.getBrowser();  
+		OperatingSystem os = userAgent.getOperatingSystem();
 		
-		// 请求地址
-		String URI = request.getRequestURI();
-		sysLog.setUrl(URI);
+		loginLog.setUserAgent(agent);
+		loginLog.setBrowser(browser.getName());
+		loginLog.setOperatingSystem(os.getName());
 		
-		// 用户信息
-		sysLog.setIp(request.getRemoteAddr());
-		
-		logService.insertLog(sysLog);
+		loginLogService.insertLoginLog(loginLog);
 		
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(objectMapper.writeValueAsString(ResultUtil.error(exception.getLocalizedMessage())));

@@ -16,10 +16,14 @@
         <div class="card-toolbar clearfix">
           <form id="searchForm" class="form-inline" action="#!" method="post">
             <div class="form-group mb-2 mr-2">
-              <input class="form-control" type="text" name="operator" placeholder="操作人员..">
+              <input class="form-control" type="text" name="loginname" placeholder="登录名..">
             </div>
             <div class="form-group mb-2 mr-2">
-              <input class="form-control" type="text" name="content" placeholder="操作内容..">
+              <select name="loginStatus" class="form-control">
+                <option value="">不限状态</option>
+                <option value="0">登录成功</option>
+                <option value="1">登录失败</option>
+              </select>
             </div>
             <div class="form-group mb-2 mr-2">
               <div class="input-group">
@@ -51,47 +55,40 @@
 
 <script type="text/javascript">
 var prefix = "system/log";
-var listUrl = prefix + '/list';
+var listUrl = prefix + '/loginList';
 
 bootstrapTable({
 	url: listUrl,
-	queryParams: {
-		status: '0',
-		operationType: 'LOGIN'
-	}, 
     columns: [{
         field: 'id',
         title: '编号'
     }, {
-        field: 'content',
-        title: '操作内容'
+        field: 'loginname',
+        title: '登录名'
     }, {
-        field: 'operatorName',
-        title: '操作人员'
-    }, {
-        field: 'gmtCreate',
-        title: '操作时间'
-    }, {
-        field: 'ip',
+       	field: 'ip',
         title: '操作IP'
     }, {
-        field: 'operate',
-        title: '操作',
-        formatter: btnGroup,  // 自定义方法
-        events: {
-            'click .detail-btn': function (event, value, row, index) {
-            	detail(row.id, '日志详情');
-            }
+       	field: 'browser',
+        title: '浏览器'
+    }, {
+       	field: 'operatingSystem',
+        title: '操作系统'
+    }, {
+        field: 'loginStatus',
+        title: '登录状态',
+        formatter: function (value, row, index) {
+        	var fontClass = value == '0' ? 'text-success' : 'text-danger';
+            return '<font class="' + fontClass +'">' + getDict('sys_login_status', value) + '</font>'
         }
+    }, {
+       	field: 'message',
+        title: '操作信息'
+    }, {
+    	field: 'gmtCreate',
+        title: '操作时间'
     }]
 });
-
-//操作按钮
-function btnGroup() {
-    let html =
-        '<a type="button" class="btn btn-xs btn-default detail-btn" title="详情" data-toggle="tooltip"><i class="mdi mdi-eye"></i></a>';
-    return html;
-}
 </script>
 </body>
 </html>

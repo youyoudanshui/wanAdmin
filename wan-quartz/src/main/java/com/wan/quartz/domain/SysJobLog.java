@@ -45,4 +45,9 @@ public class SysJobLog extends BaseDTO {
 		this.errorMessage = errorMessage;
 	}
 
+	@Override
+	public String toString() {
+		return "SysJobLog [jobName=" + jobName + ", status=" + status + ", errorMessage=" + errorMessage + "]";
+	}
+
 }
