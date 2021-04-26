@@ -33,7 +33,7 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
 		
 		// 保存登出日志
 		SysLog sysLog = new SysLog();
-		sysLog.setBusinessName("登录");
+		sysLog.setBusinessName("退出登录");
 		sysLog.setOperationType(OperationType.LOGOUT.toString());
 		sysLog.setContent("退出登录");
 		sysLog.setMethod(this.getClass().getName() + "." + "onLogoutSuccess");

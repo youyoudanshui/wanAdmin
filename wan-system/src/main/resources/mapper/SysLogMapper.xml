@@ -36,8 +36,6 @@
 		<where>
 			<if test="status != null and status != ''">and o.status = #{status}</if>
 			<if test="operator != null and operator != ''">and o.operator like concat('%', #{operator}, '%')</if>
-			<if test="operationType == 'LOGIN'">and (o.operation_type = 'LOGIN' or o.operation_type = 'LOGOUT')</if>
-			<if test="operationType == null or operationType == ''"><![CDATA[ and o.operation_type <> 'LOGIN' and o.operation_type <> 'LOGOUT' ]]></if>
 			<if test="content != null and content != ''">and o.content like concat('%', #{content}, '%')</if>
 			<if test="query.srartDate != null and query.srartDate != ''">
 				and date_format(o.gmt_create, '%Y-%m-%d') >= str_to_date(#{query.srartDate}, '%Y-%m-%d')
