@@ -21,6 +21,7 @@ import com.wan.common.domain.Page;
 import com.wan.common.domain.Result;
 import com.wan.common.enumerate.OperationType;
 import com.wan.common.util.ResultUtil;
+import com.wan.common.websocket.WebSocket;
 import com.wan.system.domain.SysNotice;
 import com.wan.system.service.SysNoticeService;
 import com.wan.web.controller.common.BaseController;
@@ -36,6 +37,9 @@ public class SysNoticeController extends BaseController {
 	
 	@Autowired
 	private SysNoticeService noticeService;
+	
+	@Autowired
+	private WebSocket webSocket;
 	
 	private String prefix = "system/notice";
 	
@@ -107,6 +111,10 @@ public class SysNoticeController extends BaseController {
 		}
 		
 		noticeService.sendNotice(id);
+		
+		// 向客户端推送消息
+		webSocket.sendMessage("getUnreadNotices");
+		
 		return ResultUtil.success();
 	}
 	
@@ -115,7 +123,15 @@ public class SysNoticeController extends BaseController {
 	@PreAuthorize("hasAuthority('do:notice:remove')")
 	@Log(BusinessName = "通知管理", OperationType = OperationType.DELETE, Content = "删除通知")
 	public Result remove(@PathVariable("id") Long id) {
+		SysNotice notice = noticeService.getNoticeById(id);
+		
 		noticeService.deleteNotice(id);
+		
+		if ("1".equals(notice.getIsSent())) {
+			// 向客户端推送消息
+			webSocket.sendMessage("getUnreadNotices");
+		}
+		
 		return ResultUtil.success();
 	}
 

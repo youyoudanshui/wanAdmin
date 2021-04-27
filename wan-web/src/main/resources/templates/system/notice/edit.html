@@ -85,11 +85,14 @@ $(document).ready(function(){
         $(this).summernote(options);
     });
 
-    validateForm({
-    	'title': {
-    		required: true
-    	}
-    });
+    $('#submitForm').validate({
+    	ignore: '.note-editor *',
+		rules: {
+	    	'title': {
+	    		required: true
+	    	}
+	    }
+	});
 });
 </script>
 </body>

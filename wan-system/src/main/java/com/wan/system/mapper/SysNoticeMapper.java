@@ -65,7 +65,7 @@ public interface SysNoticeMapper {
 	 * 删除通知内容
 	 * @param noticeId
 	 */
-	@CacheEvict(value={"notice"}, key="#p0.id")
+	@CacheEvict(value={"notice"}, key="#p0")
 	void deleteNoticeContent(Long noticeId);
 	
 }

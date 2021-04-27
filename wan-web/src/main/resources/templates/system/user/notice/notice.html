@@ -85,7 +85,8 @@ function doRead(id, isRead) {
 	}
 	
 	ajaxPost({ 
-   		url: prefix + '/read/' + id
+   		url: prefix + '/read/' + id,
+   		success: function() {}
    	});
 }
 
