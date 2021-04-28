@@ -130,6 +130,9 @@ validateForm({
 		minlength: 5,
 		equalTo: '#password'
 	},
+	'telephone': {
+		rangelength: [11, 11]
+	},
 	'email': {
 		email: true
 	},
@@ -142,6 +145,9 @@ validateForm({
 }, {
 	'loginname': {
 		remote: '该登录名已经存在'
+	},
+	'telephone': {
+		rangelength: '请输入11位手机号码'
 	}
 });
 </script>

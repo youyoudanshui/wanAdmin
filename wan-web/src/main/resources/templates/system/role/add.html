@@ -15,7 +15,7 @@
             <div class="form-group row">
               <label class="col-md-2 col-form-label" for="rolename">角色名</label>
               <div class="col-md-10">
-              	<input type="text" class="form-control" id="rolename" name="rolename" value="ROLE_" />
+              	<input type="text" class="form-control" id="rolename" name="rolename" value="" />
               	<small class="help-block">格式：ROLE_XXX</small>
               </div>
             </div>
@@ -38,6 +38,7 @@
 validateForm({
 	'rolename': {
 		required: true,
+		rolename: true,
 		remote: 'system/role/checkRolename'
 	},
 	'description': {
@@ -48,6 +49,10 @@ validateForm({
 		remote: '该角色名已经存在'
 	}
 });
+
+jQuery.validator.addMethod('rolename', function(value, element) {
+    return this.optional(element) || (value.indexOf('ROLE_') == 0);
+}, '格式：ROLE_XXX');
 </script>
 </body>
 </html>

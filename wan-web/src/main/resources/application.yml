@@ -17,14 +17,16 @@ server:
     
 #自定义参数
 wan:
-  upload-path: E:\\upload\\wan-admin
+  upload-path: E:\\wan-admin\\upload
+  file-folder: File
+  image-folder: Image
 
 # Spring配置
 spring:
   mvc:
     static-path-pattern: /**
   resources:
-    static-locations: classpath:/static/,file:E:\\upload\\wan-admin
+    static-locations: classpath:/static/,file:E:\\wan-admin\\upload
 
 
   aop:
@@ -142,12 +144,4 @@ mybatis:
   
 ##日志
 logging:
-  #格式
-  pattern:
-    console: "%d -%msg%n"
-  #日志存储路径
-  file: 
-    name: E:\wan-admin\log.log
-  #等级
-  level: 
-    com.wan.common.websocket: debug
+  config: classpath:logback-spring.xml

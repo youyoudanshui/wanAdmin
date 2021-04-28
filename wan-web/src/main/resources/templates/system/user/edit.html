@@ -108,6 +108,9 @@ validateForm({
 	'username': {
 		required: true
 	},
+	'telephone': {
+		rangelength: [11, 11]
+	},
 	'email': {
 		email: true
 	},
@@ -116,6 +119,10 @@ validateForm({
 	},
 	'roles': {
 		required: true
+	}
+}, {
+	'telephone': {
+		rangelength: '请输入11位手机号码'
 	}
 });
 </script>

@@ -26,6 +26,12 @@ public class FileController extends BaseController {
 	
 	@Value("${wan.upload-path}")
 	private String UPLOAD_FOLDER;
+	
+	@Value("${wan.file-folder}")
+	private String FILE_FOLDER;
+	
+	@Value("${wan.image-folder}")
+	private String IMAGE_FOLDER;
 
 	@PostMapping("/upload")
 	@ResponseBody
@@ -36,14 +42,14 @@ public class FileController extends BaseController {
 		
 		String fileName = FileUtil.getRandomFileName() + "-" + file.getOriginalFilename();
 		String userFloder = SecurityUtil.getAuthUser().getId().toString();
-		String filePath = UPLOAD_FOLDER + "\\\\" + userFloder + "\\\\files\\\\";
+		String filePath = UPLOAD_FOLDER + "\\\\" + userFloder + "\\\\" + FILE_FOLDER + "\\\\";
 		File dest = new File(filePath + fileName);
 		
 		try {
 			
 			FileUtil.createDirectory(filePath);
 			file.transferTo(dest);
-			String rs = userFloder + "/files/" + fileName;
+			String rs = userFloder + "/" + FILE_FOLDER + "/" + fileName;
 			return ResultUtil.success(rs);
 			
 		} catch (Exception e) {
@@ -69,7 +75,7 @@ public class FileController extends BaseController {
 		
 		String fileName = FileUtil.getRandomFileName() + "-" + oFileName;
 		String userFloder = SecurityUtil.getAuthUser().getId().toString();
-		String filePath = UPLOAD_FOLDER + "\\\\" + userFloder + "\\\\images\\\\";
+		String filePath = UPLOAD_FOLDER + "\\\\" + userFloder + "\\\\" + IMAGE_FOLDER + "\\\\";
 		File dest = new File(filePath + fileName);
 		
 		try {
@@ -82,7 +88,7 @@ public class FileController extends BaseController {
 				return ResultUtil.error("上传失败，文件不是图片");
 			}
 			
-			String rs = userFloder + "/images/" + fileName;
+			String rs = userFloder + "/" + IMAGE_FOLDER + "/" + fileName;
 			return ResultUtil.success(rs);
 			
 		} catch (Exception e) {
