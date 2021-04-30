@@ -64,6 +64,58 @@ $(document).ready(function() {
             }
         });
     });
+    
+    $('[data-provide="summernote"]').each(function() {
+        var options = {
+            dialogsInBody: true,
+            lang: 'zh-CN',
+            dialogsFade: true
+        };
+        
+        var config = {};
+        $.each( $(this).data(), function(key, value){
+            key = key.replace(/-([a-z])/g, function(x){return x[1].toUpperCase();});
+
+            if ( key == 'provide' ) {
+                return;
+            }
+
+            config[key] = value;
+        });
+        
+        options = $.extend(options, config);
+        
+        if ( options.toolbar ) {
+            switch( options.toolbar.toLowerCase() ) {
+              case 'slim':
+                options.toolbar = [
+                  // [groupName, [list of button]]
+                  ['style', ['bold', 'underline', 'clear']],
+                  ['color', ['color']],
+                  ['para', ['ul', 'ol']],
+                  ['insert', ['link', 'picture']]
+                ];
+                break;
+    
+              case 'full':
+                options.toolbar = [
+                  // [groupName, [list of button]]
+                  ['para_style', ['style']],
+                  ['style', ['bold', 'italic', 'underline', 'clear']],
+                  ['font', ['strikethrough', 'superscript', 'subscript']],
+                  ['fontsize', ['fontname', 'fontsize', 'height']],
+                  ['color', ['color']],
+                  ['para', ['ul', 'ol', 'paragraph', 'hr']],
+                  ['table', ['table']],
+                  ['insert', ['link', 'picture', 'video']],
+                  ['do', ['undo', 'redo']],
+                  ['misc', ['fullscreen', 'codeview', 'help']]
+                ];
+                break;
+            }
+        }
+        $(this).summernote(options);
+    });
 });
 
 /*Ajax请求*/

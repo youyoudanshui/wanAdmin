@@ -1,34 +1,38 @@
-getUnreadNotices();
+;!function(){
+	
+	getUnreadNotices();
 
-var websocket = null;
+	var websocket = null;
 
-if('WebSocket' in window) {
-    websocket = new WebSocket('ws://' + document.domain + path + '/webSocket');
-}
+	if('WebSocket' in window) {
+	    websocket = new WebSocket('ws://' + document.domain + path + '/webSocket');
+	}
 
-websocket.onopen = function(event) {
-    console.log('建立连接');
-}
+	websocket.onopen = function(event) {
+	    console.log('建立连接');
+	}
 
-websocket.onclose = function(event) {
-    console.log('连接关闭');
-}
+	websocket.onclose = function(event) {
+	    console.log('连接关闭');
+	}
 
-websocket.onmessage = function(event) {
-    console.log('收到消息:' + event.data)
+	websocket.onmessage = function(event) {
+	    console.log('收到消息:' + event.data)
 
-    if (event.data == 'getUnreadNotices') {
-    	getUnreadNotices();
-    }
-}
+	    if (event.data == 'getUnreadNotices') {
+	    	getUnreadNotices();
+	    }
+	}
 
-websocket.onerror = function() {
-	console.log('websocket通信发生错误！');
-}
+	websocket.onerror = function() {
+		console.log('websocket通信发生错误！');
+	}
 
-window.onbeforeunload = function() {
-    websocket.close();
-}
+	window.onbeforeunload = function() {
+	    websocket.close();
+	}
+	
+}();
 
 function getUnreadNotices() {
 	ajaxGet({ 
