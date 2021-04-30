@@ -49,10 +49,6 @@ validateForm({
 		remote: '该角色名已经存在'
 	}
 });
-
-jQuery.validator.addMethod('rolename', function(value, element) {
-    return this.optional(element) || (value.indexOf('ROLE_') == 0);
-}, '格式：ROLE_XXX');
 </script>
 </body>
 </html>

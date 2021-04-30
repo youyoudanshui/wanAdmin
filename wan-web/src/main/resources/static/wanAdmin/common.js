@@ -27,7 +27,7 @@ $(document).ready(function() {
         	notifyError('文件大小不能超过1M');
         	return false;
         } else {
-        	if (uploadType == 'image') {
+        	if (uploadType == 'image' || uploadType == 'avatar') {
         		var fileAccaccept = config('upload_image_ext');
                 if (fileAccaccept) {
                 	var fileType      = $input.files[0].type;
@@ -43,12 +43,20 @@ $(document).ready(function() {
         }
         
         var data = formFile;
+        var uploadUrl;
+        if (uploadType == 'image') {
+        	uploadUrl = 'file/uploadImage';
+        } else if (uploadType == 'avatar') {
+        	uploadUrl = 'file/uploadAvatar';
+        } else {
+        	uploadUrl = 'file/upload';
+        }
         postFile({
-        	url: uploadType == 'image' ? 'file/uploadImage' : 'file/upload',
+        	url: uploadUrl,
             data: data,
             success: function (rs) {
                 if (rs.code == 0) {
-                    $this.closest('.file-group').find('.file-value').val(rs.data);
+                    $this.closest('.file-group').find('.file-value').val(rs.data).change();
                     notifySuccess('上传成功');
                 } else {
                     notifyError(rs.message);
@@ -56,6 +64,14 @@ $(document).ready(function() {
             }
         });
     });
+    
+    jQuery.validator.addMethod('rolename', function(value, element) {
+        return this.optional(element) || (value.indexOf('ROLE_') == 0);
+    }, '须包含ROLE_前缀');
+    
+    jQuery.validator.addMethod('noteRequired', function(value, element) {
+    	return this.optional(element) || (value != '<p><br></p>');
+    }, '这是必填字段');
 });
 
 /*Ajax请求*/
@@ -184,10 +200,11 @@ function layerOpen(title, url) {
 /*表单验证*/
 function validateForm(rules, messages) {
 	$('#submitForm').validate({
+		ignore: '.note-editor *',
 		rules: rules,
 		messages: messages,
 	    errorPlacement: function errorPlacement(error, element) {
-	        var $parent = $(element).parents('.col-md-10');
+	        var $parent = $(element).closest('div');
 	        if ($parent.find('.invalid-feedback').length) {
 	            return;
 	        }

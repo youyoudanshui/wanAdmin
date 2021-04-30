@@ -10,6 +10,11 @@ import com.wan.quartz.service.SysJobLogService;
 import com.wan.system.service.SysLogService;
 import com.wan.system.service.SysLoginLogService;
 
+/**
+ * 删除3个月前的过期日志，包括登录日志、操作日志、定时任务执行日志
+ * @author wmj
+ *
+ */
 public class LogJob extends QuartzJobBean {
 	
 	@Autowired

@@ -20,4 +20,6 @@ public interface SysUserNoticeService {
 	
 	void readAllUserNotice(Long userId);
 	
+	void deleteExpiredUserNotices();
+	
 }

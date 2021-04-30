@@ -83,35 +83,15 @@ $(document).ready(function(){
         $(this).summernote(options);
     });
     
-    $('#submitForm').validate({
-    	ignore: '.note-editor *',
-		rules: {
-	    	'title': {
-	    		required: true
-	    	},
-	    	'content': {
-	    		required: true
-	    	}
-	    },
-	    errorPlacement: function errorPlacement(error, element) {
-	        var $parent = $(element).parents('.col-md-12');
-	        if ($parent.find('.invalid-feedback').length) {
-	            return;
-	        }
-	        $(element).addClass('is-invalid');
-	        $parent.append(error.addClass('invalid-feedback'));
-	    },
-	    highlight: function(element) {
-	        var $el = $(element);
-	        if ($el.hasClass('js-tags-input')) {
-	            $el.next('.tagsinput').addClass('is-invalid');  // tags插件所隐藏的输入框没法实时验证，比较尴尬
-	        }
-	    },
-	    unhighlight: function(element) {
-	        $(element).next('.tagsinput').removeClass('is-invalid');
-	        $(element).removeClass('is-invalid');
-	    }
-	});
+    validateForm({
+    	'title': {
+    		required: true
+    	},
+    	'content': {
+    		required: true,
+    		noteRequired: true
+    	}
+    });
 });
 </script>
 </body>

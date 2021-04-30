@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <#assign title="个人信息">
+  <#include "/head.html">
+</head>
+  
+<body>
+<div class="container-fluid p-t-15">
+  
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          
+          <form id="submitForm" method="post" action="" class="site-form">
+            
+            <div class="media file-group">
+              <input type="text" class="form-control file-value d-none" id="avatar" name="avatar" value="${user.avatar}" />
+	          <input type="file" class="d-none" file-type="avatar" />
+            
+	          <img id="avatarImg" src="${user.avatar}" alt="..." class="img-avatar mr-3">
+	          <div class="media-body">
+	            <button class="btn btn-default file-browser" type="button">修改头像</button>
+	            <p class="mt-1 mb-0">选择一张你喜欢的图片，裁剪后会自动生成68x68大小，上传图片大小不能超过1M。</p>
+	          </div>
+	        </div>
+	        <hr>
+            
+            <div class="form-group">
+              <label for="loginname">登录名</label>
+              <input type="text" class="form-control" name="loginname" id="loginname" value="${user.loginname}" disabled="disabled">
+            </div>
+            <div class="form-group">
+              <label for="username">用户名</label>
+              <input type="text" class="form-control" name="username" id="username" placeholder="输入您的用户名" value="${user.username}">
+            </div>
+            <div class="form-group">
+              <label for="telephone">手机</label>
+              <input type="text" class="form-control" name="telephone" id="telephone" placeholder="请输入正确的手机号码" value="${user.telephone}">
+            </div>
+            <div class="form-group">
+              <label for="email">邮箱</label>
+              <input type="text" class="form-control" name="email" id="email" placeholder="请输入正确的邮箱地址" value="${user.email}">
+            </div>
+            <div class="form-group">
+              <label for="sex">性别</label>
+              <div class="form-controls">
+                <div class="custom-control custom-radio custom-control-inline">
+		          <input type="radio" id="sexOne" name="sex" class="custom-control-input" value="1" <#if user.sex == '1'>checked</#if>>
+		          <label class="custom-control-label" for="sexOne">男</label>
+		        </div>
+	            <div class="custom-control custom-radio custom-control-inline">
+		          <input type="radio" id="sexTwo" name="sex" class="custom-control-input" value="2" <#if user.sex == '2'>checked</#if>>
+		          <label class="custom-control-label" for="sexTwo">女</label>
+		        </div>
+              </div>
+            </div>
+          </form>
+          
+          <button class="btn btn-primary" onclick="doSubmit()">保存</button>
+ 
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+
+<#include "/footer.html">
+
+<script type="text/javascript">
+$('#avatar').change(function() {
+	$('#avatarImg').attr('src', $(this).val());
+});
+
+validateForm({
+	'username': {
+		required: true
+	},
+	'telephone': {
+		rangelength: [11, 11]
+	},
+	'email': {
+		email: true
+	}
+}, {
+	'telephone': {
+		rangelength: '请输入11位手机号码'
+	}
+});
+
+function doSubmit() {
+	var $form = $('#submitForm');
+	
+	if (!$form.valid()) {
+		return;
+	}
+
+	ajaxPost({ 
+		url: 'system/user/updateProfile',
+		data: $form.serialize()
+	});
+}
+</script>
+</body>
+</html>

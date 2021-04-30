@@ -40,11 +40,14 @@
               <label class="col-md-2 col-form-label" for="avatar">头像</label>
               <div class="col-md-10">
               	<div class="input-group">
-	              <input type="text" class="form-control file-value" id="avatar" name="avatar" value="" placeholder="头像图片地址" />
-	              <input type="file" class="d-none" file-type="image" />
-	              <div class="input-group-append">
-	                <button class="btn btn-default file-browser" type="button">上传图片</button>
-	              </div>
+	              <input type="text" class="form-control file-value d-none" id="avatar" name="avatar" value="" />
+	              <input type="file" class="d-none" file-type="avatar" />
+	              
+	              <img id="avatarImg" src="" alt="..." class="img-avatar mr-3 d-none">
+		          <div class="media-body">
+		            <button class="btn btn-default file-browser" type="button">上传头像</button>
+		            <p class="mt-1 mb-0">选择一张图片，裁剪后会自动生成68x68大小，上传图片大小不能超过1M。</p>
+		          </div>
 	            </div>
               </div>
             </div>
@@ -113,6 +116,11 @@
 <#include "/footer.html">
 
 <script type="text/javascript">
+$('#avatar').change(function() {
+	$('#avatarImg').attr('src', $(this).val());
+	$('#avatarImg').removeClass('d-none');
+});
+
 validateForm({
 	'loginname': {
 		required: true,

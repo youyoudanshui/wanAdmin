@@ -22,4 +22,6 @@ public interface SysUserNoticeMapper {
 	
 	void readAllUserNotice(Long userId);
 	
+	void deleteExpiredUserNotices();
+	
 }

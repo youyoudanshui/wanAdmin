@@ -80,5 +80,9 @@
 		set is_read = '1', gmt_read = now(), gmt_modified = now() 
 		where user_id = #{userId} and is_read = '0'
 	</update>
+	
+	<delete id="deleteExpiredUserNotices">
+		delete from sys_user_notice where is_deleted = '1' and timestampdiff(MONTH, gmt_deleted, now()) > 3
+	</delete>
 
 </mapper>

@@ -216,5 +216,28 @@ public class SysUserController extends BaseController {
 		}
 		return true;
 	}
+	
+	@GetMapping("/profile")
+	public String profile(ModelMap map) {
+		// 用户信息
+		SysUser sessionUser = SecurityUtil.getAuthUser();
+		map.put("user", sessionUser);
+		return prefix + "/profile";
+	}
+	
+	@PostMapping("/updateProfile")
+	@ResponseBody
+	@Log(BusinessName = "我的设置", OperationType = OperationType.UPDATE, Content = "修改个人信息")
+	public Result updateProfile(SysUser user) {
+		// 用户信息
+		SysUser sessionUser = SecurityUtil.getAuthUser();
+		
+		user.setId(sessionUser.getId());
+		userService.updateUser(user);
+		
+		SysUser newUser = userService.getUserById(sessionUser.getId());
+		SecurityUtil.updateAuthPrincipal(newUser);
+		return ResultUtil.success();
+	}
 
 }

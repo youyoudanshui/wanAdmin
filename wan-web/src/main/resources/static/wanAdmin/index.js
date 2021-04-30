@@ -4,8 +4,6 @@ var websocket = null;
 
 if('WebSocket' in window) {
     websocket = new WebSocket('ws://' + document.domain + path + '/webSocket');
-}else {
-	setInterval('getUnreadNotices();', 1000 * 60 * 60);
 }
 
 websocket.onopen = function(event) {
@@ -26,8 +24,6 @@ websocket.onmessage = function(event) {
 
 websocket.onerror = function() {
 	console.log('websocket通信发生错误！');
-	
-	setInterval('getUnreadNotices();', 1000 * 60 * 60);
 }
 
 window.onbeforeunload = function() {

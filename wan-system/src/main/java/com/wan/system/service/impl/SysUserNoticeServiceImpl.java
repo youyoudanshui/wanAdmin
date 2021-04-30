@@ -69,4 +69,9 @@ public class SysUserNoticeServiceImpl implements SysUserNoticeService {
 		userNoticeMapper.readAllUserNotice(userId);
 	}
 
+	@Override
+	public void deleteExpiredUserNotices() {
+		userNoticeMapper.deleteExpiredUserNotices();
+	}
+
 }
