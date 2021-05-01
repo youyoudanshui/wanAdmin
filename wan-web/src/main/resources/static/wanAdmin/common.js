@@ -248,7 +248,7 @@ function validateForm(rules, messages) {
 		rules: rules,
 		messages: messages,
 	    errorPlacement: function errorPlacement(error, element) {
-	        var $parent = $(element).closest('div');
+	        var $parent = $(element).closest('div:not(.custom-control)');
 	        if ($parent.find('.invalid-feedback').length) {
 	            return;
 	        }
