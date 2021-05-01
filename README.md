@@ -32,4 +32,4 @@ JDK、MySQL、Redis
 11. summernote文本编辑器
 
 #### 截图
-![主界面](https://images.gitee.com/uploads/images/2021/0408/223833_b0db68ba_5563527.png "捕获.PNG")
+![主界面](https://images.gitee.com/uploads/images/2021/0501/160757_b6882117_5563527.png "wanAdmin.png")
