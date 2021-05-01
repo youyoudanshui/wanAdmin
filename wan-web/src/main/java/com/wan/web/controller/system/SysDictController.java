@@ -57,13 +57,13 @@ public class SysDictController extends BaseController {
 	}
 	
 	@GetMapping("/add")
-	@PreAuthorize("hasAuthority('open:dict:add')")
+	@PreAuthorize("hasAuthority('open:dict:manage')")
 	public String add(ModelMap map) {
 		return prefix + "/add";
 	}
 
 	@GetMapping("/edit/{id}")
-	@PreAuthorize("hasAuthority('open:dict:edit')")
+	@PreAuthorize("hasAuthority('open:dict:manage')")
 	public String edit(@PathVariable("id") Long id, ModelMap map) {
 		SysDict dict = dictService.getDictById(id);
 		map.put("dict", dict);
@@ -72,7 +72,7 @@ public class SysDictController extends BaseController {
 	
 	@PostMapping("/save")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:dict:add')")
+	@PreAuthorize("hasAuthority('do:dict:add')")
 	@Log(BusinessName = "数据字典管理", OperationType = OperationType.INSERT, Content = "新增类型")
 	public Result save(@Valid SysDict dict, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -89,7 +89,7 @@ public class SysDictController extends BaseController {
 	
 	@PostMapping("/update")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:dict:edit')")
+	@PreAuthorize("hasAuthority('do:dict:edit')")
 	@Log(BusinessName = "数据字典管理", OperationType = OperationType.UPDATE, Content = "修改类型")
 	public Result update(@Valid SysDict dict, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -102,7 +102,7 @@ public class SysDictController extends BaseController {
 	
 	@PostMapping("/updateStatus")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:dict:edit')")
+	@PreAuthorize("hasAuthority('do:dict:edit')")
 	@Log(BusinessName = "数据字典管理", OperationType = OperationType.UPDATE, Content = "修改类型状态")
 	public Result updateStatus(SysDict dict) {
 		dictService.updateDict(dict);
@@ -129,7 +129,7 @@ public class SysDictController extends BaseController {
 	
 	@GetMapping("/checkTypeName")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:dict:add')")
+	@PreAuthorize("hasAuthority('open:dict:manage')")
 	public boolean checkTypeName(String typeName) {
 		if (dictService.getDictByTypeName(typeName) != null) {
 			return false;

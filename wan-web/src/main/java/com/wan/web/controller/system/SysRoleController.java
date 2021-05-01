@@ -66,13 +66,13 @@ public class SysRoleController extends BaseController {
 	}
 	
 	@GetMapping("/add")
-	@PreAuthorize("hasAuthority('open:role:add')")
+	@PreAuthorize("hasAuthority('open:role:manage')")
 	public String add(ModelMap map) {
 		return prefix + "/add";
 	}
 
 	@GetMapping("/edit/{id}")
-	@PreAuthorize("hasAuthority('open:role:edit')")
+	@PreAuthorize("hasAuthority('open:role:manage')")
 	public String edit(@PathVariable("id") Long id, ModelMap map) {
 		SysRole role = roleService.getRoleById(id);
 		map.put("role", role);
@@ -81,7 +81,7 @@ public class SysRoleController extends BaseController {
 	
 	@PostMapping("/save")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:role:add')")
+	@PreAuthorize("hasAuthority('do:role:add')")
 	@Log(BusinessName = "角色管理", OperationType = OperationType.INSERT, Content = "新增角色")
 	public Result save(@Valid SysRole role, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -98,7 +98,7 @@ public class SysRoleController extends BaseController {
 	
 	@PostMapping("/update")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:role:edit')")
+	@PreAuthorize("hasAuthority('do:role:edit')")
 	@Log(BusinessName = "角色管理", OperationType = OperationType.UPDATE, Content = "修改角色")
 	public Result update(@Valid SysRole role, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -119,7 +119,7 @@ public class SysRoleController extends BaseController {
 	}
 	
 	@GetMapping("/rule/{id}")
-	@PreAuthorize("hasAuthority('open:role:rule')")
+	@PreAuthorize("hasAuthority('open:role:manage')")
 	public String rule(@PathVariable("id") Long roleId, ModelMap map) {
 		SysRole role = roleService.getRoleAndRulesById(roleId);
 		map.put("role", role);
@@ -133,7 +133,7 @@ public class SysRoleController extends BaseController {
 	
 	@PostMapping("/saveRules")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:role:rule')")
+	@PreAuthorize("hasAuthority('do:role:rule')")
 	@Log(BusinessName = "角色管理", OperationType = OperationType.INSERT, Content = "设置权限")
 	public Result saveRules(SysRole role) {
 		roleRuleService.saveRoleRules(role);
@@ -142,7 +142,7 @@ public class SysRoleController extends BaseController {
 	
 	@GetMapping("/checkRolename")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:role:add')")
+	@PreAuthorize("hasAuthority('open:role:manage')")
 	public boolean checkRolename(String rolename) {
 		if (roleService.getRoleByRolename(rolename) != null) {
 			return false;

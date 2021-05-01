@@ -57,13 +57,13 @@ public class SysJobController extends BaseController {
 	}
 	
 	@GetMapping("/add")
-	@PreAuthorize("hasAuthority('open:job:add')")
+	@PreAuthorize("hasAuthority('open:job:manage')")
 	public String add(ModelMap map) {
 		return prefix + "/add";
 	}
 
 	@GetMapping("/edit/{id}")
-	@PreAuthorize("hasAuthority('open:job:edit')")
+	@PreAuthorize("hasAuthority('open:job:manage')")
 	public String edit(@PathVariable("id") Long id, ModelMap map) {
 		SysJob job = jobService.getJobById(id);
 		map.put("job", job);
@@ -72,7 +72,7 @@ public class SysJobController extends BaseController {
 	
 	@PostMapping("/save")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:job:add')")
+	@PreAuthorize("hasAuthority('do:job:add')")
 	@Log(BusinessName = "定时任务管理", OperationType = OperationType.INSERT, Content = "新增类型定时任务")
 	public Result save(@Valid SysJob job, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -93,7 +93,7 @@ public class SysJobController extends BaseController {
 	
 	@PostMapping("/update")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:job:edit')")
+	@PreAuthorize("hasAuthority('do:job:edit')")
 	@Log(BusinessName = "定时任务管理", OperationType = OperationType.UPDATE, Content = "修改定时任务")
 	public Result update(@Valid SysJob job, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -111,7 +111,7 @@ public class SysJobController extends BaseController {
 	
 	@PostMapping("/updateStatus")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:job:edit')")
+	@PreAuthorize("hasAuthority('do:job:edit')")
 	@Log(BusinessName = "定时任务管理", OperationType = OperationType.UPDATE, Content = "修改定时任务状态")
 	public Result updateStatus(SysJob job) {
 		try {
@@ -157,7 +157,7 @@ public class SysJobController extends BaseController {
 	
 	@GetMapping("/checkJobName")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:job:add')")
+	@PreAuthorize("hasAuthority('open:job:manage')")
 	public boolean checkJobName(String jobName) {
 		if (jobService.getJobByJobName(jobName) != null) {
 			return false;

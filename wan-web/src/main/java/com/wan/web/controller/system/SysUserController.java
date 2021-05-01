@@ -77,7 +77,7 @@ public class SysUserController extends BaseController {
 	}
 	
 	@GetMapping("/add")
-	@PreAuthorize("hasAuthority('open:user:add')")
+	@PreAuthorize("hasAuthority('open:user:manage')")
 	public String add(ModelMap map) {
 		List<SysRole> roleList = roleService.listAllRoles();
 		map.put("roleList", roleList);
@@ -86,7 +86,7 @@ public class SysUserController extends BaseController {
 	}
 
 	@GetMapping("/edit/{id}")
-	@PreAuthorize("hasAuthority('open:user:edit')")
+	@PreAuthorize("hasAuthority('open:user:manage')")
 	public String edit(@PathVariable("id") Long id, ModelMap map) {
 		SysUser user = userService.getUserAndRolesById(id);
 		map.put("user", user);
@@ -99,7 +99,7 @@ public class SysUserController extends BaseController {
 	
 	@PostMapping("/save")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:user:add')")
+	@PreAuthorize("hasAuthority('do:user:add')")
 	@Log(BusinessName = "用户管理", OperationType = OperationType.INSERT, Content = "新增用户")
 	public Result save(@Valid SysUser user, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -116,7 +116,7 @@ public class SysUserController extends BaseController {
 	
 	@PostMapping("/update")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:user:edit')")
+	@PreAuthorize("hasAuthority('do:user:edit')")
 	@Log(BusinessName = "用户管理", OperationType = OperationType.UPDATE, Content = "修改用户")
 	public Result update(@Valid SysUser user, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -129,7 +129,7 @@ public class SysUserController extends BaseController {
 	
 	@PostMapping("/updateStatus")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:user:edit')")
+	@PreAuthorize("hasAuthority('do:user:edit')")
 	@Log(BusinessName = "用户管理", OperationType = OperationType.UPDATE, Content = "修改用户状态")
 	public Result updateStatus(SysUser user) {
 		userService.updateUser(user);
@@ -209,7 +209,7 @@ public class SysUserController extends BaseController {
 	
 	@GetMapping("/checkLoginname")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:user:add')")
+	@PreAuthorize("hasAuthority('open:user:manage')")
 	public boolean checkLoginname(String loginname) {
 		if (userService.getUserByLoginname(loginname) != null) {
 			return false;

@@ -110,9 +110,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.sessionManagement()
 			.invalidSessionUrl("/login?timeout=1")
-			.maximumSessions(1)
+			.maximumSessions(1000)
 			.sessionRegistry(sessionRegistry())
-			.expiredUrl("/login?expired=1");
+			.expiredUrl("/login?expired=1")
+			;
 		
 		// 关闭CSRF跨域
 		http.csrf().disable();

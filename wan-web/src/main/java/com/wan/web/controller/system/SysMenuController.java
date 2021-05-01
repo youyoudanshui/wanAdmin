@@ -52,7 +52,7 @@ public class SysMenuController {
 	}
 	
 	@GetMapping("/add/{pid}")
-	@PreAuthorize("hasAuthority('open:menu:add')")
+	@PreAuthorize("hasAuthority('open:menu:manage')")
 	public String add(@PathVariable("pid") Long pid, ModelMap map) {
 		SysMenu pmenu;
 		if (pid == -1) {
@@ -65,7 +65,7 @@ public class SysMenuController {
 	}
 
 	@GetMapping("/edit/{id}")
-	@PreAuthorize("hasAuthority('open:menu:edit')")
+	@PreAuthorize("hasAuthority('open:menu:manage')")
 	public String edit(@PathVariable("id") Long id, ModelMap map) {
 		SysMenu menu = menuService.getMenuById(id);
 		map.put("menu", menu);
@@ -74,7 +74,7 @@ public class SysMenuController {
 	
 	@PostMapping("/save")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:menu:add')")
+	@PreAuthorize("hasAuthority('do:menu:add')")
 	@Log(BusinessName = "菜单管理", OperationType = OperationType.INSERT, Content = "新增菜单")
 	public Result save(@Valid SysMenu menu, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -87,7 +87,7 @@ public class SysMenuController {
 	
 	@PostMapping("/update")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:menu:edit')")
+	@PreAuthorize("hasAuthority('do:menu:edit')")
 	@Log(BusinessName = "菜单管理", OperationType = OperationType.UPDATE, Content = "修改菜单")
 	public Result update(@Valid SysMenu menu, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -100,7 +100,7 @@ public class SysMenuController {
 	
 	@PostMapping("/updateStatus")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:menu:edit')")
+	@PreAuthorize("hasAuthority('do:menu:edit')")
 	@Log(BusinessName = "菜单管理", OperationType = OperationType.UPDATE, Content = "修改菜单状态")
 	public Result updateStatus(SysMenu menu) {
 		menuService.updateMenu(menu);

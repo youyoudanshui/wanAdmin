@@ -45,7 +45,7 @@ public class SysDictDataController extends BaseController {
 	private String prefix = "system/dict/data";
 	
 	@GetMapping("/{dictId}")
-	@PreAuthorize("hasAuthority('open:dict:data')")
+	@PreAuthorize("hasAuthority('open:dict:manage')")
 	public String data(@PathVariable("dictId") Long dictId, ModelMap map) {
 		SysDict dict = dictService.getDictById(dictId);
 		map.put("dict", dict);
@@ -54,7 +54,7 @@ public class SysDictDataController extends BaseController {
 	
 	@GetMapping("/list")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:dict:data')")
+	@PreAuthorize("hasAuthority('open:dict:manage')")
 	public PageInfo<SysDictData> list(SysDictData data, Page page) {
 		startPage(page);
 		List<SysDictData> list = dictDataService.listDictDatas(data);
@@ -63,7 +63,7 @@ public class SysDictDataController extends BaseController {
 	}
 	
 	@GetMapping("/add/{dictId}")
-	@PreAuthorize("hasAuthority('open:dict:data')")
+	@PreAuthorize("hasAuthority('open:dict:manage')")
 	public String add(@PathVariable("dictId") Long dictId, ModelMap map) {
 		SysDict dict = dictService.getDictById(dictId);
 		map.put("dict", dict);
@@ -71,7 +71,7 @@ public class SysDictDataController extends BaseController {
 	}
 
 	@GetMapping("/edit/{id}")
-	@PreAuthorize("hasAuthority('open:dict:data')")
+	@PreAuthorize("hasAuthority('open:dict:manage')")
 	public String edit(@PathVariable("id") Long id, ModelMap map) {
 		SysDictData data = dictDataService.getDictDataById(id);
 		map.put("data", data);
@@ -80,7 +80,7 @@ public class SysDictDataController extends BaseController {
 	
 	@PostMapping("/save")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:dict:data')")
+	@PreAuthorize("hasAuthority('do:dict:add')")
 	@Log(BusinessName = "数据字典管理", OperationType = OperationType.INSERT, Content = "新增类型数据")
 	public Result save(@Valid SysDictData data, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -93,7 +93,7 @@ public class SysDictDataController extends BaseController {
 	
 	@PostMapping("/update")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:dict:data')")
+	@PreAuthorize("hasAuthority('do:dict:edit')")
 	@Log(BusinessName = "数据字典管理", OperationType = OperationType.UPDATE, Content = "修改类型数据")
 	public Result update(@Valid SysDictData data, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -106,7 +106,7 @@ public class SysDictDataController extends BaseController {
 	
 	@PostMapping("/updateStatus")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:dict:data')")
+	@PreAuthorize("hasAuthority('do:dict:edit')")
 	@Log(BusinessName = "数据字典管理", OperationType = OperationType.UPDATE, Content = "修改类型数据状态")
 	public Result updateStatus(SysDictData data) {
 		SysDictData o_data = dictDataService.getDictDataById(data.getId());
@@ -118,7 +118,7 @@ public class SysDictDataController extends BaseController {
 	
 	@PostMapping("/remove/{id}")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:dict:data')")
+	@PreAuthorize("hasAuthority('do:dict:remove')")
 	@Log(BusinessName = "数据字典管理", OperationType = OperationType.DELETE, Content = "删除类型数据")
 	public Result remove(@PathVariable("id") Long id) {
 		SysDictData data = dictDataService.getDictDataById(id);

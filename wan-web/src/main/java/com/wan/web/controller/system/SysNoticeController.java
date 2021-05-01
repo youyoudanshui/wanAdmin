@@ -61,13 +61,13 @@ public class SysNoticeController extends BaseController {
 	}
 	
 	@GetMapping("/add")
-	@PreAuthorize("hasAuthority('open:notice:add')")
+	@PreAuthorize("hasAuthority('open:notice:manage')")
 	public String add() {
 		return prefix + "/add";
 	}
 
 	@GetMapping("/edit/{id}")
-	@PreAuthorize("hasAuthority('open:notice:edit')")
+	@PreAuthorize("hasAuthority('open:notice:manage')")
 	public String edit(@PathVariable("id") Long id, ModelMap map) {
 		SysNotice notice = noticeService.getNoticeById(id);
 		map.put("notice", notice);
@@ -77,7 +77,7 @@ public class SysNoticeController extends BaseController {
 	
 	@PostMapping("/save")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:notice:add')")
+	@PreAuthorize("hasAuthority('do:notice:add')")
 	@Log(BusinessName = "通知管理", OperationType = OperationType.INSERT, Content = "新增通知")
 	public Result save(@Valid SysNotice notice, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -90,7 +90,7 @@ public class SysNoticeController extends BaseController {
 	
 	@PostMapping("/update")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:notice:edit')")
+	@PreAuthorize("hasAuthority('do:notice:edit')")
 	@Log(BusinessName = "通知管理", OperationType = OperationType.UPDATE, Content = "修改通知")
 	public Result update(@Valid SysNotice notice, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {

@@ -39,7 +39,7 @@ public class SysJobLogController extends BaseController {
 	
 	@GetMapping("/list")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:job:log')")
+	@PreAuthorize("hasAuthority('open:job:manage')")
 	public PageInfo<SysJobLog> list(SysJobLog jobLog, Page page) {
 		startPage(page);
 		List<SysJobLog> list = jobLogService.listJobLogs(jobLog);
@@ -48,7 +48,7 @@ public class SysJobLogController extends BaseController {
 	}
 	
 	@GetMapping("/detail/{id}")
-	@PreAuthorize("hasAuthority('open:job:log')")
+	@PreAuthorize("hasAuthority('open:job:manage')")
 	public String detail(@PathVariable("id") Long id, ModelMap map) {
 		SysJobLog jobLog = jobLogService.getJobLog(id);
 		map.put("jobLog", jobLog);
