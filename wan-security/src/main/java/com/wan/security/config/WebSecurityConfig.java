@@ -110,7 +110,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.sessionManagement()
 			.invalidSessionUrl("/login?timeout=1")
-			.maximumSessions(1000)
+			.maximumSessions(1)
 			.sessionRegistry(sessionRegistry())
 			.expiredUrl("/login?expired=1")
 			;
