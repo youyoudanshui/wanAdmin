@@ -1,6 +1,7 @@
 package com.wan.web.controller.system;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -52,6 +53,14 @@ public class SysConfigController {
 	@Log(BusinessName = "网站配置", OperationType = OperationType.UPDATE, Content = "修改配置")
 	public Result update(SysConfig config) throws IllegalArgumentException, IllegalAccessException {
 		configService.updateConfigs(config);
+		return ResultUtil.success();
+	}
+	
+	@GetMapping("/removeCache")
+	@ResponseBody
+	@PreAuthorize("hasAuthority('open:config:manage')")
+	@CacheEvict(value="config", allEntries=true)
+	public Result removeCache() {
 		return ResultUtil.success();
 	}
 

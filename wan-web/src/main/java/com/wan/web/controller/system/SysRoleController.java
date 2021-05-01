@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -147,6 +148,14 @@ public class SysRoleController extends BaseController {
 			return false;
 		}
 		return true;
+	}
+	
+	@GetMapping("/removeCache")
+	@ResponseBody
+	@PreAuthorize("hasAuthority('open:role:manage')")
+	@CacheEvict(value="roleList", allEntries=true)
+	public Result removeCache() {
+		return ResultUtil.success();
 	}
 
 }

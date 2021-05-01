@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -132,6 +133,14 @@ public class SysNoticeController extends BaseController {
 			webSocket.sendMessage("getUnreadNotices");
 		}
 		
+		return ResultUtil.success();
+	}
+	
+	@GetMapping("/removeCache")
+	@ResponseBody
+	@PreAuthorize("hasAuthority('open:notice:manage')")
+	@CacheEvict(value="notice", allEntries=true)
+	public Result removeCache() {
 		return ResultUtil.success();
 	}
 
