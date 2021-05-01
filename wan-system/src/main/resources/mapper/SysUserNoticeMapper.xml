@@ -71,7 +71,11 @@
 		where user_notice_id = #{id}
 	</update>
 	
-	<delete id="deleteUserNotices" parameterType="Long">
+	<delete id="deleteUserNoticesByUserId" parameterType="Long">
+		delete from sys_user_notice where user_id = #{userId}
+	</delete>
+	
+	<delete id="deleteUserNoticesByNoticeId" parameterType="Long">
 		delete from sys_user_notice where notice_id = #{noticeId}
 	</delete>
 	

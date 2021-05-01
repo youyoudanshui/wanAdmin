@@ -49,7 +49,7 @@ public class SysNoticeServiceImpl implements SysNoticeService {
 	public void deleteNotice(Long id) {
 		noticeMapper.deleteNotice(id);
 		noticeMapper.deleteNoticeContent(id);
-		userNoticeMapper.deleteUserNotices(id);
+		userNoticeMapper.deleteUserNoticesByNoticeId(id);
 	}
 
 	@Override

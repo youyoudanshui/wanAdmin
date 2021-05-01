@@ -14,6 +14,7 @@ import com.wan.system.domain.SysUser;
 import com.wan.system.domain.SysUserRole;
 import com.wan.system.mapper.SysLogMapper;
 import com.wan.system.mapper.SysUserMapper;
+import com.wan.system.mapper.SysUserNoticeMapper;
 import com.wan.system.mapper.SysUserRoleMapper;
 import com.wan.system.service.SysUserService;
 
@@ -25,6 +26,9 @@ public class SysUserServiceImpl implements SysUserService {
 	
 	@Autowired
 	private SysUserRoleMapper userRoleMapper;
+	
+	@Autowired
+	private SysUserNoticeMapper userNoticeMapper;
 	
 	@Autowired
 	private SysLogMapper logMapper;
@@ -125,6 +129,7 @@ public class SysUserServiceImpl implements SysUserService {
 	public void deleteUser(Long id) {
 		userMapper.deleteUser(id);
 		userRoleMapper.deleteUserRoles(id);
+		userNoticeMapper.deleteUserNoticesByUserId(id);
 	}
 	
 	@Override
