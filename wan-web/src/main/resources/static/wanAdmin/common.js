@@ -137,7 +137,7 @@ function myAjax(options) {
         		if (result.code == 0) {
     				notifySuccess('执行成功');
     			} else {
-    				notifyWarning(r.message);
+    				notifyWarning(result.message);
     			}
         	}
         },

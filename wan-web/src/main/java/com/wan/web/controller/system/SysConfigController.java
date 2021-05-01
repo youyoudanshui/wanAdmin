@@ -49,7 +49,7 @@ public class SysConfigController {
 	
 	@PostMapping("/update")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('do:config:update')")
+	@PreAuthorize("hasAuthority('do:config:edit')")
 	@Log(BusinessName = "网站配置", OperationType = OperationType.UPDATE, Content = "修改配置")
 	public Result update(SysConfig config) throws IllegalArgumentException, IllegalAccessException {
 		configService.updateConfigs(config);

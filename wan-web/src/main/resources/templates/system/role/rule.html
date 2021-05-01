@@ -163,8 +163,8 @@
 $(function(){
     //动态选择框，上下级选中状态变化
     $('input.checkbox-parent').on('change', function(){
-        var dataid = $(this).attr("dataid");
-        $('input[dataid^=' + dataid + '-]').prop('checked', $(this).is(':checked'));
+/*         var dataid = $(this).attr("dataid");
+        $('input[dataid^=' + dataid + '-]').prop('checked', $(this).is(':checked')); */
         
         checkAll();
     });
