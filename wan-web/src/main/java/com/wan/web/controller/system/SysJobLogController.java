@@ -32,7 +32,7 @@ public class SysJobLogController extends BaseController {
 	private String prefix = "system/job/log";
 	
 	@GetMapping("")
-	@PreAuthorize("hasAuthority('open:job:log')")
+	@PreAuthorize("hasAuthority('open:job:manage')")
 	public String log() {
 		return prefix + "/log";
 	}

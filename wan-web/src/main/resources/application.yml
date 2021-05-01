@@ -74,10 +74,6 @@ spring:
         enabled: true
         url-pattern: /druid/*
         reset-enable: true
-        #允许访问的端口
-        allow: 127.0.0.1
-        #禁止访问的端口
-        #deny: 192.168.1.100
 
   # 模板引擎
   freemarker:
