@@ -141,7 +141,7 @@ public class SysJobController extends BaseController {
 		}
 	}
 	
-	@RequestMapping("/runOnce/{id}")
+	@PostMapping("/runOnce/{id}")
     @ResponseBody
     @PreAuthorize("hasAuthority('do:job:runOnce')")
 	@Log(BusinessName = "定时任务管理", OperationType = OperationType.INSERT, Content = "运行一次定时任务")
