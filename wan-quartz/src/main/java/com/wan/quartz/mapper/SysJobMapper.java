@@ -28,13 +28,13 @@ public interface SysJobMapper {
 	
 	/**
 	 * 新增定时任务
-	 * @param role
+	 * @param job
 	 */
 	void insertJob(SysJob job);
 	
 	/**
 	 * 修改定时任务
-	 * @param role
+	 * @param job
 	 */
 	void updateJob(SysJob job);
 	
