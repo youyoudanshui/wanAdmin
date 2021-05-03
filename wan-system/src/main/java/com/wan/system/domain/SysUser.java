@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,7 +42,6 @@ public class SysUser extends BaseDTO implements Serializable, UserDetails {
 	/**
 	 * 密码
 	 */
-	@NotBlank(message = "密码是必填字段！")
 	@Length(min = 5, message = "密码最少要输入 5 个字符！")
 	String password;
 	
@@ -53,6 +53,7 @@ public class SysUser extends BaseDTO implements Serializable, UserDetails {
 	/**
 	 * 手机
 	 */
+	@Pattern(regexp = "^.{0}|.{11}$", message = "请输入11位手机号码！")
 	String telephone;
 	
 	/**
