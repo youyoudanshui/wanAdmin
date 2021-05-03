@@ -19,10 +19,8 @@
               <input class="form-control" type="text" name="loginname" placeholder="登录名..">
             </div>
             <div class="form-group mb-2 mr-2">
-              <select name="loginStatus" class="form-control">
+              <select id="loginStatus" name="loginStatus" class="form-control">
                 <option value="">不限状态</option>
-                <option value="0">登录成功</option>
-                <option value="1">登录失败</option>
               </select>
             </div>
             <div class="form-group mb-2 mr-2">
@@ -56,6 +54,8 @@
 <script type="text/javascript">
 var prefix = "system/log";
 var listUrl = prefix + '/loginList';
+
+listDictOptions('sys_login_status', '#loginStatus');
 
 bootstrapTable({
 	url: listUrl,

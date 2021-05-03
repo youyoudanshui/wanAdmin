@@ -19,10 +19,8 @@
               <input class="form-control" type="text" name="jobName" placeholder="任务名称..">
             </div>
             <div class="form-group mb-2 mr-2">
-              <select name="status" class="form-control">
+              <select id="status" name="status" class="form-control">
                 <option value="">不限状态</option>
-                <option value="1">启动</option>
-                <option value="0">暂停</option>
               </select>
             </div>
             <a class="btn btn-default mb-2 mr-2" type="button" onclick="refreshTable()"><i class="mdi mdi-magnify"></i> 搜索</a>
@@ -56,6 +54,8 @@
 <script type="text/javascript">
 var prefix = "system/job";
 var listUrl = prefix + '/list';
+
+listDictOptions('sys_job_status', '#status');
 
 bootstrapTable({
 	url: listUrl,

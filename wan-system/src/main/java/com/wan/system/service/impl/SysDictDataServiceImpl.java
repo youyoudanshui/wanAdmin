@@ -39,8 +39,15 @@ public class SysDictDataServiceImpl implements SysDictDataService {
 	public String getDictDataValue(SysDictData data) {
 		return dictDataMapper.getDictDataValue(data);
 	}
+	
+	@Override
+	@Cacheable(value = {"dictData"}, key = "#data.typeName", unless = "#result?.size() == 0")
+	public List<SysDictData> getDictDataList(SysDictData data) {
+		return dictDataMapper.getDictDataList(data);
+	}
 
 	@Override
+	@CacheEvict(value={"dictData"}, key = "#data.typeName")
 	public void insertDictData(SysDictData data) {
 		dictDataMapper.insertDictData(data);
 	}
@@ -50,7 +57,7 @@ public class SysDictDataServiceImpl implements SysDictDataService {
 		dictDataMapper.updateDictData(data);
 		
 		// 删除缓存
-		Set<String> keys = stringRedisTemplate.keys(cachePrefix + data.getTypeName() + "_*");
+		Set<String> keys = stringRedisTemplate.keys(cachePrefix + data.getTypeName() + "*");
 		stringRedisTemplate.delete(keys);
 	}
 
@@ -58,6 +65,10 @@ public class SysDictDataServiceImpl implements SysDictDataService {
 	@CacheEvict(value={"dictData"}, key = "#data.typeName + '_' + #data.key")
 	public void deleteDictData(SysDictData data) {
 		dictDataMapper.deleteDictData(data.getId());
+		
+		// 删除缓存
+		Set<String> keys = stringRedisTemplate.keys(cachePrefix + data.getTypeName());
+		stringRedisTemplate.delete(keys);
 	}
 
 }

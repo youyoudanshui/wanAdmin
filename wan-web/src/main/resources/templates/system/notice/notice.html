@@ -19,10 +19,8 @@
               <input class="form-control" type="text" name="title" placeholder="标题..">
             </div>
             <div class="form-group mb-2 mr-2">
-              <select name="isSent" class="form-control">
+              <select id="isSent" name="isSent" class="form-control">
                 <option value="">不限状态</option>
-                <option value="1">已发送</option>
-                <option value="0">未发送</option>
               </select>
             </div>
             <a class="btn btn-default mb-2 mr-2" type="button" onclick="refreshTable()"><i class="mdi mdi-magnify"></i> 搜索</a>
@@ -56,6 +54,8 @@
 <script type="text/javascript">
 var prefix = "system/notice";
 var listUrl = prefix + '/list';
+
+listDictOptions('sys_notice_isSent', '#isSent');
 
 bootstrapTable({
 	url: listUrl,

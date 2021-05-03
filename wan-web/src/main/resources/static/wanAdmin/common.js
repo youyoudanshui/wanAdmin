@@ -452,9 +452,14 @@ function config(configKey) {
 }
 
 function getDict(typeName, key) {
-	var dataValue = '';
+	var dataValue = null;
+	
+	if (key == null || key == '' || key == 'undefined') {
+		return dataValue;
+	}
+	
 	ajaxGet({
-		url: 'system/dict/data/get',
+		url: 'system/dict/data/getValue',
 		data: {typeName: typeName, key: key},
 		async: false,
 		success: function(rs) {
@@ -464,6 +469,26 @@ function getDict(typeName, key) {
 		}
 	});
 	return dataValue;
+}
+
+function listDictOptions(typeName, elem) {
+	var dataList = null;
+	ajaxGet({
+		url: 'system/dict/data/getList',
+		data: {typeName: typeName},
+		async: false,
+		success: function(rs) {
+			if (rs.code == 0) {
+				dataList = rs.data;
+			}
+		}
+	});
+	
+	var opts = '';
+	for (var i = 0; i < dataList.length; i ++) {
+		opts += '<option value="' + dataList[i].key + '">' + dataList[i].value + '</option>';
+	}
+	$(elem).append(opts);
 }
 
 /*获取地址参数*/

@@ -28,6 +28,7 @@
 		<include refid="selectDictDataVO"/>
 		<where>
 			<if test="dictId != null and dictId != ''">and dd.dict_id = #{dictId}</if>
+			<if test="typeName != null and typeName != ''">and d.type_name = #{typeName}</if>
 			<if test="key != null and key != ''">and dd.data_key like concat('%', #{key}, '%')</if>
 		</where>
 		order by dd.seq asc, dd.gmt_create asc
@@ -43,6 +44,13 @@
 		from sys_dict_data dd
 		left join sys_dict d on d.dict_id = dd.dict_id
 		where d.type_name = #{typeName} and dd.data_key = #{key} and dd.status = '1' and d.status = '1'
+	</select>
+	
+	<select id="getDictDataList" parameterType="SysDictData" resultMap="SysDictDataResult">
+		select dd.data_key, dd.data_value
+		from sys_dict_data dd
+		left join sys_dict d on d.dict_id = dd.dict_id
+		where d.type_name = #{typeName} and dd.status = '1' and d.status = '1'
 	</select>
 	
 	<insert id="insertDictData" parameterType="SysDictData">
@@ -66,6 +74,7 @@
 	<update id="updateDictData" parameterType="SysDictData">
 		update sys_dict_data
 		<set>
+			<if test="key != null">data_key = #{key},</if>
 			<if test="value != null">data_value = #{value},</if>
 			<if test="status != null">status = #{status},</if>
 			<if test="seq != null">seq = #{seq},</if>

@@ -12,6 +12,8 @@ public interface SysDictDataService {
 	
 	String getDictDataValue(SysDictData data);
 	
+	List<SysDictData> getDictDataList(SysDictData data);
+	
 	void insertDictData(SysDictData data);
 	
 	void updateDictData(SysDictData data);

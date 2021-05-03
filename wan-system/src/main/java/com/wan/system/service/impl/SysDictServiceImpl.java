@@ -53,8 +53,11 @@ public class SysDictServiceImpl implements SysDictService {
 		
 		// 删除缓存
 		if ("0".equals(dict.getStatus())) {
-			Set<String> keys = stringRedisTemplate.keys(cachePrefix + dictMapper.getDictById(dict.getId()).getTypeName() + "_*");
-			stringRedisTemplate.delete(keys);
+			String typeName = dict.getTypeName();
+			if (dict.getTypeName() == null) {
+				typeName = dictMapper.getDictById(dict.getId()).getTypeName();
+			}
+			removeCache(typeName);
 		}
 	}
 
@@ -66,7 +69,11 @@ public class SysDictServiceImpl implements SysDictService {
 		dictDataMapper.deleteDictDataByDictId(id);
 		
 		// 删除缓存
-		Set<String> keys = stringRedisTemplate.keys(cachePrefix + dict.getTypeName() + "_*");
+		removeCache(dict.getTypeName());
+	}
+	
+	private void removeCache(String typeName) {
+		Set<String> keys = stringRedisTemplate.keys(cachePrefix + typeName + "*");
 		stringRedisTemplate.delete(keys);
 	}
 

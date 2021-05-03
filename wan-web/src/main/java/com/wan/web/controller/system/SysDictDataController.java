@@ -126,11 +126,18 @@ public class SysDictDataController extends BaseController {
 		return ResultUtil.success();
 	}
 	
-	@GetMapping("/get")
+	@GetMapping("/getValue")
 	@ResponseBody
-	public Result get(SysDictData data) {
+	public Result getValue(SysDictData data) {
 		String dataValue = dictDataService.getDictDataValue(data);
 		return ResultUtil.success(dataValue);
+	}
+	
+	@GetMapping("/getList")
+	@ResponseBody
+	public Result getList(SysDictData data) {
+		List<SysDictData> dataList = dictDataService.getDictDataList(data);
+		return ResultUtil.success(dataList);
 	}
 
 }

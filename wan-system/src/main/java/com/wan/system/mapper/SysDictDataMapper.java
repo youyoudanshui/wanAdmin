@@ -27,6 +27,13 @@ public interface SysDictDataMapper {
 	String getDictDataValue(SysDictData data);
 	
 	/**
+	 * 获取字典数据列表
+	 * @param data
+	 * @return
+	 */
+	List<SysDictData> getDictDataList(SysDictData data);
+	
+	/**
 	 * 新增字典数据
 	 * @param data
 	 */

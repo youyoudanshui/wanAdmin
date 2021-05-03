@@ -19,10 +19,8 @@
               <input class="form-control" type="text" name="jobName" placeholder="任务名称..">
             </div>
             <div class="form-group mb-2 mr-2">
-              <select name="status" class="form-control">
+              <select id="status" name="status" class="form-control">
                 <option value="">不限状态</option>
-                <option value="0">正常</option>
-                <option value="1">异常</option>
               </select>
             </div>
             <div class="form-group mb-2 mr-2">
@@ -56,6 +54,8 @@
 <script type="text/javascript">
 var prefix = "system/job/log";
 var listUrl = prefix + '/list';
+
+listDictOptions('sys_log_status', '#status');
 
 bootstrapTable({
 	url: listUrl,
