@@ -51,6 +51,7 @@
 		from sys_dict_data dd
 		left join sys_dict d on d.dict_id = dd.dict_id
 		where d.type_name = #{typeName} and dd.status = '1' and d.status = '1'
+		order by dd.seq asc, dd.gmt_create asc
 	</select>
 	
 	<insert id="insertDictData" parameterType="SysDictData">
