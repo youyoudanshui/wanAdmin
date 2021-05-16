@@ -77,13 +77,12 @@ bootstrapTable({
     }, {
         field: 'operate',
         title: '操作',
-        formatter: btnGroup,  // 自定义方法
+        formatter: function(value, row, index) {
+        	return btnGroup(row.id)  // 自定义方法
+        },
         events: {
             'click .edit-btn': function (event, value, row, index) {
             	update(row.id, '编辑类型');
-            },
-            'click .data-btn': function (event, value, row, index) {
-            	setDatas(row.id);
             },
             'click .delete-btn': function (event, value, row, index) {
             	del(row.id);
@@ -93,20 +92,12 @@ bootstrapTable({
 });
 
 //操作按钮
-function btnGroup() {
+function btnGroup(id) {
 	return [
         '<a type="button" class="edit-btn btn btn-xs btn-default m-r-5" title="修改" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>',
-        '<a type="button" class="data-btn btn btn-xs btn-default m-r-5" title="数据" data-toggle="tooltip"><i class="mdi mdi-format-list-bulleted"></i></a>',
+        '<a type="button" class="data-btn btn btn-xs btn-default m-r-5 js-create-tab" title="数据" data-toggle="tooltip" data-title="数据管理" data-url="' + prefix + '/data/' + id + '"><i class="mdi mdi-format-list-bulleted"></i></a>',
         '<a type="button" class="delete-btn btn btn-xs btn-default" title="删除" data-toggle="tooltip"><i class="mdi mdi-delete"></i></a>'
     ].join('');
-}
-
-function setDatas(id) {
-	parent.$(parent.document).data('multitabs').create({
-        iframe : true,
-        title : '数据管理',
-        url : prefix + '/data/' + id
-    }, true);
 }
 </script>
 </body>
