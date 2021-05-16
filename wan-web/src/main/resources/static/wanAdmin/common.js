@@ -229,7 +229,7 @@ function layerOpen(title, url) {
         title: title,
         shadeClose: true,
         shade: 0.5,
-        area: ['90%', '90%'],
+        area: ['90%', '99%'],
         content: url,
         btn: ['确 定', '关闭'],
         yes: function(index, layero) {
@@ -406,7 +406,7 @@ function detail(id, title) {
         title: title,
         shadeClose: true,
         shade: 0.5,
-        area: ['90%', '90%'],
+        area: ['90%', '99%'],
         content: prefix + '/detail/' + id,
         btn: ['关闭'],
         yes: function(index, layero) {
