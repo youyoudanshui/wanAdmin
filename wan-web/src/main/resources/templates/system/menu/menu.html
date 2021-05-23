@@ -135,11 +135,12 @@ $treeTable.bootstrapTable({
   
 // 操作按钮
 function operateFormatter(value, row, index) {
-    return [
-        '<a type="button" class="add-btn btn btn-xs btn-default m-r-5" title="新增下级菜单" data-toggle="tooltip"><i class="mdi mdi-plus"></i></a>',
-        '<a type="button" class="edit-btn btn btn-xs btn-default m-r-5" title="修改" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>',
-        '<a type="button" class="delete-btn btn btn-xs btn-default" title="删除" data-toggle="tooltip"><i class="mdi mdi-delete"></i></a>'
-    ].join('');
+	var btns = '<a type="button" class="edit-btn btn btn-xs btn-default m-r-5" title="修改" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>'
+    		 + '<a type="button" class="delete-btn btn btn-xs btn-default" title="删除" data-toggle="tooltip"><i class="mdi mdi-delete"></i></a>';
+	if (row.type == 'BUTTON' || row._level > 2) {
+		return btns;
+	}
+    return '<a type="button" class="add-btn btn btn-xs btn-default m-r-5" title="新增下级菜单" data-toggle="tooltip"><i class="mdi mdi-plus"></i></a>' + btns;
 }
 
 /**
