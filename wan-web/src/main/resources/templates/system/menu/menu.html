@@ -18,6 +18,9 @@
             <button id="btn_add" type="button" class="btn btn-primary m-r-5" onclick="addMenu(-1, '新增一级菜单')">
               <span class="mdi mdi-plus" aria-hidden="true"></span>新增一级菜单
             </button>
+            <button id="btn_add" type="button" class="btn btn-info m-r-5" onclick="expandAllRoot()">
+              <span class="mdi mdi-swap-horizontal" aria-hidden="true"></span>展开/折叠
+            </button>
             <button id="btn_cache" type="button" class="btn btn-default m-r-5" onclick="removeCache()">
               <span class="mdi mdi-delete" aria-hidden="true"></span>删除缓存
             </button>
@@ -37,6 +40,7 @@
 <script type="text/javascript">
 var prefix = "system/menu";
 var listUrl = prefix + '/list';
+var expand_flag = false;
 
 // tree-grid使用
 var $treeTable = $('.tree-table');
@@ -102,17 +106,6 @@ $treeTable.bootstrapTable({
     treeShowField: 'name',
     parentIdField: 'pid',
     
-    onResetView: function(data) {
-        $treeTable.treegrid({
-            initialState: 'collapsed', // 所有节点都折叠
-            treeColumn: 0,
-            //expanderExpandedClass: 'mdi mdi-folder-open',  // 可自定义图标样式
-            //expanderCollapsedClass: 'mdi mdi-folder',
-        });
-        
-        // 只展开树形的第一集节点
-        $treeTable.treegrid('getRootNodes').treegrid('expand');
-    },
     onCheck: function(row) {
         var datas = $treeTable.bootstrapTable('getData');
         
@@ -129,6 +122,24 @@ $treeTable.bootstrapTable({
         $treeTable.bootstrapTable('load', datas);
     },
     onLoadSuccess: function(data){
+        $treeTable.treegrid({
+            initialState: 'expanded', // 所有节点都折叠
+            treeColumn: 0,
+            //expanderExpandedClass: 'mdi mdi-folder-open',  // 可自定义图标样式
+            //expanderCollapsedClass: 'mdi mdi-folder',
+        });
+        
+        // 只展开树形的第一集节点
+//        $treeTable.treegrid('getRootNodes').treegrid('expand');
+        
+        $treeTable.treegrid('getAllNodes').each(function() {
+        	if ($(this).treegrid("isLeaf")) {
+        		$(this).treegrid('getParentNode').treegrid('collapse');
+        	}
+        });
+        
+        expand_flag = false;
+        
         $("[data-toggle='tooltip']").tooltip();
     }
 });
@@ -170,6 +181,16 @@ function selectParentChecked(datas,row,id,pid){
 
 function addMenu(pid, title) {
 	layerOpen(title, prefix + '/add/' + pid);
+}
+
+function expandAllRoot(){
+	if (expand_flag) {
+		$treeTable.treegrid('collapseAll');
+		expand_flag = false;
+	} else {
+		$treeTable.treegrid('expandAll');
+		expand_flag = true;
+	}
 }
 </script>
 </body>
