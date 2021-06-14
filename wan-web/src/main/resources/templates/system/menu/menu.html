@@ -134,7 +134,9 @@ $treeTable.bootstrapTable({
         
         $treeTable.treegrid('getAllNodes').each(function() {
         	if ($(this).treegrid("isLeaf")) {
-        		$(this).treegrid('getParentNode').treegrid('collapse');
+        		if ($(this).treegrid('getParentNode') != null) {
+        			$(this).treegrid('getParentNode').treegrid('collapse');
+        		}
         	}
         });
         
