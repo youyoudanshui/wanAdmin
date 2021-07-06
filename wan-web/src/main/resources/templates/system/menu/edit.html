@@ -153,9 +153,9 @@ validateForm({
 function checkType() {
 	var type = $(':radio[name="type"]:checked').val();
 	if (type == 'MENU') {
-		$('#url').parents('.form-group').removeClass('d-none');
+		$('#url').parents('.form-group').show();
 	} else {
-		$('#url').parents('.form-group').addClass('d-none');
+		$('#url').parents('.form-group').hide();
 		$('#url').val('');
 	}
 }

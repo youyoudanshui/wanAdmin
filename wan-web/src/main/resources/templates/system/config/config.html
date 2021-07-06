@@ -97,14 +97,14 @@ checkLogoType();
 function checkLogoType() {
 	var logoType = $(':radio[name="web_site_logo_type"]:checked').val();
 	if (logoType == 'IMAGE') {
-		$('#web_site_logo_image').parents('.form-group').removeClass('d-none');
+		$('#web_site_logo_image').parents('.form-group').show();
 		
-		$('#web_site_logo_text').parent().addClass('d-none');
+		$('#web_site_logo_text').parent().hide();
 		$('#web_site_logo_text').val('');
 	} else {
-		$('#web_site_logo_text').parent().removeClass('d-none');
+		$('#web_site_logo_text').parent().show();
 		
-		$('#web_site_logo_image').parents('.form-group').addClass('d-none');
+		$('#web_site_logo_image').parents('.form-group').hide();
 		$('#web_site_logo_image').val('');
 	}
 }
