@@ -33,12 +33,12 @@
                 </div>
               </div>
               
-              <div class="form-group" <#if config.web_site_logo_type != 'TEXT'>style="display: none;"</#if>>
+              <div class="form-group">
                 <label for="web_site_logo_text">LOGO文字</label>
                 <input class="form-control" type="text" id="web_site_logo_text" name="web_site_logo_text" value="${config.web_site_logo_text}" placeholder="请输入站点LOGO">
               </div>
               
-              <div class="form-group file-group" <#if config.web_site_logo_type != 'IMAGE'>style="display: none;"</#if>>
+              <div class="form-group file-group">
                 <label for="web_site_logo_image">LOGO图片</label>
 	            <div class="input-group">
 	              <input type="text" class="form-control file-value" id="web_site_logo_image" name="web_site_logo_image" value="${config.web_site_logo_image}" placeholder="LOGO图片地址" />
@@ -88,18 +88,26 @@
 var prefix = "system/config";
 
 $(':radio[name="web_site_logo_type"]').change(function() {
-	if ($(this).val() == 'IMAGE') {
-		$('#web_site_logo_image').parents('.form-group').show();
+	checkLogoType();
+
+});
+
+checkLogoType();
+
+function checkLogoType() {
+	var logoType = $(':radio[name="web_site_logo_type"]:checked').val();
+	if (logoType == 'IMAGE') {
+		$('#web_site_logo_image').parents('.form-group').removeClass('d-none');
 		
-		$('#web_site_logo_text').parent().hide();
+		$('#web_site_logo_text').parent().addClass('d-none');
 		$('#web_site_logo_text').val('');
 	} else {
-		$('#web_site_logo_text').parent().show();
+		$('#web_site_logo_text').parent().removeClass('d-none');
 		
-		$('#web_site_logo_image').parents('.form-group').hide();
+		$('#web_site_logo_image').parents('.form-group').addClass('d-none');
 		$('#web_site_logo_image').val('');
 	}
-});
+}
 
 function doSubmit() {
 	var $form = $('#submitForm');

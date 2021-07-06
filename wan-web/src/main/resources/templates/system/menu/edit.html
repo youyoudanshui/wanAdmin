@@ -62,7 +62,7 @@
 	        
 	        </#if>
 	        
-	        <div class="form-group row" <#if menu.type == 'BUTTON'>style="display: none;"</#if>>
+	        <div class="form-group row">
 	          <label class="col-md-2 col-form-label" for="url">url</label>
 	          <div class="col-md-10">
 	          	<input type="text" class="form-control" id="url" name="url" value="${menu.url}" />
@@ -129,13 +129,10 @@ $(document).on('change', '#icon', function(){
 });
 
 $(':radio[name="type"]').change(function() {
-	if ($(this).val() == 'MENU') {
-		$('#url').parents('.form-group').show();
-	} else {
-		$('#url').parent().show();
-		$('#url').val('');
-	}
+	checkType();
 });
+
+checkType();
 
 validateForm({
 	'name': {
@@ -152,6 +149,16 @@ validateForm({
 		digits: true
 	}
 });
+
+function checkType() {
+	var type = $(':radio[name="type"]:checked').val();
+	if (type == 'MENU') {
+		$('#url').parents('.form-group').removeClass('d-none');
+	} else {
+		$('#url').parents('.form-group').addClass('d-none');
+		$('#url').val('');
+	}
+}
 </script>
 </body>
 </html>
