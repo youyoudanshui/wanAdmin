@@ -436,6 +436,16 @@ $.fn.serializeObject = function() {
     return o;  
 }
 
+/*表单数据转链接参数字符串*/
+$.fn.serializeString = function() {  
+	var s = '';  
+	var a = this.serializeArray();  
+	$.each(a, function() {  
+		s += encodeURIComponent(this.name) + '=' + (encodeURIComponent(this.value) || '') + '&';
+	});  
+	return s.substring(0, s.length - 1);  
+}
+
 /*获取系统配置参数值*/
 function config(configKey) {
 	var configValue = '';

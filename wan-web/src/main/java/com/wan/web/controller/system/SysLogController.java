@@ -2,6 +2,8 @@ package com.wan.web.controller.system;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.wan.common.domain.Page;
+import com.wan.common.util.ExcelUtil;
+import com.wan.common.util.FileUtil;
 import com.wan.system.domain.SysLog;
 import com.wan.system.domain.SysLoginLog;
 import com.wan.system.service.SysLogService;
@@ -20,7 +24,7 @@ import com.wan.system.service.SysLoginLogService;
 import com.wan.web.controller.common.BaseController;
 
 /**
- * 日志
+ * 操作日志
  * @author wmj
  *
  */
@@ -80,6 +84,20 @@ public class SysLogController extends BaseController {
 		SysLog log = logService.getLog(id);
 		map.put("log", log);
 		return prefix + "/detail";
+	}
+	
+	@GetMapping("/export")
+	@PreAuthorize("hasAuthority('open:log:manage')")
+	public void export(SysLog log, String fileName, HttpServletResponse response) {
+		List<SysLog> list = logService.listLogs(log);
+		ExcelUtil.exportHtmlExcel(list, SysLog.class, response, fileName + FileUtil.getRandomFileName(), null);
+	}
+	
+	@GetMapping("/loginExport")
+	@PreAuthorize("hasAuthority('open:log:manage')")
+	public void loginExport(SysLoginLog loginLog, String fileName, HttpServletResponse response) {
+		List<SysLoginLog> list = loginLogService.listLoginLogs(loginLog);
+		ExcelUtil.exportHtmlExcel(list, SysLoginLog.class, response, fileName + FileUtil.getRandomFileName(), null);
 	}
 
 }

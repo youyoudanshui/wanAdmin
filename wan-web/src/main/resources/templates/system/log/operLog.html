@@ -31,6 +31,7 @@
               </div>
             </div>
             <a class="btn btn-default mb-2 mr-2" type="button" onclick="refreshTable()"><i class="mdi mdi-magnify"></i> 搜索</a>
+            <a class="btn btn-success mb-2 mr-2" type="button" onclick="exportData()"><i class="mdi mdi-export"></i> 导出</a>
             <button class="btn btn-secondary mb-2" type="reset">重置</button>
           </form>
         </div>
@@ -93,6 +94,13 @@ function btnGroup() {
     let html =
         '<a type="button" class="btn btn-xs btn-default detail-btn" title="详情" data-toggle="tooltip"><i class="mdi mdi-eye"></i></a>';
     return html;
+}
+
+function exportData() {
+	layer.confirm('确定按查询条件导出所有记录？', function(index) {
+		location = prefix + '/export?fileName=操作日志&status=0&' + $('#searchForm').serializeString();
+	    layer.close(index);
+	});
 }
 </script>
 </body>

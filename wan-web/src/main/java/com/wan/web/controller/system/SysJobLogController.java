@@ -2,6 +2,8 @@ package com.wan.web.controller.system;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.wan.common.domain.Page;
+import com.wan.common.util.ExcelUtil;
+import com.wan.common.util.FileUtil;
 import com.wan.quartz.domain.SysJobLog;
 import com.wan.quartz.service.SysJobLogService;
 import com.wan.web.controller.common.BaseController;
@@ -53,6 +57,13 @@ public class SysJobLogController extends BaseController {
 		SysJobLog jobLog = jobLogService.getJobLog(id);
 		map.put("jobLog", jobLog);
 		return prefix + "/detail";
+	}
+	
+	@GetMapping("/export")
+	@PreAuthorize("hasAuthority('open:job:manage')")
+	public void export(SysJobLog jobLog, String fileName, HttpServletResponse response) {
+		List<SysJobLog> list = jobLogService.listJobLogs(jobLog);
+		ExcelUtil.exportHtmlExcel(list, SysJobLog.class, response, fileName + FileUtil.getRandomFileName(), null);
 	}
 
 }

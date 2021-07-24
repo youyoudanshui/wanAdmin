@@ -1,5 +1,6 @@
 package com.wan.system.domain;
 
+import com.wan.common.annotation.Excel;
 import com.wan.common.domain.BaseDTO;
 
 /**
@@ -17,20 +18,12 @@ public class SysLoginLog extends BaseDTO {
 	/**
 	 * 登录名
 	 */
+	@Excel(Name="登录名")
 	String loginname;
 	
 	Long userId;
 	
-	/**
-	 * 登录状态
-	 */
-	String loginStatus;
-	
-	/**
-	 * 操作信息
-	 */
-	String message;
-	
+	@Excel(Name="操作IP")
 	String ip;
 	
 	/**
@@ -41,12 +34,26 @@ public class SysLoginLog extends BaseDTO {
 	/**
 	 * 浏览器
 	 */
+	@Excel(Name="浏览器")
 	String browser;
 	
 	/**
 	 * 操作系统
 	 */
+	@Excel(Name="操作系统")
 	String operatingSystem;
+	
+	/**
+	 * 登录状态
+	 */
+	@Excel(Name="登录状态", Dict="0=登录成功,1=登录失败")
+	String loginStatus;
+	
+	/**
+	 * 操作信息
+	 */
+	@Excel(Name="操作信息")
+	String message;
 
 	public String getLoginname() {
 		return loginname;

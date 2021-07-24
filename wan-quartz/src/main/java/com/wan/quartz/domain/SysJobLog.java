@@ -1,5 +1,6 @@
 package com.wan.quartz.domain;
 
+import com.wan.common.annotation.Excel;
 import com.wan.common.domain.BaseDTO;
 
 public class SysJobLog extends BaseDTO {
@@ -9,16 +10,19 @@ public class SysJobLog extends BaseDTO {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Excel(Name="任务名称")
 	String jobName;
 	
 	/**
 	 * 状态
 	 */
+	@Excel(Name="执行状态", Dict="0=正常,1=异常")
 	String status;
 	
 	/**
 	 * 异常信息
 	 */
+	@Excel(Name="异常信息")
 	String errorMessage;
 
 	public String getJobName() {

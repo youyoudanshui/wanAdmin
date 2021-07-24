@@ -1,5 +1,6 @@
 package com.wan.system.domain;
 
+import com.wan.common.annotation.Excel;
 import com.wan.common.domain.BaseDTO;
 
 /**
@@ -22,36 +23,43 @@ public class SysLog extends BaseDTO {
 	/**
 	 * 业务名称
 	 */
+	@Excel(Name="业务名称")
 	String businessName;
 	
 	/**
 	 * 操作类型
 	 */
+	@Excel(Name="操作类型", Dict="INSERT=新增,UPDATE=修改,DELETE=删除,LOGIN=登录,LOGOUT=登出,UNKNOWN=未知")
 	String operationType;
 	
 	/**
 	 * 内容
 	 */
+	@Excel(Name="内容")
 	String content;
 	
 	/**
 	 * 请求方法
 	 */
+	@Excel(Name="请求方法")
 	String method;
 	
 	/**
 	 * 请求地址
 	 */
+	@Excel(Name="请求URI")
 	String url;
 	
 	/**
 	 * 请求参数
 	 */
+	@Excel(Name="请求参数")
 	String requestParam;
 	
 	/**
 	 * 返回参数
 	 */
+	@Excel(Name="返回参数")
 	String responseParam;
 	
 	/**
@@ -59,13 +67,16 @@ public class SysLog extends BaseDTO {
 	 */
 	Long operator;
 	
+	@Excel(Name="操作人员")
 	String operatorName;
 	
+	@Excel(Name="请求IP")
 	String ip;
 	
 	/**
 	 * 异常信息
 	 */
+	@Excel(Name="异常信息")
 	String errorMessage;
 
 	public String getStatus() {
