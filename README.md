@@ -3,6 +3,10 @@
 #### 介绍
 wanAdmin是基于Spring Boot2.3的后台管理系统解决方案，包含用户管理、角色管理、菜单管理、数据字典等后台管理基础功能。
 
+- 文档地址：http://www.wmj.zone/
+- 演示地址：http://www.wmj.zone/wan-admin/
+
+
 #### 部署环境
 JDK 1.8、MySQL 5.6以上、Redis
 
