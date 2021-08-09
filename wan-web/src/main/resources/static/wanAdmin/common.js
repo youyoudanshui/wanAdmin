@@ -1,7 +1,9 @@
 $(document).ready(function() {
 	$(document).on("keypress", "form#searchForm", function(event) { 
-		refreshTable();
-		return event.keyCode != 13;
+		if (event.keyCode == 13) {
+			refreshTable();
+			return false;
+		}
 	});
 	
     $(document).on('click', '.file-browser', function() {
