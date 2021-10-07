@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>登录页面 - ${config.web_site_title}</title>
+<#assign path="${request.getContextPath()}">
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="keywords" content="${config.web_site_keywords}">
+<meta name="description" content="${config.web_site_description}">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/materialdesignicons.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="wanAdmin/css/login3.css" rel="stylesheet">
+</head>
+  
+<body class="center-vh" style="background-image: url(${config.login_page_bg_image}); background-size: cover;">
+<div class="bg-translucent p-2">
+  <div class="flex-box bg-white login-box">
+    <div class="login-left p-5">
+      
+      <form id="submitForm" action="" method="post" class="login-form" onsubmit="return doLogin();">
+	    <div class="form-group has-feedback">
+	      <span class="mdi mdi-account" aria-hidden="true"></span>
+	      <input type="text" class="form-control" id="username" name="username" placeholder="用户名" value="admin">
+	    </div>
+	
+	    <div class="form-group has-feedback">
+	      <span class="mdi mdi-lock" aria-hidden="true"></span>
+	      <input type="password" class="form-control" id="password" name="password" placeholder="密码" value="123456">
+	    </div>
+	    
+	    <div class="form-group has-feedback row">
+	      <div class="col-7">
+	        <span class="mdi mdi-check-all form-control-feedback" aria-hidden="true"></span>
+	        <input type="text" name="captcha" class="form-control" placeholder="验证码">
+	      </div>
+	      <div class="col-5 text-right">
+	        <img src="images/captcha.png" class="pull-right" id="captcha" style="cursor: pointer;" onclick="this.src=this.src+'?d='+Math.random();" title="点击刷新" alt="captcha">
+	      </div>
+	    </div>
+	
+	    <div class="form-group">
+	      <button class="btn btn-block btn-primary" type="submit">立即登录</button>
+	    </div>
+	  </form>
+    </div>
+    <div class="login-right p-5 d-none d-sm-block">
+      <p class="mb-3">
+        <#if config.web_site_logo_type == 'TEXT'>
+	   	  <span class="h4 text-white">${config.web_site_logo_text}</span>
+	    </#if>
+	    <#if config.web_site_logo_type == 'IMAGE'>
+	      <img src="${config.web_site_logo_image}" class="m-b-md m-t-xs" alt="logo" />
+	    </#if>
+      </p>
+      <p class="text-white">${config.web_site_description}</p>
+      <p class="text-white align-self-end">${config.web_site_copyright}</p>
+    </div>
+  </div>
+</div>
+  
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-notify.min.js"></script>
+<!--layer弹窗插件 -->
+<script type="text/javascript" src="js/layer/layer.min.js"></script>
+<!--表单验证 -->
+<script type="text/javascript" src="js/jquery-validate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="js/jquery-validate/messages_zh.min.js"></script>
+<script type="text/javascript" src="wanAdmin/common.js"></script>
+
+<script type="text/javascript">
+var path = '${path}';
+</script>
+<script type="text/javascript" src="wanAdmin/login.js"></script>
+
+</body>
+</html>

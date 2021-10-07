@@ -11,39 +11,21 @@
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/materialdesignicons.min.css" rel="stylesheet">
 <link href="css/style.min.css" rel="stylesheet">
-<style>
-.login-form .has-feedback {
-    position: relative;
-}
-.login-form .has-feedback .form-control {
-    padding-left: 36px;
-}
-.login-form .has-feedback .mdi {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: auto;
-    width: 36px;
-    height: 36px;
-    line-height: 36px;
-    z-index: 4;
-    color: #dcdcdc;
-    display: block;
-    text-align: center;
-    pointer-events: none;
-}
-.login-form .has-feedback.row .mdi {
-    left: 15px;
-}
-</style>
+<link href="wanAdmin/css/login2.css" rel="stylesheet">
 </head>
   
-<body class="center-vh" style="background-image: url(images/login-bg-2.jpg); background-size: cover;">
-<div class="card card-shadowed p-5 w-420 mb-0 mr-2 ml-2" id="login-box">
+<body class="center-vh" style="background-image: url(${config.login_page_bg_image}); background-size: cover;">
+<div class="login-box p-5 w-420 mb-0 mr-2 ml-2">
   <div class="text-center mb-3">
-    <a href="index"> <h2>wanAdmin</h2> </a>
+    <a href="${path}/">
+      <#if config.web_site_logo_type == 'TEXT'>
+    	<h3 class="text-muted">${config.web_site_logo_text}</h3>
+      </#if>
+      <#if config.web_site_logo_type == 'IMAGE'>
+    	<img src="${config.web_site_logo_image}" />
+      </#if>
+    </a>
   </div>
-
   <form id="submitForm" action="" method="post" class="login-form" onsubmit="return doLogin();">
     <div class="form-group has-feedback">
       <span class="mdi mdi-account" aria-hidden="true"></span>
@@ -70,7 +52,7 @@
     </div>
   </form>
   
-  <p class="text-center text-muted mb-0">${config.web_site_copyright}</p>
+  <p class="text-center text-white">${config.web_site_copyright}</p>
 </div>
   
 <script type="text/javascript" src="js/jquery.min.js"></script>
@@ -81,51 +63,11 @@
 <script type="text/javascript" src="js/jquery-validate/jquery.validate.min.js"></script>
 <script type="text/javascript" src="js/jquery-validate/messages_zh.min.js"></script>
 <script type="text/javascript" src="wanAdmin/common.js"></script>
+
 <script type="text/javascript">
-if(window != top) {				    
-    top.location.href = window.location.href;
-}
-
-if (getQueryVariable('timeout') == '1') {
-	layer.alert('登录超时，请重新登录');
-}
-if (getQueryVariable('expired') == '1') {
-	layer.alert('账号在其他地方登录');
-}
-
-validateForm({
-	'username': {
-		required: true
-	},
-	'password': {
-		required: true
-	},
-	'captcha': {
-		required: true
-	}
-});
-
-function doLogin() {
-	if (!$('#submitForm').valid()) {
-		return;
-	}
-	
-	ajaxPost({
-		url: 'doLogin',
-        data: $('#submitForm').serialize(),
-        success: function(r) {
-            if (r.code == 0) {
-                location.href = '${path}/';
-            } else {
-            	$('#captcha').click();
-            	$('input[name="captcha"]').val("");
-            	notifyWarning(r.message);
-            }
-        }
-	});
-	
-	return false;
-}
+var path = '${path}';
 </script>
+<script type="text/javascript" src="wanAdmin/login.js"></script>
+
 </body>
 </html>

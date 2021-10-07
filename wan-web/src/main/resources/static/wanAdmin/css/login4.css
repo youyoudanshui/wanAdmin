@@ -1,0 +1,24 @@
+@charset "UTF-8";
+.login-form .has-feedback {
+    position: relative;
+}
+.login-form .has-feedback .form-control {
+    padding-left: 36px;
+}
+.login-form .has-feedback .mdi {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: auto;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    z-index: 4;
+    color: #dcdcdc;
+    display: block;
+    text-align: center;
+    pointer-events: none;
+}
+.login-form .has-feedback.row .mdi {
+    left: 15px;
+}

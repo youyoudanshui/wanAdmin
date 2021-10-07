@@ -49,7 +49,23 @@ public class SysConfigServiceImpl implements SysConfigService {
 		
 		for (Field field : fields) {
 			field.setAccessible(true);
-			configMapper.updateConfig(field.getName(), field.get(config).toString());
+			
+			String configKey = field.getName();
+			
+			if ("serialVersionUID".equals(configKey)) continue;
+			
+			String configValue = field.get(config).toString();
+			Map<String, String> configMap = configMapper.getConfigByConfigKey(configKey);
+			
+			if (configMap == null) {
+				// 不存在该参数时新增
+				configMapper.insertConfig(configKey, configValue);
+			} else {
+				// 值改变时更新
+				if (!configValue.equals(configMap.get("config_value"))) {
+					configMapper.updateConfig(configKey, configValue);
+				}
+			}
 		}
 	}
 	

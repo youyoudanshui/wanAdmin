@@ -69,6 +69,45 @@
                 <label for="web_site_copyright">版权信息</label>
                 <textarea class="form-control" id="web_site_copyright" name="web_site_copyright" placeholder="请输入版权信息">${config.web_site_copyright}</textarea>
               </div>
+              <div class="form-group file-group">
+                <label for="login_page_bg_image">登录页背景图片</label>
+	            <div class="input-group">
+	              <input type="text" class="form-control file-value" id="login_page_bg_image" name="login_page_bg_image" value="${config.login_page_bg_image}" placeholder="登录页背景图片地址" />
+	              <input type="file" class="d-none" file-type="image" />
+	              <div class="input-group-append">
+	                <button class="btn btn-default file-browser" type="button">上传图片</button>
+	              </div>
+	            </div>
+              </div>
+              <div class="form-group">
+                <label>登录页样式</label>
+                <div class="form-inline" style="height: 36px;">
+	                <div class="form-controls mb-2 mr-sm-2">
+	                  <div class="custom-control custom-radio custom-control-inline">
+			            <input type="radio" id="type1" name="login_page_template_radio" class="custom-control-input" value="1">
+			            <label class="custom-control-label" for="type1">1.居中（默认）</label>
+			          </div>
+		              <div class="custom-control custom-radio custom-control-inline">
+			            <input type="radio" id="type2" name="login_page_template_radio" class="custom-control-input" value="2">
+			            <label class="custom-control-label" for="type2">2.居中透明</label>
+			          </div>
+		              <div class="custom-control custom-radio custom-control-inline">
+			            <input type="radio" id="type3" name="login_page_template_radio" class="custom-control-input" value="3">
+			            <label class="custom-control-label" for="type3">3.居中分栏</label>
+			          </div>
+		              <div class="custom-control custom-radio custom-control-inline">
+			            <input type="radio" id="type4" name="login_page_template_radio" class="custom-control-input" value="4">
+			            <label class="custom-control-label" for="type4">4.居右</label>
+			          </div>
+		              <div class="custom-control custom-radio custom-control-inline">
+			            <input type="radio" id="type0" name="login_page_template_radio" class="custom-control-input" value="0">
+			            <label class="custom-control-label" for="type0">自定义</label>
+			          </div>
+	                </div>
+		          	<input class="form-control" type="text" id="login_page_template_type" name="login_page_template_type" value="${config.login_page_template_type}" placeholder="请输入登录页文件名后缀">
+                </div>
+                <small id="zdyTip" class="help-block">自定义的登录页需存放在templates/login文件夹下，且文件名为login前缀，如loginMy.html，则填写My</small>
+              </div>
             </form>
             
             <button class="btn btn-primary m-r-5" onclick="doSubmit()">确认保存</button>
@@ -89,10 +128,23 @@ var prefix = "system/config";
 
 $(':radio[name="web_site_logo_type"]').change(function() {
 	checkLogoType();
+});
 
+$(':radio[name="login_page_template_radio"]').change(function() {
+	var radioType = $(':radio[name="login_page_template_radio"]:checked').val();
+	if (radioType == '0') {
+		$('#login_page_template_type').val('');
+		$('#login_page_template_type').show();
+		$('#zdyTip').show();
+	} else {
+		$('#login_page_template_type').hide();
+		$('#login_page_template_type').val(radioType);
+		$('#zdyTip').hide();
+	}
 });
 
 checkLogoType();
+checkLoginPageTemplateType();
 
 function checkLogoType() {
 	var logoType = $(':radio[name="web_site_logo_type"]:checked').val();
@@ -106,6 +158,29 @@ function checkLogoType() {
 		
 		$('#web_site_logo_image').parents('.form-group').hide();
 		$('#web_site_logo_image').val('');
+	}
+}
+
+function checkLoginPageTemplateType() {
+	var tplType = $('#login_page_template_type').val();
+	var radio = $(':radio[name="login_page_template_radio"][value="'+tplType+'"]');
+	$(':radio[name="login_page_template_radio"]').attr('checked', false);
+	
+	if (tplType == '') {
+		$('#login_page_template_type').hide();
+		$('#zdyTip').hide();
+		$(':radio[name="login_page_template_radio"][value="1"]').attr('checked', true);
+		return;
+	}
+	
+	if (radio.length > 0 && tplType != '0') {
+		$('#login_page_template_type').hide();
+		$('#zdyTip').hide();
+		radio.attr('checked', true);
+	} else {
+		$('#login_page_template_type').show();
+		$('#zdyTip').show();
+		$(':radio[name="login_page_template_radio"][value="0"]').attr('checked', true);
 	}
 }
 

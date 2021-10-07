@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
+import com.wan.system.domain.SysConfig;
 import com.wan.web.controller.common.BaseController;
 
 /**
@@ -32,7 +33,8 @@ public class SysLoginController extends BaseController {
 	@GetMapping("/login")
 	public String login(ModelMap map) {
 		getConfig(map);
-		return "login";
+		SysConfig config = (SysConfig) map.get("config");
+		return "login/login" + config.getLogin_page_template_type();
 	}
 	
 	@GetMapping("/images/captcha.png")

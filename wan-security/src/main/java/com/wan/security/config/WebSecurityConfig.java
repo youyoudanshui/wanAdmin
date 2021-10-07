@@ -124,7 +124,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		// 设置拦截忽略文件夹，可以对静态资源放行
-		web.ignoring().antMatchers("/css/**", "/js/**", "/wanAdmin/**", "/fonts/**", "/images/**", "/favicon.ico", "/login");
+		web.ignoring().antMatchers("/css/**", "/js/**", "/wanAdmin/**", "/fonts/**", "/images/**", "/*/Image/**", "/favicon.ico", "/login");
 	}
 	
 }

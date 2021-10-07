@@ -3,6 +3,8 @@ package com.wan.system.domain;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 网站配置
  * @author wmj
@@ -31,6 +33,10 @@ public class SysConfig implements Serializable {
 	
 	String upload_image_ext;
 	
+	String login_page_bg_image;
+	
+	String login_page_template_type;
+	
 	public SysConfig() {
 		
 	}
@@ -45,6 +51,8 @@ public class SysConfig implements Serializable {
 		web_site_description = configMap.get("web_site_description");
 		web_site_copyright = configMap.get("web_site_copyright");
 		upload_image_ext = configMap.get("upload_image_ext");
+		login_page_bg_image = configMap.get("login_page_bg_image");
+		login_page_template_type = configMap.get("login_page_template_type");
 		
 	}
 
@@ -110,6 +118,25 @@ public class SysConfig implements Serializable {
 
 	public void setUpload_image_ext(String upload_image_ext) {
 		this.upload_image_ext = upload_image_ext;
+	}
+
+	public String getLogin_page_bg_image() {
+		return login_page_bg_image;
+	}
+
+	public void setLogin_page_bg_image(String login_page_bg_image) {
+		this.login_page_bg_image = login_page_bg_image;
+	}
+
+	public String getLogin_page_template_type() {
+		if (StringUtils.isBlank(login_page_template_type)) {
+			return "1";
+		}
+		return login_page_template_type;
+	}
+
+	public void setLogin_page_template_type(String login_page_template_type) {
+		this.login_page_template_type = login_page_template_type;
 	}
 	
 }
