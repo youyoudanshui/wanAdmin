@@ -5,7 +5,9 @@
 	var websocket = null;
 
 	if('WebSocket' in window) {
-	    websocket = new WebSocket('ws://' + document.domain + path + '/webSocket');
+		var protocol = location.protocol,
+			ws = protocol == 'https:' ? 'wss' : 'ws';
+	    websocket = new WebSocket(ws + '://' + document.domain + path + '/webSocket');
 	}
 
 	websocket.onopen = function(event) {
