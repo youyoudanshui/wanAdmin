@@ -52,6 +52,9 @@ public class SysMenu extends BaseDTO {
 	Integer seq;
 	
 	List<SysMenu> submenus;
+	
+	/*是否拥有该菜单权限*/
+	boolean hasPermission;
 
 	public Long getPid() {
 		return pid;
@@ -133,11 +136,19 @@ public class SysMenu extends BaseDTO {
 		this.submenus = submenus;
 	}
 
+	public boolean isHasPermission() {
+		return hasPermission;
+	}
+
+	public void setHasPermission(boolean hasPermission) {
+		this.hasPermission = hasPermission;
+	}
+
 	@Override
 	public String toString() {
-		return "SysMenuDO [pid=" + pid + ", pname=" + pname + ", status=" + status + ", name=" + name + ", icon=" + icon
-				+ ", url=" + url + ", permissionValue=" + permissionValue + ", seq=" + seq + ", submenus=" + submenus
-				+ "]";
+		return "SysMenu [pid=" + pid + ", pname=" + pname + ", status=" + status + ", type=" + type + ", name=" + name
+				+ ", icon=" + icon + ", url=" + url + ", permissionValue=" + permissionValue + ", seq=" + seq
+				+ ", submenus=" + submenus + ", hasPermission=" + hasPermission + "]";
 	}
 	
 }

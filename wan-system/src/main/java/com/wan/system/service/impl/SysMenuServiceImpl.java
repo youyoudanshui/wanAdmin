@@ -1,10 +1,11 @@
 package com.wan.system.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.wan.system.domain.SysMenu;
@@ -23,52 +24,46 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 	
 	@Override
-	@Cacheable("indexMenuList")
-	public List<SysMenu> listIndexMenus() {
-		// 一级菜单
-		List<SysMenu> list = menuMapper.listPrimaryMenus();
-		for (SysMenu pmenu: list) {
-			// 二级菜单
-			List<SysMenu> submenus2 = menuMapper.listMenusByPid(pmenu.getId());
-			for (SysMenu menu2: submenus2) {
-				// 三级菜单
-				List<SysMenu> submenus3 = menuMapper.listMenusByPid(menu2.getId());
-				menu2.setSubmenus(submenus3);
-			}
-			pmenu.setSubmenus(submenus2);
-		}
-		return list;
+	public List<SysMenu> listIndexMenus(Long userId) {
+		List<SysMenu> list = menuMapper.listMenusByUserId(userId);
+		return listMenuTrees(list);
 	}
 	
 	@Override
-	@Cacheable("menuAndButtonList")
-	public List<SysMenu> listMenusAndButtons() {
-		// 一级菜单
-		List<SysMenu> list = menuMapper.listPrimaryMenus();
-		for (SysMenu pmenu: list) {
-			// 二级菜单
-			List<SysMenu> submenus2 = menuMapper.listMenusByPid(pmenu.getId());
-			for (SysMenu menu2: submenus2) {
-				// 三级菜单
-				List<SysMenu> submenus3 = menuMapper.listMenusByPid(menu2.getId());
-				for (SysMenu menu3: submenus3) {
-					// 四级按钮
-					List<SysMenu> submenus4 = menuMapper.listButtonsByPid(menu3.getId());
-					menu3.setSubmenus(submenus4);
-				}
-				
-				if (submenus3.size() == 0) {
-					submenus3 = menuMapper.listButtonsByPid(menu2.getId());
-				}
-				menu2.setSubmenus(submenus3);
+	public List<SysMenu> listMenusAndButtons(Long roleId) {
+		List<SysMenu> list = menuMapper.listMenusByRoleId(roleId);
+		return listMenuTrees(list);
+	}
+	
+	private List<SysMenu> listMenuTrees(List<SysMenu> list) {
+		Map<Long, List<SysMenu>> map = new HashMap<Long, List<SysMenu>>();
+		// 获取每个节点的直属子节点
+		for (SysMenu menu: list) {
+			Long pid = menu.getPid() == null ? 0 : menu.getPid();
+			if (map.get(pid) == null) {
+				map.put(pid, new ArrayList<SysMenu>());
 			}
-			
-			if (submenus2.size() == 0) {
-				submenus2 = menuMapper.listButtonsByPid(pmenu.getId());
-			}
-			pmenu.setSubmenus(submenus2);
+			map.get(pid).add(menu);
 		}
-		return list;
+		return formatMenuTree(map, 0L);
+	}
+	
+	/**
+	 * 利用递归格式化每个节点
+	 * @param map
+	 * @param pid
+	 * @return
+	 */
+	private List<SysMenu> formatMenuTree(Map<Long, List<SysMenu>> map, Long pid) {
+		List<SysMenu> list = new ArrayList<SysMenu>();
+		if (map.get(pid) == null) {
+	        return list;
+	    }
+	    for (SysMenu menu: map.get(pid)) {
+	    	menu.setSubmenus(formatMenuTree(map, menu.getId()));
+	    	list.add(menu);
+	    }
+		return list;		
 	}
 
 	@Override
@@ -83,19 +78,16 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 
 	@Override
-	@CacheEvict(value={"indexMenuList", "menuAndButtonList"}, allEntries=true)
 	public void insertMenu(SysMenu menu) {
 		menuMapper.insertMenu(menu);
 	}
 
 	@Override
-	@CacheEvict(value={"indexMenuList", "menuAndButtonList"}, allEntries=true)
 	public void updateMenu(SysMenu menu) {
 		menuMapper.updateMenu(menu);
 	}
 
 	@Override
-	@CacheEvict(value={"indexMenuList", "menuAndButtonList"}, allEntries=true)
 	public void deleteMenu(Long id) {
 		menuMapper.deleteMenu(id);
 	}

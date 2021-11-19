@@ -18,11 +18,8 @@
             <button id="btn_add" type="button" class="btn btn-primary m-r-5" onclick="addMenu(-1, '新增一级菜单')">
               <span class="mdi mdi-plus" aria-hidden="true"></span>新增一级菜单
             </button>
-            <button id="btn_add" type="button" class="btn btn-info m-r-5" onclick="expandAllRoot()">
+            <button id="btn_expand" type="button" class="btn btn-info m-r-5" onclick="expandAllRoot()">
               <span class="mdi mdi-swap-horizontal" aria-hidden="true"></span>展开/折叠
-            </button>
-            <button id="btn_cache" type="button" class="btn btn-default m-r-5" onclick="removeCache()">
-              <span class="mdi mdi-delete" aria-hidden="true"></span>删除缓存
             </button>
           </div>
           
@@ -106,6 +103,30 @@ $treeTable.bootstrapTable({
     treeShowField: 'name',
     parentIdField: 'pid',
     
+    onResetView: function(data) {
+    	$treeTable.treegrid({
+            initialState: 'expanded', // 所有节点都展开
+            treeColumn: 0,
+            //expanderExpandedClass: 'mdi mdi-folder-open',  // 可自定义图标样式
+            //expanderCollapsedClass: 'mdi mdi-folder',
+        });
+    	
+    	// 只展开树形的第一集节点
+//      $treeTable.treegrid('getRootNodes').treegrid('expand');
+    	
+    	// 不显示按钮
+        $treeTable.treegrid('getAllNodes').each(function() {
+        	var data = $treeTable.bootstrapTable('getRowByUniqueId', $(this).treegrid('getNodeId'));
+        	if (data.type == 'BUTTON') {
+        		var pnode = $(this).treegrid('getParentNode');
+        		if (pnode != null && pnode.treegrid('isExpanded')) {
+        			pnode.treegrid('collapse');
+        		}
+        	}
+        });
+        
+        expand_flag = false;
+    },
     onCheck: function(row) {
         var datas = $treeTable.bootstrapTable('getData');
         
@@ -115,33 +136,12 @@ $treeTable.bootstrapTable({
         
         $treeTable.bootstrapTable('load', datas);
     },
-    
     onUncheck: function(row) {
         var datas = $treeTable.bootstrapTable('getData');
         selectChilds(datas, row, 'id', 'pid', false);
         $treeTable.bootstrapTable('load', datas);
     },
     onLoadSuccess: function(data){
-        $treeTable.treegrid({
-            initialState: 'expanded', // 所有节点都折叠
-            treeColumn: 0,
-            //expanderExpandedClass: 'mdi mdi-folder-open',  // 可自定义图标样式
-            //expanderCollapsedClass: 'mdi mdi-folder',
-        });
-        
-        // 只展开树形的第一集节点
-//        $treeTable.treegrid('getRootNodes').treegrid('expand');
-        
-        $treeTable.treegrid('getAllNodes').each(function() {
-        	if ($(this).treegrid("isLeaf")) {
-        		if ($(this).treegrid('getParentNode') != null) {
-        			$(this).treegrid('getParentNode').treegrid('collapse');
-        		}
-        	}
-        });
-        
-        expand_flag = false;
-        
         $("[data-toggle='tooltip']").tooltip();
     }
 });
@@ -150,7 +150,7 @@ $treeTable.bootstrapTable({
 function operateFormatter(value, row, index) {
 	var btns = '<a type="button" class="edit-btn btn btn-xs btn-default m-r-5" title="修改" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>'
     		 + '<a type="button" class="delete-btn btn btn-xs btn-default" title="删除" data-toggle="tooltip"><i class="mdi mdi-delete"></i></a>';
-	if (row.type == 'BUTTON' || row._level > 2) {
+	if (row.type == 'BUTTON') {
 		return btns;
 	}
     return '<a type="button" class="add-btn btn btn-xs btn-default m-r-5" title="新增下级菜单" data-toggle="tooltip"><i class="mdi mdi-plus"></i></a>' + btns;

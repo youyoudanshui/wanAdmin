@@ -16,6 +16,7 @@
 		<result property="seq"              column="seq"      />
 		<result property="gmtCreate"        column="gmt_create"        />
 		<result property="gmtModified"      column="gmt_modified"          />
+		<result property="hasPermission"    column="hasPermission"          />
 	</resultMap>
 	
 	<sql id="selectMenuVO">
@@ -28,22 +29,20 @@
 		order by seq asc
 	</select>
 	
-	<select id="listPrimaryMenus" resultMap="SysMenuResult">
-		<include refid="selectMenuVO"/>
-		where type = 'MENU' and pid is null and status = '1'
-		order by seq asc
+	<select id="listMenusByUserId" parameterType="Long" resultMap="SysMenuResult">
+		select m.menu_id, m.pid, m.type, m.name, m.icon, m.url, m.permission_value, m.seq, m.gmt_create, m.gmt_modified
+		from sys_menu m
+		where m.type = 'MENU' and m.status = '1'
+		and exists (select 1 from sys_role_rule rr left join sys_user_role ur on ur.role_id = rr.role_id where ur.user_id = #{userId} and rr.permission_value = m.permission_value)
+		order by m.seq asc
 	</select>
 	
-	<select id="listMenusByPid" parameterType="Long" resultMap="SysMenuResult">
-		<include refid="selectMenuVO"/>
-		where type = 'MENU' and pid = ${pid} and status = '1'
-		order by seq asc
-	</select>
-	
-	<select id="listButtonsByPid" parameterType="Long" resultMap="SysMenuResult">
-		<include refid="selectMenuVO"/>
-		where type = 'BUTTON' and pid = ${pid} and status = '1'
-		order by seq asc
+	<select id="listMenusByRoleId" parameterType="Long" resultMap="SysMenuResult">
+		select m.menu_id, m.pid, m.type, m.name, m.icon, m.url, m.permission_value, m.seq, m.gmt_create, m.gmt_modified,
+			case when (select count(1) from sys_role_rule rr where rr.role_id = #{roleId} and rr.permission_value = m.permission_value)>0 then true else false end as hasPermission
+		from sys_menu m
+		where m.status = '1'
+		order by m.seq asc
 	</select>
 	
 	<select id="getMenuById" parameterType="Long" resultMap="SysMenuResult">

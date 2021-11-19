@@ -12,8 +12,6 @@ public interface SysRoleService {
 	
 	SysRole getRoleById(Long id);
 	
-	SysRole getRoleAndRulesById(Long id);
-	
 	SysRole getRoleByRolename(String rolename);
 	
 	void insertRole(SysRole role);

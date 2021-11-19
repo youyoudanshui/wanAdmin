@@ -8,9 +8,9 @@ public interface SysMenuService {
 
 	List<SysMenu> listMenus();
 	
-	List<SysMenu> listIndexMenus();
+	List<SysMenu> listIndexMenus(Long userId);
 	
-	List<SysMenu> listMenusAndButtons();
+	List<SysMenu> listMenusAndButtons(Long roleId);
 	
 	SysMenu getMenuById(Long id);
 	

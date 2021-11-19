@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.wan.common.util.ReqUtil;
+import com.wan.system.domain.SysMenu;
 import com.wan.system.domain.SysRole;
 import com.wan.system.domain.SysRoleRule;
 import com.wan.system.domain.SysUser;
@@ -27,6 +28,7 @@ import com.wan.system.domain.SysUserRole;
 import com.wan.system.mapper.SysRoleMapper;
 import com.wan.system.mapper.SysRoleRuleMapper;
 import com.wan.system.mapper.SysUserRoleMapper;
+import com.wan.system.service.SysMenuService;
 import com.wan.system.service.SysUserService;
 
 @Service
@@ -43,6 +45,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
 	private SysRoleRuleMapper roleRuleMapper;
+	
+	@Autowired
+	private SysMenuService menuService;
 	
 	/**
 	 * 用户名username实际为登录名loginname
@@ -93,9 +98,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				authorities.add(new SimpleGrantedAuthority(roleRule.getPermissionValue()));
 			}
 		}
+		user.setAuthorities(authorities);
+		
+		// 添加菜单
+		List<SysMenu> menuList = menuService.listIndexMenus(user.getId());
+		user.setMenus(menuList);
 		
 		// 返回UserDetails实现类
-		user.setAuthorities(authorities);
 		return user;
 		
 	}

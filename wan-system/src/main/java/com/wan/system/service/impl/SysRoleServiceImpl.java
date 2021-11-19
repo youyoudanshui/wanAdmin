@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wan.system.domain.SysRole;
-import com.wan.system.domain.SysRoleRule;
 import com.wan.system.mapper.SysRoleMapper;
 import com.wan.system.mapper.SysRoleRuleMapper;
 import com.wan.system.service.SysRoleService;
@@ -37,22 +36,6 @@ public class SysRoleServiceImpl implements SysRoleService {
 	@Override
 	public SysRole getRoleById(Long id) {
 		return roleMapper.getRoleById(id);
-	}
-
-	@Override
-	public SysRole getRoleAndRulesById(Long id) {
-		SysRole role = roleMapper.getRoleById(id);
-		
-		// 权限
-		List<SysRoleRule> roleRuleList = roleRuleMapper.listRoleRules(id);
-		int size = roleRuleList.size();
-		String[] rules = new String[size];
-		for (int i = 0; i < size; i ++) {
-			rules[i] = roleRuleList.get(i).getPermissionValue();
-		}
-		role.setRules(rules);
-		
-		return role;
 	}
 
 	@Override

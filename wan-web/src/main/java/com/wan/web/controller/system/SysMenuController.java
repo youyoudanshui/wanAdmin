@@ -5,7 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,7 +19,9 @@ import com.wan.common.annotation.Log;
 import com.wan.common.domain.Result;
 import com.wan.common.enumerate.OperationType;
 import com.wan.common.util.ResultUtil;
+import com.wan.security.util.SecurityUtil;
 import com.wan.system.domain.SysMenu;
+import com.wan.system.domain.SysUser;
 import com.wan.system.service.SysMenuService;
 
 /**
@@ -116,12 +117,20 @@ public class SysMenuController {
 		return ResultUtil.success();
 	}
 	
-	@GetMapping("/removeCache")
+	@GetMapping("/indexList")
 	@ResponseBody
-	@PreAuthorize("hasAuthority('open:menu:manage')")
-	@CacheEvict(value={"indexMenuList", "menuAndButtonList"}, allEntries=true)
-	public Result removeCache() {
-		return ResultUtil.success();
+	public Result indexList() {
+		// 用户信息
+		SysUser user = SecurityUtil.getAuthUser();
+		List<SysMenu> list = user.getMenus();
+		return ResultUtil.success(list);
+	}
+	
+	@GetMapping("/ruleList")
+	@ResponseBody
+	public Result ruleList(Long roleId) {
+		List<SysMenu> list = menuService.listMenusAndButtons(roleId);
+		return ResultUtil.success(list);
 	}
 
 }

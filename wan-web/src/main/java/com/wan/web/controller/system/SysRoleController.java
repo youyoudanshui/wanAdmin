@@ -22,9 +22,7 @@ import com.wan.common.domain.Page;
 import com.wan.common.domain.Result;
 import com.wan.common.enumerate.OperationType;
 import com.wan.common.util.ResultUtil;
-import com.wan.system.domain.SysMenu;
 import com.wan.system.domain.SysRole;
-import com.wan.system.service.SysMenuService;
 import com.wan.system.service.SysRoleRuleService;
 import com.wan.system.service.SysRoleService;
 import com.wan.web.controller.common.BaseController;
@@ -43,9 +41,6 @@ public class SysRoleController extends BaseController {
 	
 	@Autowired
 	private SysRoleRuleService roleRuleService;
-	
-	@Autowired
-	private SysMenuService menuService;
 	
 	private String prefix = "system/role";
 	
@@ -121,13 +116,8 @@ public class SysRoleController extends BaseController {
 	@GetMapping("/rule/{id}")
 	@PreAuthorize("hasAuthority('open:role:manage')")
 	public String rule(@PathVariable("id") Long roleId, ModelMap map) {
-		SysRole role = roleService.getRoleAndRulesById(roleId);
+		SysRole role = roleService.getRoleById(roleId);
 		map.put("role", role);
-		
-		// 获取菜单列表
-		List<SysMenu> menuList = menuService.listMenusAndButtons();
-		map.put("menuList", menuList);
-		
 		return prefix + "/rule";
 	}
 	

@@ -13,24 +13,18 @@ public interface SysMenuMapper {
 	List<SysMenu> listMenus();
 	
 	/**
-	 * 获取一级菜单列表
+	 * 根据用户ID获取菜单列表
+	 * @param userId
 	 * @return
 	 */
-	List<SysMenu> listPrimaryMenus();
+	List<SysMenu> listMenusByUserId(Long userId);
 	
 	/**
-	 * 根据父级菜单ID获取子菜单列表
-	 * @param pid
+	 * 根据角色ID获取菜单列表
+	 * @param userId
 	 * @return
 	 */
-	List<SysMenu> listMenusByPid(Long pid);
-	
-	/**
-	 * 根据父级菜单ID获取子按钮列表
-	 * @param pid
-	 * @return
-	 */
-	List<SysMenu> listButtonsByPid(Long pid);
+	List<SysMenu> listMenusByRoleId(Long roleId);
 	
 	/**
 	 * 根据id获取菜单

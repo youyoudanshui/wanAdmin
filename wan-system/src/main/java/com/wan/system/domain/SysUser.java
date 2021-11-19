@@ -2,6 +2,7 @@ package com.wan.system.domain;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -95,6 +96,8 @@ public class SysUser extends BaseDTO implements Serializable, UserDetails {
 	Collection<GrantedAuthority> authorities;
 	
 	String ip;
+	
+	List<SysMenu> menus;
 
 	public String getLoginname() {
 		return loginname;
@@ -194,6 +197,14 @@ public class SysUser extends BaseDTO implements Serializable, UserDetails {
 	
 	public String getIp() {
 		return ip;
+	}
+
+	public List<SysMenu> getMenus() {
+		return menus;
+	}
+
+	public void setMenus(List<SysMenu> menus) {
+		this.menus = menus;
 	}
 
 	@Override

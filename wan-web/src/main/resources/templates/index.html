@@ -73,57 +73,6 @@
         <nav class="sidebar-main">
           <ul class="nav-drawer">
             <li class="nav-item active"> <a class="multitabs" href="main"><i class="mdi mdi-home"></i> <span>首页</span></a> </li>
-            
-            <#list menuList as menu><!-- 一级菜单 -->
-              
-              <#if user.authorities?seq_contains(menu.permissionValue)>
-            
-	              <#if menu.submenus?size gt 0>
-	              
-	                <li class="nav-item nav-item-has-subnav">
-		              <a href="javascript:void(0)"><i class="${menu.icon}"></i> <span>${menu.name}</span></a>
-		              <ul class="nav nav-subnav">
-		              	<#list menu.submenus as submenu2><!-- 二级菜单 -->
-		              	
-		              	  <#if user.authorities?seq_contains(submenu2.permissionValue)>
-		              	  
-			              	  <#if submenu2.submenus?size gt 0>
-			              	  	
-			              	  	<li class="nav-item nav-item-has-subnav">
-			              	  	  <a href="javascript:void(0)">${submenu2.name}</a>
-			              	  	  <ul class="nav nav-subnav">
-			              	  	  	
-			              	  	  	<#list submenu2.submenus as submenu3><!-- 三级菜单 -->
-			              	  	  	
-			              	  	  	  <#if user.authorities?seq_contains(submenu3.permissionValue)>
-			              	  	  	
-			              	  	  	  	<li> <a class="multitabs" href="${submenu3.url!'#'}">${submenu3.name}</a> </li>
-			              	  	  	
-			              	  	  	  </#if>
-			              	  	  	
-			              	  	  	</#list>
-			              	  	  	
-			              	  	  </ul>
-			              	  	</li>
-			              	  	
-			              	  <#else>
-			              	  	<li> <a class="multitabs" href="${submenu2.url!'#'}">${submenu2.name}</a> </li>
-			              	  </#if>
-		              	  
-		              	  </#if>
-		              	
-		              	</#list>
-		              </ul>
-		            </li>
-		            
-	              <#else>
-	                <li class="nav-item"> <a class="multitabs" href="${menu.url!'#'}"><i class="${menu.icon}"></i> <span>${menu.name}</span></a> </li>
-	              </#if>
-              
-              </#if>
-            
-            </#list>
-            
           </ul>
         </nav>
         
@@ -331,6 +280,5 @@
 var path = '${path}';
 </script>
 <script type="text/javascript" src="wanAdmin/index.js"></script>
-
 </body>
 </html>

@@ -31,122 +31,7 @@
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                
-                  <#list menuList as menu><!-- 一级菜单 -->
-            
-		              
-		            <tr>
-	                  <td>
-	                    <div class="custom-control custom-checkbox">
-	                      <input type="checkbox" name="rules" class="custom-control-input checkbox-parent" id="roleid-${menu.id}" dataid="id-${menu.id}" value="${menu.permissionValue}" <#if role.rules?seq_contains(menu.permissionValue)>checked</#if>>
-	                      <label class="custom-control-label" for="roleid-${menu.id}">${menu.name}</label>
-	                    </div>
-	                  </td>
-	                </tr>
-	                
-	                <#if menu.submenus?size gt 0>
-	                
-	                  <#assign type2="${menu.submenus[0].type}">
-	                  
-	                  <#if type2 == 'MENU'>
-	                  
-	                    <#list menu.submenus as submenu2><!-- 二级菜单 -->
-	                    
-	                      <tr>
-			                <td class="p-l-20">
-			                  <div class="custom-control custom-checkbox">
-			                    <input type="checkbox" name="rules" class="custom-control-input checkbox-child" id="roleid-${menu.id}-${submenu2.id}" dataid="id-${menu.id}-${submenu2.id}" value="${submenu2.permissionValue}" <#if role.rules?seq_contains(submenu2.permissionValue)>checked</#if>>
-			                    <label class="custom-control-label" for="roleid-${menu.id}-${submenu2.id}">${submenu2.name}</label>
-			                  </div>
-			                </td>
-			              </tr>
-			              
-			              <#if submenu2.submenus?size gt 0>
-			              
-			                <#assign type3="${submenu2.submenus[0].type}">
-			                
-			                <#if type3 == 'MENU'>
-			                
-			                  <#list submenu2.submenus as submenu3><!-- 三级菜单 -->
-			                  
-			                    <tr>
-					              <td class="p-l-40">
-					                <div class="custom-control custom-checkbox">
-					                  <input type="checkbox" name="rules" class="custom-control-input checkbox-child" id="roleid-${menu.id}-${submenu2.id}-${submenu3.id}" dataid="id-${menu.id}-${submenu2.id}-${submenu3.id}" value="${submenu3.permissionValue}" <#if role.rules?seq_contains(submenu3.permissionValue)>checked</#if>>
-				                      <label class="custom-control-label" for="roleid-${menu.id}-${submenu2.id}-${submenu3.id}">${submenu3.name}</label>
-					                </div>
-					              </td>
-					            </tr>
-					            
-					            <#if submenu3.submenus?size gt 0>
-					            
-					              <tr>
-						            <td style="padding-left: 60px;">
-						                      
-						              <#list submenu3.submenus as submenu4><!-- 四级按钮 -->
-						                      
-							            <div class="custom-control custom-checkbox custom-control-inline">
-							              <input type="checkbox" name="rules" class="custom-control-input checkbox-child" id="roleid-${menu.id}-${submenu2.id}-${submenu3.id}-${submenu4.id}" dataid="id-${menu.id}-${submenu2.id}-${submenu3.id}-${submenu4.id}" value="${submenu4.permissionValue}" <#if role.rules?seq_contains(submenu4.permissionValue)>checked</#if>>
-						                  <label class="custom-control-label" for="roleid-${menu.id}-${submenu2.id}-${submenu3.id}-${submenu4.id}">${submenu4.name}</label>
-							            </div>
-						                      
-						              </#list>
-						                      
-						            </td>
-						          </tr>
-					            
-					            </#if>
-			                  
-			                  </#list>
-			                
-			                <#else>
-			                
-			                  <tr>
-				                <td class="p-l-40">
-				                      
-				                  <#list submenu2.submenus as submenu3><!-- 三级按钮 -->
-				                      
-					                <div class="custom-control custom-checkbox custom-control-inline">
-					                  <input type="checkbox" name="rules" class="custom-control-input checkbox-child" id="roleid-${menu.id}-${submenu2.id}-${submenu3.id}" dataid="id-${menu.id}-${submenu2.id}-${submenu3.id}" value="${submenu3.permissionValue}" <#if role.rules?seq_contains(submenu3.permissionValue)>checked</#if>>
-				                      <label class="custom-control-label" for="roleid-${menu.id}-${submenu2.id}-${submenu3.id}">${submenu3.name}</label>
-					                </div>
-				                      
-				                  </#list>
-				                      
-				                </td>
-				              </tr>
-			                
-			                </#if>
-			              
-			              </#if>
-	                    
-	                    </#list>
-	                  
-	                  <#else>
-	                  
-	                    <tr>
-		                  <td class="p-l-20">
-		                      
-		                    <#list menu.submenus as submenu2><!-- 二级按钮 -->
-		                      
-			                  <div class="custom-control custom-checkbox custom-control-inline">
-			                    <input type="checkbox" name="rules" class="custom-control-input checkbox-child" id="roleid-${menu.id}-${submenu2.id}" dataid="id-${menu.id}-${submenu2.id}" value="${submenu2.permissionValue}" <#if role.rules?seq_contains(submenu2.permissionValue)>checked</#if>>
-			                    <label class="custom-control-label" for="roleid-${menu.id}-${submenu2.id}">${submenu2.name}</label>
-			                  </div>
-		                      
-		                    </#list>
-		                      
-		                  </td>
-		                </tr>
-	                  
-	                  </#if>
-	                  
-	                </#if>
-	                  
-	              </#list>
-		                
-                </tbody>
+                <tbody></tbody>
               </table>
             </div>
           </form>
@@ -161,10 +46,24 @@
 
 <script type="text/javascript">
 $(function(){
+	// 生成权限
+	ajaxGet({ 
+		url: 'system/menu/ruleList',
+		data: {roleId: $('input[name="id"]').val()},
+		async: false,
+		success: function(r) {
+			if (r.code == 0) {
+				setTbody(r.data);
+			} else {
+				notifyWarning(r.message);
+			}
+		}
+	});
+	
     //动态选择框，上下级选中状态变化
     $('input.checkbox-parent').on('change', function(){
-/*         var dataid = $(this).attr("dataid");
-        $('input[dataid^=' + dataid + '-]').prop('checked', $(this).is(':checked')); */
+        var dataid = $(this).attr("dataid");
+        $('input[dataid^=' + dataid + '-]').prop('checked', $(this).is(':checked'));
         
         checkAll();
     });
@@ -202,13 +101,55 @@ $(function(){
 });
 
 /*全选*/
-function checkAll() {
+var checkAll = function() {
 	if ($('input[name=rules]:not(:checked)').length == 0) {
     	$('#check-all').prop('checked', true);
     } else {
     	$('#check-all').prop('checked', false);
     }
 }
+
+/**
+ * 菜单
+ * @param data 菜单JSON数据
+ */
+var setTbody = function(data) {
+    if (data.length == 0) return false;
+    html = createRule(data, '1', 'id', 0);
+    $('tbody').append(html);
+}
+
+var createRule = function (data, type, pdataid, plevel) {
+    var menu_body = '';
+    
+    for(var i = 0; i < data.length; i++){
+    	level = plevel + 1;
+    	p_left = level == 1 ? '' : ' style="padding-left: ' + 20*plevel + 'px;"';
+    	isButton = data[i].type == 'BUTTON' ? true : false;
+    	i_class = isButton ? ' custom-control-inline' : '';
+    	c_class = type == '1' ? 'custom-control-input checkbox-parent' : (isButton ? 'custom-control-input checkbox-child' : 'custom-control-input checkbox-parent checkbox-child');
+        id = 'role' + pdataid + '-' + data[i].id;
+        dataid = pdataid + '-' + data[i].id;
+        value = data[i].permissionValue;
+        isChecked = data[i].hasPermission ? 'checked' : '';
+        label_div = '<label class="custom-control-label" for="' + id + '">' + data[i].name + '</label>';
+        
+        menu_body += isButton ? '' : '<tr><td' + p_left + '>';
+        menu_body += '<div class="custom-control custom-checkbox' + i_class + '">';
+        menu_body += '<input type="checkbox" name="rules" class="' + c_class + '" id="' + id + '" dataid="' + dataid + '" value="' + value + '"' + isChecked + '>';
+        menu_body += label_div;
+        menu_body += '</div>';
+        menu_body += isButton ? '' : '</td></tr>';
+        
+        if (data[i].submenus && data[i].submenus.length > 0) {
+        	if (data[i].submenus[0].type == 'BUTTON')  menu_body += '<tr><td style="padding-left: ' + 20*level + 'px;">';
+            menu_body += createRule(data[i].submenus, '2', dataid, level);
+            if (data[i].submenus[0].type == 'BUTTON') menu_body += '</td></tr>';
+        }
+    }
+    
+    return menu_body;
+};
 </script>
 </body>
 </html>
