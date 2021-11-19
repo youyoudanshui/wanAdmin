@@ -452,11 +452,11 @@ $.fn.serializeString = function() {
 function config(configKey) {
 	var configValue = '';
 	ajaxGet({
-		url: 'system/config/get/' + configKey,
+		url: 'system/config/get',
 		async: false,
 		success: function(rs) {
 			if (rs.code == 0) {
-				configValue = rs.data;
+				configValue = rs.data[configKey];
 			}
 		}
 	});

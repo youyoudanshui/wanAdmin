@@ -80,7 +80,7 @@ public class FileController extends BaseController {
 		}
 		
 		String oFileName = file.getOriginalFilename();
-		String upload_image_ext = configService.getConfigValue("upload_image_ext");
+		String upload_image_ext = configService.getConfig().getUpload_image_ext();
 		String suffix = oFileName.substring(oFileName.lastIndexOf(".") + 1);
 		if (StringUtils.isNotBlank(upload_image_ext) && upload_image_ext.indexOf(suffix) < 0) {
 			return ResultUtil.error("您上传图片的类型不符合(" + upload_image_ext + ")");
@@ -125,7 +125,7 @@ public class FileController extends BaseController {
 		}
 		
 		String oFileName = file.getOriginalFilename();
-		String upload_image_ext = configService.getConfigValue("upload_image_ext");
+		String upload_image_ext = configService.getConfig().getUpload_image_ext();
 		String suffix = oFileName.substring(oFileName.lastIndexOf(".") + 1);
 		if (StringUtils.isNotBlank(upload_image_ext) && upload_image_ext.indexOf(suffix) < 0) {
 			return ResultUtil.error("您上传图片的类型不符合(" + upload_image_ext + ")");

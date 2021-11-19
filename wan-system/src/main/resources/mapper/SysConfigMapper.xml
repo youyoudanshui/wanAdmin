@@ -17,10 +17,6 @@
 		where config_key = #{configKey}
 	</select>
 	
-	<select id="getConfigValue" parameterType="String" resultType="String">
-		select config_value from sys_config where config_key = #{configKey}
-	</select>
-	
 	<insert id="insertConfig" parameterType="String">
 		insert into sys_config(config_key, config_value, gmt_create) values (#{configKey}, #{configValue}, now())
 	</insert>

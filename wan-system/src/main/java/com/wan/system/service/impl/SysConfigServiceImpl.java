@@ -34,12 +34,6 @@ public class SysConfigServiceImpl implements SysConfigService {
 		SysConfig config = new SysConfig(configMap);
 		return config;
 	}
-	
-	@Override
-	@Cacheable(value = {"config"}, key = "#configKey")
-	public String getConfigValue(String configKey) {
-		return configMapper.getConfigValue(configKey);
-	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)

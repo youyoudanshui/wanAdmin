@@ -21,13 +21,6 @@ public interface SysConfigMapper {
 	Map<String, String> getConfigByConfigKey(String configKey);
 	
 	/**
-	 * 获取系统配置参数值
-	 * @param configKey
-	 * @return
-	 */
-	String getConfigValue(String configKey);
-	
-	/**
 	 * 新增系统配置
 	 * @param configKey
 	 * @param configValue

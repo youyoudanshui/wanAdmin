@@ -6,8 +6,6 @@ public interface SysConfigService {
 	
 	SysConfig getConfig();
 	
-	String getConfigValue(String configKey);
-	
 	void updateConfigs(SysConfig config) throws IllegalArgumentException, IllegalAccessException;
 	
 }

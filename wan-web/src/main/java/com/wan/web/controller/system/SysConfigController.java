@@ -6,7 +6,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,11 +39,11 @@ public class SysConfigController {
 		return prefix + "/config";
 	}
 	
-	@GetMapping("/get/{configKey}")
+	@GetMapping("/get")
 	@ResponseBody
-	public Result get(@PathVariable("configKey") String configKey) {
-		String configValue = configService.getConfigValue(configKey);
-		return ResultUtil.success(configValue);
+	public Result get() {
+		SysConfig config = configService.getConfig();
+		return ResultUtil.success(config);
 	}
 	
 	@PostMapping("/update")
