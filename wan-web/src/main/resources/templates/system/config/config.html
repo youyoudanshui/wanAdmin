@@ -47,6 +47,7 @@
 	                <button class="btn btn-default file-browser" type="button">上传图片</button>
 	              </div>
 	            </div>
+	            <small class="help-block">为保证显示效果，LOGO图片大小不要超过240x36</small>
               </div>
               
               
@@ -85,19 +86,19 @@
 	                <div class="form-controls mb-2 mr-sm-2">
 	                  <div class="custom-control custom-radio custom-control-inline">
 			            <input type="radio" id="type1" name="login_page_template_radio" class="custom-control-input" value="1">
-			            <label class="custom-control-label" for="type1">1.居中（默认）</label>
+			            <label class="custom-control-label" for="type1" data-toggle="popover" data-img="wanAdmin/images/login_page1.png">1.居中（默认）</label>
 			          </div>
 		              <div class="custom-control custom-radio custom-control-inline">
 			            <input type="radio" id="type2" name="login_page_template_radio" class="custom-control-input" value="2">
-			            <label class="custom-control-label" for="type2">2.居中透明</label>
+			            <label class="custom-control-label" for="type2" data-toggle="popover" data-img="wanAdmin/images/login_page2.png">2.居中透明</label>
 			          </div>
 		              <div class="custom-control custom-radio custom-control-inline">
 			            <input type="radio" id="type3" name="login_page_template_radio" class="custom-control-input" value="3">
-			            <label class="custom-control-label" for="type3">3.居中分栏</label>
+			            <label class="custom-control-label" for="type3" data-toggle="popover" data-img="wanAdmin/images/login_page3.png">3.居中分栏</label>
 			          </div>
 		              <div class="custom-control custom-radio custom-control-inline">
 			            <input type="radio" id="type4" name="login_page_template_radio" class="custom-control-input" value="4">
-			            <label class="custom-control-label" for="type4">4.居右</label>
+			            <label class="custom-control-label" for="type4" data-toggle="popover" data-img="wanAdmin/images/login_page4.png">4.居右</label>
 			          </div>
 		              <div class="custom-control custom-radio custom-control-inline">
 			            <input type="radio" id="type0" name="login_page_template_radio" class="custom-control-input" value="0">
@@ -107,6 +108,20 @@
 		          	<input class="form-control" type="text" id="login_page_template_type" name="login_page_template_type" value="${config.login_page_template_type}" placeholder="请输入登录页文件名后缀">
                 </div>
                 <small id="zdyTip" class="help-block">自定义的登录页需存放在templates/login文件夹下，且文件名为login前缀，如loginMy.html，则填写My</small>
+              </div>
+              <div class="form-group">
+                <label for="multitabs_cache">菜单标签页缓存</label>
+                <div class="controls-box clearfix">
+                  <div class="custom-control custom-radio custom-control-inline">
+	                <input type="radio" id="cache0" name="multitabs_cache" class="custom-control-input" value="0" <#if !config.multitabs_cache?? || config.multitabs_cache == '0'>checked</#if>>
+	                <label class="custom-control-label" for="cache0">关闭（默认）</label>
+	              </div>
+	              <div class="custom-control custom-radio custom-control-inline">
+	                <input type="radio" id="cache1" name="multitabs_cache" class="custom-control-input" value="1" <#if config.multitabs_cache == '1'>checked</#if>>
+	                <label class="custom-control-label" for="cache1">开启</label>
+	              </div>
+                </div>
+                <small class="help-block">开启菜单标签页缓存，在不关闭窗口的情况下，直接刷新页面能保留所有标签页</small>
               </div>
             </form>
             
@@ -125,6 +140,15 @@
 
 <script type="text/javascript">
 var prefix = "system/config";
+
+$('[data-toggle="popover"]').popover({
+	placement: 'top',
+	trigger: 'hover',
+	html: true,
+	content: function() {
+		return '<img src="' + $(this).data('img') + '" />';
+	}
+});
 
 $(':radio[name="web_site_logo_type"]').change(function() {
 	checkLogoType();

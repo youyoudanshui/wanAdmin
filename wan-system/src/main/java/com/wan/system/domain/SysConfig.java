@@ -37,6 +37,8 @@ public class SysConfig implements Serializable {
 	
 	String login_page_template_type;
 	
+	String multitabs_cache;
+	
 	public SysConfig() {
 		
 	}
@@ -53,6 +55,7 @@ public class SysConfig implements Serializable {
 		upload_image_ext = configMap.get("upload_image_ext");
 		login_page_bg_image = configMap.get("login_page_bg_image");
 		login_page_template_type = configMap.get("login_page_template_type");
+		multitabs_cache = configMap.get("multitabs_cache");
 		
 	}
 
@@ -137,6 +140,14 @@ public class SysConfig implements Serializable {
 
 	public void setLogin_page_template_type(String login_page_template_type) {
 		this.login_page_template_type = login_page_template_type;
+	}
+
+	public String getMultitabs_cache() {
+		return multitabs_cache;
+	}
+
+	public void setMultitabs_cache(String multitabs_cache) {
+		this.multitabs_cache = multitabs_cache;
 	}
 	
 }

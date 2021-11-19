@@ -325,11 +325,11 @@ if (typeof jQuery === "undefined") {
             var navTabParam = $navTab.length ? self._getParam($navTab) : {};
             //change storage active status
             var storage = self._storage();
-            if (storage[prevNavTabParam.id]) {
-                storage[prevNavTabParam.id].active = false;
+            if (storage[prevNavTabParam.did]) {
+                storage[prevNavTabParam.did].active = false;
             }
-            if (storage[navTabParam.id]) {
-                storage[navTabParam.id].active = true;
+            if (storage[navTabParam.did]) {
+                storage[navTabParam.did].active = true;
             }
             self._resetStorage(storage);
             //active navTab and tabPane
@@ -357,7 +357,7 @@ if (typeof jQuery === "undefined") {
                 if ($tabPane.is('iframe')) {
                   
                     //if (!$tabPane.attr('src')) {
-                    if ((!$tabPane.attr('src') && options.refresh == 'no') || (options.refresh == 'nav' && isNavBar) || options.refresh == 'all'){
+                    if (!$tabPane.attr('src') || (!$tabPane.attr('src') && options.refresh == 'no') || (options.refresh == 'nav' && isNavBar) || options.refresh == 'all'){
                         $tabPane.attr('src', param.url);
                     }
                 } else {
@@ -656,12 +656,17 @@ if (typeof jQuery === "undefined") {
                 $el = self.$element,
                 options = self.options,
                 storage, init = options.init,
-                param;
+                param,
+                tempParam;
             if (supportStorage(options.cache)) {
                 storage = self._storage();
                 self._resetStorage({});
                 $.each(storage, function (k, v) {
                     self.create(v, false);
+                    if (v.active) {
+                        tempParam = self._getParam(v);
+                        self.activeMenu(self._exist(tempParam));
+                    }
                 })
             }
             if ($.isEmptyObject(storage)) {
@@ -674,7 +679,7 @@ if (typeof jQuery === "undefined") {
                 }
             }
             //if no any tab actived, active the main tab
-            if (!$el.navPanelList.children('li a.active').length) {
+            if (!$el.navPanelList.children('li').find('a.active').length) {
                 self.active($el.navPanelList.find('[data-type="main"]:first'));
             }
             return self;
