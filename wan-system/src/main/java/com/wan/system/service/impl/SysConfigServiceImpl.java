@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ReflectionUtils;
 
 import com.wan.system.domain.SysConfig;
 import com.wan.system.mapper.SysConfigMapper;
@@ -42,11 +43,11 @@ public class SysConfigServiceImpl implements SysConfigService {
 		Field[] fields = config.getClass().getDeclaredFields();
 		
 		for (Field field : fields) {
-			field.setAccessible(true);
+			ReflectionUtils.makeAccessible(field);
 			
 			String configKey = field.getName();
 			
-			if ("serialVersionUID".equals(configKey)) continue;
+			if ("serialVersionUID".equals(configKey) || field.get(config) == null) continue;
 			
 			String configValue = field.get(config).toString();
 			Map<String, String> configMap = configMapper.getConfigByConfigKey(configKey);

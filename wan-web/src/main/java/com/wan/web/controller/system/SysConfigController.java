@@ -39,6 +39,14 @@ public class SysConfigController {
 		return prefix + "/config";
 	}
 	
+	@GetMapping("/upload")
+	@PreAuthorize("hasAuthority('open:config:manage')")
+	public String upload(ModelMap map) {
+		SysConfig config = configService.getConfig();
+		map.put("config", config);
+		return prefix + "/upload";
+	}
+	
 	@GetMapping("/get")
 	@ResponseBody
 	public Result get() {

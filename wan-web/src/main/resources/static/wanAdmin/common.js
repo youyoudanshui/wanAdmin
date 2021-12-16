@@ -19,32 +19,34 @@ $(document).ready(function() {
         var $this    = $(this);
         var $input   = $(this)[0];
         var $len     = $input.files.length;
-        var $size = $input.files[0].size;
+        var $size 	 = $input.files[0].size;
         var formFile = new FormData();
         var uploadType = $this.attr('file-type');
         
         if ($len == 0) {
+        	notifyError('请选择文件');
             return false;
-        } else if ($size > 1024 * 1024) {
+        }
+        if ($size > 1024 * 1024) {
         	notifyError('文件大小不能超过1M');
         	return false;
-        } else {
-        	if (uploadType == 'image' || uploadType == 'avatar') {
-        		var fileAccaccept = config('upload_image_ext');
-                if (fileAccaccept) {
-                	var fileType      = $input.files[0].type;
-                    var type          = (fileType.substr(fileType.lastIndexOf("/") + 1)).toLowerCase();
-                    
-                    if (!type || fileAccaccept.indexOf(type) == -1) {
-                    	notifyError('您上传图片的类型不符合(' + fileAccaccept + ')');
-                        return false;
-                    }
-                }
-        	}
-            formFile.append("file", $input.files[0]);
         }
         
-        var data = formFile;
+        if (uploadType == 'image' || uploadType == 'avatar') {
+        	var fileAccaccept = config('upload_image_ext');
+            if (fileAccaccept) {
+            	var fileType = $input.files[0].type;
+                var type     = (fileType.substr(fileType.lastIndexOf("/") + 1)).toLowerCase();
+                
+                if (!type || !checkFileType(type, fileAccaccept)) {
+                	notifyError('您上传图片的类型不符合(' + fileAccaccept + ')');
+                    return false;
+                }
+            }
+        }
+    	
+        formFile.append("file", $input.files[0]);
+        
         var uploadUrl;
         if (uploadType == 'image') {
         	uploadUrl = 'file/uploadImage';
@@ -55,7 +57,7 @@ $(document).ready(function() {
         }
         postFile({
         	url: uploadUrl,
-            data: data,
+            data: formFile,
             success: function (rs) {
                 if (rs.code == 0) {
                     $this.closest('.file-group').find('.file-value').val(rs.data).change();
@@ -505,11 +507,22 @@ function listDictOptions(typeName, elem) {
 
 /*获取地址参数*/
 function getQueryVariable(variable) {
-       var query = window.location.search.substring(1);
-       var vars = query.split("&");
-       for (var i=0;i<vars.length;i++) {
-               var pair = vars[i].split("=");
-               if(pair[0] == variable){return pair[1];}
-       }
-       return(false);
+	var query = window.location.search.substring(1);
+	var vars = query.split('&');
+	for (var i = 0; i < vars.length; i++) {
+    	var pair = vars[i].split('=');
+    	if (pair[0] == variable) {
+    		return pair[1];
+    	}
+	}
+	return false;
+}
+
+/*检查文件类型*/
+function checkFileType(type, fileAccaccept) {
+	var fileTypes = fileAccaccept.toLowerCase().split(',');
+	if (fileTypes.indexOf(type) > -1 || fileTypes.indexOf('.' + type) > -1) {
+		return true;
+	}
+	return false;
 }

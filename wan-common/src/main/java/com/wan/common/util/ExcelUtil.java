@@ -12,6 +12,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.ReflectionUtils;
 
 import com.wan.common.annotation.Excel;
 
@@ -32,6 +35,8 @@ import jxl.write.WritableWorkbook;
 
 public class ExcelUtil {
 	
+	private final static Logger log = LoggerFactory.getLogger(ExcelUtil.class);
+	
 	/**
 	 * 导出Excel
 	 * 
@@ -48,7 +53,7 @@ public class ExcelUtil {
 	 * @param sheetName
 	 *            ：工作表名称
 	 */
-	public static void createExcel(List list, Class listClass, String filePath, HttpServletResponse response,
+	public static void createExcel(List<?> list, Class<?> listClass, String filePath, HttpServletResponse response,
 			String headers[], String keySet[], List<Map<String, String>> dicts, String fileName, String sheetName) {
 		sheetName = sheetName != null && !sheetName.equals("") ? sheetName : "sheet1";
 		WritableWorkbook wook = null;// 可写的工作薄对象
@@ -116,8 +121,8 @@ public class ExcelUtil {
 							method = getMap.get("GET" + keySet[j].toString().toUpperCase());
 							if (method != null) {
 								// 从对应的get方法得到返回值
-								String value = method.invoke(objClass, null) == null ? ""
-										: String.valueOf(method.invoke(objClass, null));
+								String value = method.invoke(objClass) == null ? ""
+										: String.valueOf(method.invoke(objClass));
 								if (dicts.get(j) != null) {
 									value = dicts.get(j).get(value);
 								}
@@ -136,7 +141,7 @@ public class ExcelUtil {
 				throw new Exception("传入参数不合法");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("异常信息：", e);
 		} finally {
 			try {
 				if (wook != null) {
@@ -146,7 +151,7 @@ public class ExcelUtil {
 					out.close();
 				}
 			} catch (Exception e2) {
-				e2.printStackTrace();
+				log.error("异常信息：", e2);
 			}
 		}
 	}
@@ -157,7 +162,7 @@ public class ExcelUtil {
 	 * @param cls
 	 * @return
 	 */
-	public static HashMap<String, Method> getAllMethod(Class c) throws Exception {
+	public static HashMap<String, Method> getAllMethod(Class<?> c) throws Exception {
 		HashMap<String, Method> map = new HashMap<String, Method>();
 		Method[] methods = c.getMethods();// 得到所有方法
 		String methodName = "";
@@ -176,7 +181,7 @@ public class ExcelUtil {
 	 * @param cls
 	 * @return
 	 */
-	public static HashMap<String, Object> getExportFields(Class c) {
+	public static HashMap<String, Object> getExportFields(Class<?> c) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<String> keySet = new ArrayList<String>();
 		List<String> headers = new ArrayList<String>();
@@ -188,7 +193,7 @@ public class ExcelUtil {
 		
 		Field[] fields = c.getDeclaredFields();
 		for (Field field: fields) {
-			field.setAccessible(true);
+			ReflectionUtils.makeAccessible(field);
 			String key = field.getName();
 			Excel excel = field.getAnnotation(Excel.class);
 			if (excel != null) {
@@ -229,7 +234,8 @@ public class ExcelUtil {
 	 * @param keySet
 	 * @param sheetName
 	 */
-	public static void exportHtmlExcel(List list, Class listClass, HttpServletResponse response, String fileName, String sheetName) {
+	@SuppressWarnings("unchecked")
+	public static void exportHtmlExcel(List<?> list, Class<?> listClass, HttpServletResponse response, String fileName, String sheetName) {
 		HashMap<String, Object> map = getExportFields(listClass);
 		String headers[] = (String[]) map.get("headers");
 		String keySet[] = (String[]) map.get("keySet");

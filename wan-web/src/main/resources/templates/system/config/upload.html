@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <#assign title="网站配置">
+  <#include "/head.html">
+</head>
+  
+<body>
+<div class="container-fluid p-t-15">
+  
+  <div class="row">
+    
+    <div class="col-lg-12">
+      <div class="card">
+        
+    	<ul class="nav nav-tabs page-tabs pt-2 pl-3 pr-3">
+          <li class="nav-item"> <a href="system/config" class="nav-link">基本</a> </li>
+          <li class="nav-item"> <a href="javascript:void(0)" class="nav-link active">上传</a> </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active">
+        
+            <form id="submitForm" action="" method="post" class="edit-form">
+              <div class="form-group">
+                <label for="upload_file_ext">允许上传的文件后缀</label>
+                <input class="js-tags-input form-control" type="text" id="upload_file_ext" name="upload_file_ext" value="${config.upload_file_ext}">
+                <small class="help-block">不填写则不限制类型</small>
+              </div>
+              <div class="form-group">
+                <label for="upload_image_ext">允许上传的图片后缀</label>
+                <input class="js-tags-input form-control" type="text" id="upload_image_ext" name="upload_image_ext" value="${config.upload_image_ext}">
+                <small class="help-block">不填写则不限制类型</small>
+              </div>
+            </form>
+            
+            <button class="btn btn-primary m-r-5" onclick="doSubmit()">确认保存</button>
+            <button class="btn btn-default m-r-5" onclick="removeCache()">删除缓存</button>
+        
+          </div>
+        </div>
+		
+      </div>
+    </div>
+        
+  </div>
+  
+</div>
+
+<#include "/footer.html">
+
+<script type="text/javascript">
+var prefix = "system/config";
+
+function doSubmit() {
+	var $form = $('#submitForm');
+
+	ajaxPost({ 
+		url: prefix + '/update',
+		data: $form.serialize()
+	});
+}
+</script>
+
+</body>
+</html>

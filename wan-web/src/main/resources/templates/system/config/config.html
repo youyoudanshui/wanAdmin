@@ -12,8 +12,14 @@
     
     <div class="col-lg-12">
       <div class="card">
-        <div class="card-body">
-            
+        
+    	<ul class="nav nav-tabs page-tabs pt-2 pl-3 pr-3">
+          <li class="nav-item"> <a href="javascript:void(0)" class="nav-link active">基本</a> </li>
+          <li class="nav-item"> <a href="system/config/upload" class="nav-link">上传</a> </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active">
+        
             <form id="submitForm" action="" method="post" class="edit-form">
               <div class="form-group">
                 <label for="web_site_title">网站标题</label>
@@ -51,11 +57,6 @@
               </div>
               
               
-              <div class="form-group">
-                <label for="upload_image_ext">上传图片类型</label>
-                <input class="form-control" type="text" id="upload_image_ext" name="upload_image_ext" value="${config.upload_image_ext}">
-                <small class="help-block">多个后缀用逗号隔开，不填写则不限制类型</small>
-              </div>
               <div class="form-group">
                 <label for="web_site_keywords">站点关键词</label>
                 <input class="form-control" type="text" id="web_site_keywords" name="web_site_keywords" value="${config.web_site_keywords}" placeholder="请输入站点关键词">
@@ -127,8 +128,10 @@
             
             <button class="btn btn-primary m-r-5" onclick="doSubmit()">确认保存</button>
             <button class="btn btn-default m-r-5" onclick="removeCache()">删除缓存</button>
+        
+          </div>
+        </div>
 		
-		</div>
       </div>
     </div>
         
