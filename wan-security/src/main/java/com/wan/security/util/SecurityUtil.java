@@ -35,6 +35,7 @@ public class SecurityUtil {
 		Authentication auth = getAuth();
 		user.setIp(ReqUtil.getRequest().getRemoteAddr());
 		user.setAuthorities((Collection<GrantedAuthority>) auth.getAuthorities());
+		user.setMenus(((SysUser) auth.getPrincipal()).getMenus());
 		
 		UsernamePasswordAuthenticationToken newToken = new UsernamePasswordAuthenticationToken(user, auth.getCredentials(), auth.getAuthorities());
 		newToken.setDetails(auth.getDetails());
