@@ -20,7 +20,7 @@ import javax.imageio.ImageIO;
 public class FileUtil {
 	
 	// 特殊字符：/\:*?"<>|
-	public static String specialChars = "\\/\\\\\\:\\*\\?\\\"\\<\\>\\|";
+	public static String specialChars = "/\\:*?\"<>|";
 
 	public static String getRandomFileName() {
 		
@@ -160,10 +160,10 @@ public class FileUtil {
 	 */
 	public static boolean checkSpecialChar(String fileName) {
 		
-		String regex = "[" + specialChars + "]";
+		String regex = "[/\\\\:\\*\\?\"<>\\|]";
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(fileName);
-		if (matcher.matches()) {
+		if (matcher.find()) {
 			return true;
 		}
 		return false;
