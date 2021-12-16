@@ -19,7 +19,7 @@
               <input type="text" class="form-control file-value d-none" id="avatar" name="avatar" value="${user.avatar}" />
 	          <input type="file" class="d-none" file-type="avatar" />
             
-	          <img id="avatarImg" src="${user.avatar}" alt="..." class="img-avatar mr-3">
+	          <img id="avatarImg" src="${user.avatar}" alt="..." class="img-avatar img-avatar-48 mr-3  <#if !user.avatar?? || user.avatar == ''>d-none</#if>">
 	          <div class="media-body">
 	            <button class="btn btn-default file-browser" type="button">修改头像</button>
 	            <p class="mt-1 mb-0">选择一张你喜欢的图片，裁剪后会自动生成68x68大小，上传图片大小不能超过1M。</p>
@@ -73,6 +73,7 @@
 <script type="text/javascript">
 $('#avatar').change(function() {
 	$('#avatarImg').attr('src', $(this).val());
+	$('#avatarImg').removeClass('d-none');
 });
 
 validateForm({
