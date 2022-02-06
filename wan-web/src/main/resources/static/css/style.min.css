@@ -2727,12 +2727,12 @@ a.text-danger:hover,a.text-danger:focus {
 
 /* 徽章 */
 .badge {
-    -weikit-border-radius: 2px;
+    -webkit-border-radius: 2px;
     border-radius: 2px;
     font-weight: 300;
 }
 .badge-pill {
-    -weikit-border-radius: 10rem;
+    -webkit-border-radius: 10rem;
     border-radius: 10rem;
 }
 .badge-primary {
@@ -3701,6 +3701,7 @@ button.list-group-item:hover {
 }
 .nav-item-has-subnav > a:after {
     position: absolute;
+    top: 12px;
     right: 24px;
     font-family: 'Material Design Icons';
     font-size: 10px;
@@ -3710,6 +3711,9 @@ button.list-group-item:hover {
     transition: -webkit-transform 0.3s linear;
     transition: transform 0.3s linear;
     transition: transform 0.3s linear, -webkit-transform 0.3s linear;
+}
+.nav-item-has-subnav .nav-item-has-subnav > a:after {
+    top: 10px;
 }
 .nav-item-has-subnav.open > a:after {
     -webkit-transform: rotate(90deg);
@@ -4011,12 +4015,11 @@ button.list-group-item:hover {
 
 [data-logobg*='color_'] .sidebar-header img {
     position: relative;
-	left: -220px;
-    -webkit-filter: drop-shadow(rgb(255, 255, 255) 220px 0px);
-	-moz-filter: drop-shadow(rgb(255, 255, 255) 220px 0px);
-    -ms-filter: drop-shadow(rgb(255, 255, 255) 220px 0px);
-    -o-filter: drop-shadow(rgb(255, 255, 255) 220px 0px);
-    filter: drop-shadow(rgb(255, 255, 255) 220px 0px);
+    -webkit-filter: brightness(275%);
+	-moz-filter: brightness(275%);
+    -ms-filter: brightness(275%);
+    -o-filter: brightness(275%);
+    filter: brightness(275%);
 }
 [data-headerbg*='color_'] .lyear-layout-header,
 [data-headerbg*='color_'] .lyear-layout-header .topbar-right > li > a,

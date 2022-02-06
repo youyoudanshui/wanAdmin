@@ -3,7 +3,7 @@ if (typeof jQuery === "undefined") {
     throw new Error("MultiTabs requires jQuery");
 }((function ($) {
     "use strict";
-    var NAMESPACE, tabIndex; //variable
+    var NAMESPACE; //variable
     var MultiTabs, handler, getTabIndex, isExtUrl, sumDomWidth, trimText, supportStorage; //function
     var defaultLayoutTemplates, defaultInit; //default variable
 
@@ -24,16 +24,18 @@ if (typeof jQuery === "undefined") {
 
     /**
      * get index for tab
-     * @param content   content type, for 'main' tab just can be 1
-     * @param capacity  capacity of tab, except 'main' tab
-     * @returns int     return index
+     * @param content content type, for 'main' tab just can be 1
+     * @param url
+     * @returns string return index
      */
-    getTabIndex = function (content, capacity) {
+    getTabIndex = function (content, url) {
         if (content === 'main') return 0;
-        capacity = capacity || 8; //capacity of maximum tab quantity, the tab will be cover if more than it
-        tabIndex = tabIndex || 0;
-        tabIndex++;
-        tabIndex = tabIndex % capacity;
+        
+        var tabIndex = window.btoa(url);
+        tabIndex = tabIndex.replace(/\+/g, "_43");
+        tabIndex = tabIndex.replace(/\//g, "_47");
+        tabIndex = tabIndex.replace(/=/g, "_61");
+
         return tabIndex;
     };
 
@@ -554,19 +556,17 @@ if (typeof jQuery === "undefined") {
                 $navHasSubnav = $navObj.parents('.nav-item'),
                 $viSubHeight  = $navHasSubnav.siblings().find('.nav-subnav:visible').outerHeight();
             
-            $('.nav-item').each(function(i){
-                if ($(this).hasClass('active') && !$navObj.parents('.nav-item').last().hasClass('active')) {
-                    $(this).removeClass('active').removeClass('open');
-                    $(this).find('.nav-subnav:visible').slideUp(500);
-                    if (window.innerWidth > 1024 && $('body').hasClass('lyear-layout-sidebar-close')) {
-                        $(this).find('.nav-subnav').hide();
-                    }
+            $('.nav-drawer .nav-item').not($navHasSubnav).each(function() {
+                if (window.innerWidth > 1024 && $('body').hasClass('lyear-layout-sidebar-close')) {
+                    $(this).find('.nav-subnav').hide();
                 }
+                $(this).find('.nav-subnav:visible').slideUp(500);
+                $(this).removeClass('active open');
             });
             
             $('.nav-drawer').find('li').removeClass('active');
             $navObj.parent('li').addClass('active');
-            $navHasSubnav.first().addClass('active');
+            $navHasSubnav.addClass('active');
             
             // 当前菜单无子菜单
             if (!$navObj.parents('.nav-item').first().is('.nav-item-has-subnav')) {
@@ -574,37 +574,44 @@ if (typeof jQuery === "undefined") {
                 $('.lyear-layout-sidebar-info').animate({scrollTop: hht}, 300);
             }
             
-            if ($navObj.parents('ul.nav-subnav').last().is(':hidden')) {
-                $navObj.parents('ul.nav-subnav').last().slideDown(500, function(){
-                    $navHasSubnav.last().addClass('open');
-		            var scrollHeight  = 0,
-                        $scrollBox    = $('.lyear-layout-sidebar-info'),
-		                pervTotal     = $navHasSubnav.last().prevAll().length,
-		                boxHeight     = $scrollBox.outerHeight(),
-	                    innerHeight   = $('.sidebar-main').outerHeight(),
-                        thisScroll    = $scrollBox.scrollTop(),
-                        thisSubHeight = $(this).outerHeight(),
-                        footHeight    = 121;
-		            
-		            if (footHeight + innerHeight - boxHeight >= (pervTotal * 48)) {
-		                scrollHeight = pervTotal * 48;
-		            }
-                    if ($navHasSubnav.length == 1) {
-                        $scrollBox.animate({scrollTop: scrollHeight}, 300);
-                    } else {
-                        // 子菜单操作
-                        if (typeof($viSubHeight) != 'undefined' && $viSubHeight != null) {
-                            scrollHeight = thisScroll + thisSubHeight - $viSubHeight;
+            var $sideDownObj = $navObj.parents('ul.nav-subnav').filter(':hidden');
+            var $sideDownLen = $sideDownObj.length;
+
+            $sideDownObj.each(function(i) {
+                $(this).slideDown(500, function() {
+                    $(this).parent('.nav-item').addClass('open');
+                    
+                    if (i === $sideDownLen - 1) {
+                        var scrollHeight  = 0,
+                            $scrollBox    = $('.lyear-layout-sidebar-info'),
+		                    pervTotal     = $navHasSubnav.last().prevAll().length,
+		                    boxHeight     = $scrollBox.outerHeight(),
+	                        innerHeight   = $('.sidebar-main').outerHeight(),
+                            thisScroll    = $scrollBox.scrollTop(),
+                            thisSubHeight = $(this).outerHeight(),
+                            footHeight    = 121;
+		                
+		                if (footHeight + innerHeight - boxHeight >= (pervTotal * 48)) {
+		                    scrollHeight = pervTotal * 48;
+		                }
+                        
+                        if ($navHasSubnav.length == 1) {
                             $scrollBox.animate({scrollTop: scrollHeight}, 300);
                         } else {
-                            if ((thisScroll + boxHeight - $scrollBox[0].scrollHeight) == 0) {
-                                scrollHeight = thisScroll - thisSubHeight;
+                            // 子菜单操作
+                            if (typeof($viSubHeight) != 'undefined' && $viSubHeight != null) {
+                                scrollHeight = thisScroll + thisSubHeight - $viSubHeight;
                                 $scrollBox.animate({scrollTop: scrollHeight}, 300);
+                            } else {
+                                if ((thisScroll + boxHeight - $scrollBox[0].scrollHeight) == 0) {
+                                    scrollHeight = thisScroll - thisSubHeight;
+                                    $scrollBox.animate({scrollTop: scrollHeight}, 300);
+                                }
                             }
                         }
                     }
                 });
-            }
+            });
         },
 
         /**
@@ -634,9 +641,7 @@ if (typeof jQuery === "undefined") {
             //$el.navTabMain    = $('#multitabs_main_0');
             $el.navToolsRight = $el.nav.find('.mt-nav-tools-right:first');
             $el.tabContent = $el.find('.tab-content:first');
-            //hide tab-header if maxTabs less than 1
-            if (options.nav.maxTabs <= 1) {
-                options.nav.maxTabs = 1;
+            if (options.nav.showTabs == false) {
                 $el.nav.hide();
             }
             //set the nav-panel width
@@ -986,7 +991,7 @@ if (typeof jQuery === "undefined") {
             //active
             param.active = data.active || obj.active || false;
             //index
-            param.index = data.index || obj.index || getTabIndex(param.type, options.nav.maxTabs);
+            param.index = data.index || obj.index || getTabIndex(param.type, param.url);
             //id
             param.did = data.did || obj.did || this._generateId(param);
             return param;
@@ -1233,7 +1238,7 @@ if (typeof jQuery === "undefined") {
             draggable: true, //nav tab draggable option
             fixed: false, //fixed the nav-bar
             layout: 'default', //it can be 'default', 'classic' (all hidden tab in dropdown list), and simple
-            maxTabs: 15, //Max tabs number (without counting main tab), when is 1, hide the whole nav
+            showTabs: true, // 是否显示Tab标签栏
             maxTitleLength: 25, //Max title length of tab
             showCloseOnHover: false, //while is true, show close button in hover, if false, show close button always
             style: 'nav-tabs' //can be nav-tabs or nav-pills
