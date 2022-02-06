@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
+import com.wan.security.service.impl.TextCreator;
 
 @Configuration
 public class KaptchaConfig {
@@ -37,6 +38,8 @@ public class KaptchaConfig {
         properties.setProperty("kaptcha.background.clear.to", "247,255,255");
         // 噪点颜色
         properties.setProperty("kaptcha.noise.color", "134,128,130");
+        // 随机文本生成器
+        properties.setProperty("kaptcha.textproducer.impl", TextCreator.class.getName());
  
  
         Config config = new Config(properties);
