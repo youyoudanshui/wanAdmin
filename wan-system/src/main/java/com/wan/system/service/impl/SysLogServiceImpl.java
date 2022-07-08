@@ -2,12 +2,14 @@ package com.wan.system.service.impl;
 
 import java.util.List;
 
+import net.dreamlu.mica.core.utils.Charsets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wan.system.domain.SysLog;
 import com.wan.system.mapper.SysLogMapper;
 import com.wan.system.service.SysLogService;
+import org.springframework.web.util.HtmlUtils;
 
 @Service
 public class SysLogServiceImpl implements SysLogService {
@@ -32,7 +34,12 @@ public class SysLogServiceImpl implements SysLogService {
 
 	@Override
 	public SysLog getLog(Long id) {
-		return logMapper.getLog(id);
+		SysLog log = logMapper.getLog(id);
+		String requestParam = log.getRequestParam();
+		if (requestParam != null) {
+			log.setRequestParam(HtmlUtils.htmlEscape(requestParam, Charsets.UTF_8_NAME));
+		}
+		return log;
 	}
 
 	@Override

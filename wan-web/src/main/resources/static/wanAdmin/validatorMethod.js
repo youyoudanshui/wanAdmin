@@ -7,7 +7,7 @@
 
 	// 检验summernote富文本框
 	jQuery.validator.addMethod('noteRequired', function(value, element) {
-		return this.optional(element) || (value != '<p><br></p>');
+		return this.optional(element) || !$(element).summernote('isEmpty');
 	}, '这是必填字段');
 	
 }();

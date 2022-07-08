@@ -65,7 +65,10 @@ bootstrapTable({
         title: '编号'
     }, {
         field: 'loginname',
-        title: '登录名'
+        title: '登录名',
+        formatter: function (value, row, index) {
+            return htmlEncode(value);
+        }
     }, {
        	field: 'ip',
         title: '操作IP'

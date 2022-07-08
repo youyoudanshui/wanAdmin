@@ -2,6 +2,7 @@ package com.wan.system.service.impl;
 
 import java.util.List;
 
+import net.dreamlu.mica.xss.core.XssCleaner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,9 @@ public class SysNoticeServiceImpl implements SysNoticeService {
 	@Autowired
 	private SysUserNoticeMapper userNoticeMapper;
 
+	@Autowired
+	private XssCleaner xssCleaner;
+
 	@Override
 	public List<SysNotice> listNotices(SysNotice notice) {
 		return noticeMapper.listNotices(notice);
@@ -33,6 +37,8 @@ public class SysNoticeServiceImpl implements SysNoticeService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void insertNotice(SysNotice notice) {
+		notice.setTitle(xssCleaner.clean(notice.getTitle()));
+
 		noticeMapper.insertNotice(notice);
 		noticeMapper.insertNoticeContent(notice);
 	}
@@ -40,6 +46,8 @@ public class SysNoticeServiceImpl implements SysNoticeService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void updateNotice(SysNotice notice) {
+		notice.setTitle(xssCleaner.clean(notice.getTitle()));
+
 		noticeMapper.updateNotice(notice);
 		noticeMapper.updateNoticeContent(notice);
 	}

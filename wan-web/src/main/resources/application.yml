@@ -83,3 +83,10 @@ mybatis:
 ##日志
 logging:
   config: classpath:logback-spring.xml
+
+# https://gitee.com/596392912/mica
+mica:
+  xss:
+    enabled: true
+    path-patterns: /**
+    path-exclude-patterns:

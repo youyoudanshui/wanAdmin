@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import net.dreamlu.mica.core.utils.Charsets;
+import net.dreamlu.mica.xss.core.XssCleanIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +28,7 @@ import com.wan.common.websocket.WebSocket;
 import com.wan.system.domain.SysNotice;
 import com.wan.system.service.SysNoticeService;
 import com.wan.web.controller.common.BaseController;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * 通知
@@ -70,6 +73,7 @@ public class SysNoticeController extends BaseController {
 	@PreAuthorize("hasAuthority('open:notice:manage')")
 	public String edit(@PathVariable("id") Long id, ModelMap map) {
 		SysNotice notice = noticeService.getNoticeById(id);
+		notice.setContent(HtmlUtils.htmlEscape(notice.getContent(), Charsets.UTF_8_NAME));
 		map.put("notice", notice);
 		
 		return prefix + "/edit";
@@ -79,6 +83,7 @@ public class SysNoticeController extends BaseController {
 	@ResponseBody
 	@PreAuthorize("hasAuthority('do:notice:add')")
 	@Log(BusinessName = "通知管理", OperationType = OperationType.INSERT, Content = "新增通知")
+	@XssCleanIgnore
 	public Result save(@Valid SysNotice notice, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());
@@ -92,6 +97,7 @@ public class SysNoticeController extends BaseController {
 	@ResponseBody
 	@PreAuthorize("hasAuthority('do:notice:edit')")
 	@Log(BusinessName = "通知管理", OperationType = OperationType.UPDATE, Content = "修改通知")
+	@XssCleanIgnore
 	public Result update(@Valid SysNotice notice, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());

@@ -526,3 +526,12 @@ function checkFileType(type, fileAccaccept) {
 	}
 	return false;
 }
+
+/*使XSS代码不执行*/
+function htmlEncode(input) {
+    var temp = document.createElement('div');
+    (temp.textContent != undefined ) ? (temp.textContent = input) : (temp.innerText = input);
+    var output = temp.innerHTML;
+    temp = null;
+    return output;
+}
